@@ -232,6 +232,10 @@
                 <option value="full-year">12-Mo Annual (Jul '24–Jun '25)</option>
               </select>
             </div>
+            <button type="button" class="card-chart-edit-btn" id="btnEditCardC" onclick="toggleCardChartEdit('c')" title="Enable interactive point dragging">
+              <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+              <span id="btnEditCardCText">Edit Dots</span>
+            </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-c', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
           <div class="trend-legend-bar">
@@ -243,9 +247,9 @@
               <span class="legend-line-dashed"></span>
               <span>Personal Well-being</span>
             </div>
-            <span class="chart-drag-hint-badge" title="Click and pull any point on the chart to adjust values">
+            <span class="chart-drag-hint-badge" id="cardCDragHint" style="display: none;" title="Drag dots to adjust values">
               <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/></svg>
-              Drag dots to edit
+              Drag dots to edit (Click Done to lock)
             </span>
           </div>
           <div class="chart-wrapper">
@@ -316,10 +320,15 @@
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
             <span class="card-letter-badge">G</span>
             <span class="card-title">6-MONTH BI FORECAST</span>
-            <span class="chart-drag-hint-badge" title="Click and pull bar tops to adjust projections">
+            <span class="forecast-period-tag" id="forecastPeriodTag">H2: Jul–Dec '25</span>
+            <span class="chart-drag-hint-badge" id="cardGDragHint" style="display: none;" title="Drag bar tops to adjust projections">
               <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/></svg>
               Drag bars to edit
             </span>
+            <button type="button" class="card-chart-edit-btn" id="btnEditCardG" onclick="toggleCardChartEdit('g')" title="Enable interactive bar dragging">
+              <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+              <span id="btnEditCardGText">Edit Bars</span>
+            </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-g', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
           <div class="forecast-body">
@@ -941,120 +950,144 @@ for i, nbrs in enumerate(neighbors):
               </div>
             </div>
 
-            <!-- 6 Month Grid with Interactive Dual Sliders -->
+            <!-- 6 Month Grid with Direct Numerical Inputs, Steppers & Meter Tracks -->
             <div class="months-editor-grid">
               <!-- JAN -->
               <div class="month-card" id="month-card-0">
                 <div class="month-title-badge">JAN</div>
-                <div class="month-slider-pair">
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge pro-bg-badge" id="badge-pro-0">56</span>
-                    <input type="range" min="0" max="100" value="56" class="vertical-slider pro-slider" id="slider-pro-0" oninput="onTrendSliderChange(0, 'pro', this.value)">
-                    <span class="slider-label-mini">Pro</span>
+                <div class="month-metric-group">
+                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(0, 'pro', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-0" value="56" oninput="onTrendNumInputChange(0, 'pro', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(0, 'pro', 5)">+5</button>
                   </div>
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge well-bg-badge" id="badge-well-0">69</span>
-                    <input type="range" min="0" max="100" value="69" class="vertical-slider well-slider" id="slider-well-0" oninput="onTrendSliderChange(0, 'well', this.value)">
-                    <span class="slider-label-mini">Well</span>
-                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-0" style="width: 56%;"></div></div>
                 </div>
-                <input type="hidden" id="trend-pro-0" value="56">
-                <input type="hidden" id="trend-well-0" value="69">
+                <div class="month-metric-group">
+                  <div class="month-metric-label well-label"><span>Well-being</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(0, 'well', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-0" value="69" oninput="onTrendNumInputChange(0, 'well', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(0, 'well', 5)">+5</button>
+                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-0" style="width: 69%;"></div></div>
+                </div>
               </div>
 
               <!-- FEB -->
               <div class="month-card" id="month-card-1">
                 <div class="month-title-badge">FEB</div>
-                <div class="month-slider-pair">
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge pro-bg-badge" id="badge-pro-1">61</span>
-                    <input type="range" min="0" max="100" value="61" class="vertical-slider pro-slider" id="slider-pro-1" oninput="onTrendSliderChange(1, 'pro', this.value)">
-                    <span class="slider-label-mini">Pro</span>
+                <div class="month-metric-group">
+                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(1, 'pro', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-1" value="61" oninput="onTrendNumInputChange(1, 'pro', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(1, 'pro', 5)">+5</button>
                   </div>
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge well-bg-badge" id="badge-well-1">58</span>
-                    <input type="range" min="0" max="100" value="58" class="vertical-slider well-slider" id="slider-well-1" oninput="onTrendSliderChange(1, 'well', this.value)">
-                    <span class="slider-label-mini">Well</span>
-                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-1" style="width: 61%;"></div></div>
                 </div>
-                <input type="hidden" id="trend-pro-1" value="61">
-                <input type="hidden" id="trend-well-1" value="58">
+                <div class="month-metric-group">
+                  <div class="month-metric-label well-label"><span>Well-being</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(1, 'well', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-1" value="58" oninput="onTrendNumInputChange(1, 'well', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(1, 'well', 5)">+5</button>
+                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-1" style="width: 58%;"></div></div>
+                </div>
               </div>
 
               <!-- MAR -->
               <div class="month-card" id="month-card-2">
                 <div class="month-title-badge">MAR</div>
-                <div class="month-slider-pair">
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge pro-bg-badge" id="badge-pro-2">66</span>
-                    <input type="range" min="0" max="100" value="66" class="vertical-slider pro-slider" id="slider-pro-2" oninput="onTrendSliderChange(2, 'pro', this.value)">
-                    <span class="slider-label-mini">Pro</span>
+                <div class="month-metric-group">
+                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(2, 'pro', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-2" value="66" oninput="onTrendNumInputChange(2, 'pro', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(2, 'pro', 5)">+5</button>
                   </div>
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge well-bg-badge" id="badge-well-2">54</span>
-                    <input type="range" min="0" max="100" value="54" class="vertical-slider well-slider" id="slider-well-2" oninput="onTrendSliderChange(2, 'well', this.value)">
-                    <span class="slider-label-mini">Well</span>
-                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-2" style="width: 66%;"></div></div>
                 </div>
-                <input type="hidden" id="trend-pro-2" value="66">
-                <input type="hidden" id="trend-well-2" value="54">
+                <div class="month-metric-group">
+                  <div class="month-metric-label well-label"><span>Well-being</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(2, 'well', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-2" value="54" oninput="onTrendNumInputChange(2, 'well', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(2, 'well', 5)">+5</button>
+                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-2" style="width: 54%;"></div></div>
+                </div>
               </div>
 
               <!-- APR (Anomaly) -->
               <div class="month-card anomaly-month-card" id="month-card-3">
                 <div class="month-title-badge anomaly-badge">APR (Anomaly)</div>
-                <div class="month-slider-pair">
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge pro-bg-badge" id="badge-pro-3">80</span>
-                    <input type="range" min="0" max="100" value="80" class="vertical-slider pro-slider" id="slider-pro-3" oninput="onTrendSliderChange(3, 'pro', this.value)">
-                    <span class="slider-label-mini">Pro</span>
+                <div class="month-metric-group">
+                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(3, 'pro', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-3" value="80" oninput="onTrendNumInputChange(3, 'pro', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(3, 'pro', 5)">+5</button>
                   </div>
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge well-bg-badge" id="badge-well-3">68</span>
-                    <input type="range" min="0" max="100" value="68" class="vertical-slider well-slider" id="slider-well-3" oninput="onTrendSliderChange(3, 'well', this.value)">
-                    <span class="slider-label-mini">Well</span>
-                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-3" style="width: 80%;"></div></div>
                 </div>
-                <input type="hidden" id="trend-pro-3" value="80">
-                <input type="hidden" id="trend-well-3" value="68">
+                <div class="month-metric-group">
+                  <div class="month-metric-label well-label"><span>Well-being</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(3, 'well', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-3" value="68" oninput="onTrendNumInputChange(3, 'well', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(3, 'well', 5)">+5</button>
+                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-3" style="width: 68%;"></div></div>
+                </div>
               </div>
 
               <!-- MAY -->
               <div class="month-card" id="month-card-4">
                 <div class="month-title-badge">MAY</div>
-                <div class="month-slider-pair">
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge pro-bg-badge" id="badge-pro-4">71</span>
-                    <input type="range" min="0" max="100" value="71" class="vertical-slider pro-slider" id="slider-pro-4" oninput="onTrendSliderChange(4, 'pro', this.value)">
-                    <span class="slider-label-mini">Pro</span>
+                <div class="month-metric-group">
+                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(4, 'pro', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-4" value="71" oninput="onTrendNumInputChange(4, 'pro', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(4, 'pro', 5)">+5</button>
                   </div>
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge well-bg-badge" id="badge-well-4">55</span>
-                    <input type="range" min="0" max="100" value="55" class="vertical-slider well-slider" id="slider-well-4" oninput="onTrendSliderChange(4, 'well', this.value)">
-                    <span class="slider-label-mini">Well</span>
-                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-4" style="width: 71%;"></div></div>
                 </div>
-                <input type="hidden" id="trend-pro-4" value="71">
-                <input type="hidden" id="trend-well-4" value="55">
+                <div class="month-metric-group">
+                  <div class="month-metric-label well-label"><span>Well-being</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(4, 'well', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-4" value="55" oninput="onTrendNumInputChange(4, 'well', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(4, 'well', 5)">+5</button>
+                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-4" style="width: 55%;"></div></div>
+                </div>
               </div>
 
               <!-- JUN -->
               <div class="month-card" id="month-card-5">
                 <div class="month-title-badge">JUN</div>
-                <div class="month-slider-pair">
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge pro-bg-badge" id="badge-pro-5">86</span>
-                    <input type="range" min="0" max="100" value="86" class="vertical-slider pro-slider" id="slider-pro-5" oninput="onTrendSliderChange(5, 'pro', this.value)">
-                    <span class="slider-label-mini">Pro</span>
+                <div class="month-metric-group">
+                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(5, 'pro', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-5" value="86" oninput="onTrendNumInputChange(5, 'pro', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(5, 'pro', 5)">+5</button>
                   </div>
-                  <div class="slider-track-col">
-                    <span class="slider-val-badge well-bg-badge" id="badge-well-5">75</span>
-                    <input type="range" min="0" max="100" value="75" class="vertical-slider well-slider" id="slider-well-5" oninput="onTrendSliderChange(5, 'well', this.value)">
-                    <span class="slider-label-mini">Well</span>
-                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-5" style="width: 86%;"></div></div>
                 </div>
-                <input type="hidden" id="trend-pro-5" value="86">
-                <input type="hidden" id="trend-well-5" value="75">
+                <div class="month-metric-group">
+                  <div class="month-metric-label well-label"><span>Well-being</span></div>
+                  <div class="trend-nudge-row">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(5, 'well', -5)">-5</button>
+                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-5" value="75" oninput="onTrendNumInputChange(5, 'well', this.value)">
+                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(5, 'well', 5)">+5</button>
+                  </div>
+                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-5" style="width: 75%;"></div></div>
+                </div>
               </div>
             </div>
           </div>
@@ -1091,6 +1124,46 @@ for i, nbrs in enumerate(neighbors):
 
         <!-- Panel 5: Forecast & Strategy -->
         <div class="studio-panel" id="studio-panel-forecast">
+          <div class="studio-card" style="margin-bottom: 14px;">
+            <div class="forecast-panel-head">
+              <div>
+                <h4 class="card-section-title">6-Month Forward Projection Targets (H2: Jul – Dec '25)</h4>
+                <p class="field-hint">Enter custom projected index values (0–100) or auto-calculate based on historical trend velocity.</p>
+              </div>
+              <button type="button" class="preset-pill-btn" onclick="autoCalculateForecastFromTrends()" title="Calculate next 6 months projection based on current trend velocity" style="border: 1px solid #2563eb; color: #2563eb; background: #eff6ff; font-weight: 700;">
+                ⚡ Auto-Project from Real-Time Trends
+              </button>
+            </div>
+
+            <!-- Direct Monthly Forecast Inputs -->
+            <div class="forecast-months-grid" id="forecastMonthsInputGrid">
+              <div class="forecast-month-cell">
+                <span class="forecast-month-lbl">Jul</span>
+                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-0" value="55" oninput="onForecastNumInputChange(0, this.value)">
+              </div>
+              <div class="forecast-month-cell">
+                <span class="forecast-month-lbl">Aug</span>
+                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-1" value="62" oninput="onForecastNumInputChange(1, this.value)">
+              </div>
+              <div class="forecast-month-cell">
+                <span class="forecast-month-lbl">Sep</span>
+                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-2" value="67" oninput="onForecastNumInputChange(2, this.value)">
+              </div>
+              <div class="forecast-month-cell">
+                <span class="forecast-month-lbl">Oct</span>
+                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-3" value="72" oninput="onForecastNumInputChange(3, this.value)">
+              </div>
+              <div class="forecast-month-cell">
+                <span class="forecast-month-lbl">Nov</span>
+                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-4" value="75" oninput="onForecastNumInputChange(4, this.value)">
+              </div>
+              <div class="forecast-month-cell">
+                <span class="forecast-month-lbl">Dec</span>
+                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-5" value="82" oninput="onForecastNumInputChange(5, this.value)">
+              </div>
+            </div>
+          </div>
+
           <div class="studio-card">
             <div class="forecast-panel-head">
               <div>

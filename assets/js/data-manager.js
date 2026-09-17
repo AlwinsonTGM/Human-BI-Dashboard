@@ -196,20 +196,16 @@ function openDataEditor() {
       for (let i = 0; i < 6; i++) {
         const inpPro = document.getElementById(`trend-pro-${i}`);
         const inpWell = document.getElementById(`trend-well-${i}`);
-        const sliderPro = document.getElementById(`slider-pro-${i}`);
-        const sliderWell = document.getElementById(`slider-well-${i}`);
-        const badgePro = document.getElementById(`badge-pro-${i}`);
-        const badgeWell = document.getElementById(`badge-well-${i}`);
+        const meterPro = document.getElementById(`meter-pro-${i}`);
+        const meterWell = document.getElementById(`meter-well-${i}`);
 
         const pVal = proArr[i] !== undefined ? proArr[i] : 50;
         const wVal = wellArr[i] !== undefined ? wellArr[i] : 50;
 
         if (inpPro) inpPro.value = pVal;
         if (inpWell) inpWell.value = wVal;
-        if (sliderPro) sliderPro.value = pVal;
-        if (sliderWell) sliderWell.value = wVal;
-        if (badgePro) badgePro.textContent = pVal;
-        if (badgeWell) badgeWell.textContent = wVal;
+        if (meterPro) meterPro.style.width = `${pVal}%`;
+        if (meterWell) meterWell.style.width = `${wVal}%`;
       }
 
       // Initialize or update live studio trendline preview chart
@@ -231,6 +227,14 @@ function openDataEditor() {
     // Strategic question
     const inpQuestion = document.getElementById('edit-strategic-question');
     if (inpQuestion) inpQuestion.value = currentData.strategicQuestion;
+
+    // Direct Forecast Monthly Target Values (Jul – Dec)
+    if (currentData.forecast && Array.isArray(currentData.forecast.values)) {
+      for (let i = 0; i < 6; i++) {
+        const fInp = document.getElementById(`forecast-val-${i}`);
+        if (fInp) fInp.value = currentData.forecast.values[i] !== undefined ? currentData.forecast.values[i] : 50;
+      }
+    }
 
     // Dynamic Forecast Summary Checklist
     const forecastListEl = document.getElementById('forecastGoalsList');
@@ -354,21 +358,24 @@ function updateKpiGauge(kpiId) {
   fillEl.style.width = `${Math.round(pct)}%`;
 }
 
-// Interactive Monthly Slider Change Handler
-function onTrendSliderChange(index, metric, val) {
-  const hiddenInp = document.getElementById(`trend-${metric}-${index}`);
-  const badge = document.getElementById(`badge-${metric}-${index}`);
-  if (hiddenInp) hiddenInp.value = val;
-  if (badge) badge.textContent = val;
+// Direct Numerical Input Change Handler for Monthly Trends in Studio
+function onTrendNumInputChange(index, metric, val) {
+  let num = parseInt(val, 10);
+  if (isNaN(num)) num = 0;
+  num = Math.max(0, Math.min(100, num));
 
-  // Gather current values for real-time chart update
+  // Update mini meter bar fill
+  const meter = document.getElementById(`meter-${metric}-${index}`);
+  if (meter) meter.style.width = `${num}%`;
+
+  // Gather current values from all 6 inputs for live preview
   const currentPro = [];
   const currentWell = [];
   for (let i = 0; i < 6; i++) {
-    const pEl = document.getElementById(`slider-pro-${i}`);
-    const wEl = document.getElementById(`slider-well-${i}`);
-    currentPro.push(pEl ? parseInt(pEl.value, 10) || 0 : 50);
-    currentWell.push(wEl ? parseInt(wEl.value, 10) || 0 : 50);
+    const pEl = document.getElementById(`trend-pro-${i}`);
+    const wEl = document.getElementById(`trend-well-${i}`);
+    currentPro.push(pEl ? (parseInt(pEl.value, 10) || 0) : 50);
+    currentWell.push(wEl ? (parseInt(wEl.value, 10) || 0) : 50);
   }
 
   if (window.updateStudioTrendPreview) {
@@ -376,148 +383,125 @@ function onTrendSliderChange(index, metric, val) {
   }
 }
 
-// Time Horizon Range Selector for Authentic Trend Chart (Card C)
-function onTrendRangeSelect(rangeKey) {
-  if (!currentData) return;
-
-  if (!currentData.longitudinalPool) {
-    currentData.longitudinalPool = {
-      labels: ["Jul '24", "Aug '24", "Sep '24", "Oct '24", "Nov '24", "Dec '24", "Jan '25", "Feb '25", "Mar '25", "Apr '25", "May '25", "Jun '25"],
-      datasets: {
-        professionalImpact: [48, 52, 55, 60, 58, 64, 56, 61, 66, 80, 71, 86],
-        personalWellbeing: [62, 65, 60, 58, 63, 67, 69, 58, 54, 68, 55, 75]
-      },
-      ranges: {
-        "last-6": { label: "Current (Jan–Jun '25)", indices: [6, 7, 8, 9, 10, 11] },
-        "last-3": { label: "Recent / Q2 (Apr–Jun '25)", indices: [9, 10, 11] },
-        "q1": { label: "Baseline / Q1 (Jan–Mar '25)", indices: [6, 7, 8] },
-        "prior-6": { label: "Prior Sem (Jul–Dec '24)", indices: [0, 1, 2, 3, 4, 5] },
-        "full-year": { label: "12-Mo Annual (Jul '24–Jun '25)", indices: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }
-      }
-    };
-  }
-
-  const pool = currentData.longitudinalPool;
-  const rangeConfig = pool.ranges?.[rangeKey] || pool.ranges?.['last-6'];
-  if (!rangeConfig) return;
-
-  const slicedLabels = rangeConfig.indices.map(i => pool.labels[i]);
-  const slicedPro = rangeConfig.indices.map(i => pool.datasets.professionalImpact[i]);
-  const slicedWell = rangeConfig.indices.map(i => pool.datasets.personalWellbeing[i]);
-
-  if (!currentData.trend) currentData.trend = {};
-  currentData.trend.activeRange = rangeKey;
-  currentData.trend.period = rangeConfig.label;
-  currentData.trend.labels = slicedLabels;
-  if (!currentData.trend.datasets) currentData.trend.datasets = {};
-  currentData.trend.datasets.professionalImpact = slicedPro;
-  currentData.trend.datasets.personalWellbeing = slicedWell;
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
-
-  if (window.initTrendChart) {
-    window.initTrendChart(currentData.trend);
-  } else if (window.updateCharts) {
-    window.updateCharts(currentData);
-  }
-
-  syncTrendRangeSelector();
-  showToast(`Horizon updated: ${rangeConfig.label}`);
+// Quick Stepper / Nudge for Monthly Values (-5 / +5)
+function stepTrendVal(index, metric, delta) {
+  const inp = document.getElementById(`trend-${metric}-${index}`);
+  if (!inp) return;
+  let cur = parseInt(inp.value, 10) || 0;
+  let next = Math.max(0, Math.min(100, cur + delta));
+  inp.value = next;
+  onTrendNumInputChange(index, metric, next);
 }
 
-// Chart Point Drag Handlers for on-canvas interactive editing
-function handleChartPointDrag(chartType, datasetIndex, index, value) {
-  if (!currentData) return;
+// Card Chart Interactive Drag Edit Mode Toggles (Cards C & G)
+window.isCardCEditing = false;
+window.isCardGEditing = false;
 
-  if (chartType === 'trend') {
-    if (!currentData.trend || !currentData.trend.datasets) return;
-    const activeRange = currentData.trend.activeRange || 'last-6';
-    const pool = currentData.longitudinalPool;
-    const rangeConfig = pool?.ranges?.[activeRange];
-    const poolIdx = (rangeConfig && rangeConfig.indices && rangeConfig.indices[index] !== undefined)
-      ? rangeConfig.indices[index]
-      : index;
+function toggleCardChartEdit(cardKey) {
+  if (cardKey === 'c') {
+    window.isCardCEditing = !window.isCardCEditing;
+    const btn = document.getElementById('btnEditCardC');
+    const btnText = document.getElementById('btnEditCardCText');
+    const hint = document.getElementById('cardCDragHint');
+    const card = document.getElementById('pbi-card-c');
 
-    if (datasetIndex === 0) {
-      if (currentData.trend.datasets.professionalImpact) {
-        currentData.trend.datasets.professionalImpact[index] = value;
-      }
-      if (pool?.datasets?.professionalImpact && poolIdx !== undefined) {
-        pool.datasets.professionalImpact[poolIdx] = value;
-      }
-      // If visible in studio (months 0..5 correspond to Jan..Jun, indices 6..11)
-      if (poolIdx >= 6 && poolIdx <= 11) {
-        const sIdx = poolIdx - 6;
-        const sEl = document.getElementById(`slider-pro-${sIdx}`);
-        const bEl = document.getElementById(`badge-pro-${sIdx}`);
-        const iEl = document.getElementById(`trend-pro-${sIdx}`);
-        if (sEl) sEl.value = value;
-        if (bEl) bEl.textContent = value;
-        if (iEl) iEl.value = value;
-      }
+    if (window.isCardCEditing) {
+      if (btn) btn.classList.add('active-editing');
+      if (btnText) btnText.textContent = '✓ Done';
+      if (hint) hint.style.display = 'inline-flex';
+      if (card) card.classList.add('card-editing-mode');
+      showToast('Card C Edit Mode: Pull any dot on the chart to adjust values');
     } else {
-      if (currentData.trend.datasets.personalWellbeing) {
-        currentData.trend.datasets.personalWellbeing[index] = value;
-      }
-      if (pool?.datasets?.personalWellbeing && poolIdx !== undefined) {
-        pool.datasets.personalWellbeing[poolIdx] = value;
-      }
-      if (poolIdx >= 6 && poolIdx <= 11) {
-        const sIdx = poolIdx - 6;
-        const sEl = document.getElementById(`slider-well-${sIdx}`);
-        const bEl = document.getElementById(`badge-well-${sIdx}`);
-        const iEl = document.getElementById(`trend-well-${sIdx}`);
-        if (sEl) sEl.value = value;
-        if (bEl) bEl.textContent = value;
-        if (iEl) iEl.value = value;
-      }
+      if (btn) btn.classList.remove('active-editing');
+      if (btnText) btnText.textContent = 'Edit Dots';
+      if (hint) hint.style.display = 'none';
+      if (card) card.classList.remove('card-editing-mode');
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
+      showToast('Card C changes saved & chart locked.');
     }
-  } else if (chartType === 'forecast') {
-    if (!currentData.forecast || !currentData.forecast.values) return;
-    if (datasetIndex === 0) {
-      currentData.forecast.values[index] = value;
+  } else if (cardKey === 'g') {
+    window.isCardGEditing = !window.isCardGEditing;
+    const btn = document.getElementById('btnEditCardG');
+    const btnText = document.getElementById('btnEditCardGText');
+    const hint = document.getElementById('cardGDragHint');
+    const card = document.getElementById('pbi-card-g');
+
+    if (window.isCardGEditing) {
+      if (btn) btn.classList.add('active-editing');
+      if (btnText) btnText.textContent = '✓ Done';
+      if (hint) hint.style.display = 'inline-flex';
+      if (card) card.classList.add('card-editing-mode');
+      showToast('Card G Edit Mode: Pull bar tops to adjust forecast projections');
+    } else {
+      if (btn) btn.classList.remove('active-editing');
+      if (btnText) btnText.textContent = 'Edit Bars';
+      if (hint) hint.style.display = 'none';
+      if (card) card.classList.remove('card-editing-mode');
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
+      showToast('Card G forecast saved & bars locked.');
     }
   }
 }
 
-function handleChartPointDragEnd(chartType, datasetIndex, index, value) {
+// Direct Forecast Month Input Change Handler
+function onForecastNumInputChange(index, val) {
   if (!currentData) return;
-  handleChartPointDrag(chartType, datasetIndex, index, value);
+  if (!currentData.forecast) currentData.forecast = { values: [55, 62, 67, 72, 75, 82] };
+  let num = parseInt(val, 10);
+  if (isNaN(num)) num = 0;
+  num = Math.max(0, Math.min(100, num));
+  currentData.forecast.values[index] = num;
+
+  if (typeof calculateStatisticalTrendline === 'function') {
+    currentData.forecast.trendline = calculateStatisticalTrendline(currentData.forecast.values);
+  }
+  if (window.initForecastChart) {
+    window.initForecastChart(currentData.forecast);
+  }
+}
+
+// Auto-Calculate Real-Time Forecast from Current Historical Trends
+function autoCalculateForecastFromTrends() {
+  if (!currentData || !currentData.trend || !currentData.trend.datasets) return;
+  const pro = currentData.trend.datasets.professionalImpact || [56, 61, 66, 80, 71, 86];
+  const well = currentData.trend.datasets.personalWellbeing || [69, 58, 54, 68, 55, 75];
+
+  const n = pro.length;
+  const lastPro = pro[n - 1] || 80;
+  const prevPro = pro[Math.max(0, n - 3)] || 70;
+  const proVelocity = (lastPro - prevPro) / Math.max(1, Math.min(3, n - 1));
+
+  const lastWell = well[n - 1] || 75;
+  const prevWell = well[Math.max(0, n - 3)] || 65;
+  const wellVelocity = (lastWell - prevWell) / Math.max(1, Math.min(3, n - 1));
+
+  const blendedVelocity = (proVelocity * 0.65) + (wellVelocity * 0.35);
+  const startVal = Math.round((lastPro * 0.6) + (lastWell * 0.4));
+
+  const projectedValues = [];
+  for (let i = 0; i < 6; i++) {
+    const proj = Math.round(startVal + (blendedVelocity * (i + 1) * 0.85));
+    projectedValues.push(Math.max(30, Math.min(98, proj)));
+  }
+
+  if (!currentData.forecast) currentData.forecast = {};
+  currentData.forecast.values = projectedValues;
+
+  for (let i = 0; i < 6; i++) {
+    const inp = document.getElementById(`forecast-val-${i}`);
+    if (inp) inp.value = projectedValues[i];
+  }
+
+  if (typeof calculateStatisticalTrendline === 'function') {
+    currentData.forecast.trendline = calculateStatisticalTrendline(currentData.forecast.values);
+  }
+
+  if (window.initForecastChart) {
+    window.initForecastChart(currentData.forecast);
+  }
+
   localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
-
-  if (chartType === 'trend') {
-    const metric = datasetIndex === 0 ? 'Professional Impact' : 'Personal Well-being';
-    const month = currentData.trend?.labels?.[index] || `Month ${index + 1}`;
-    showToast(`Saved ${metric} for ${month}: ${value}%`);
-  } else if (chartType === 'forecast') {
-    const month = currentData.forecast?.labels?.[index] || `Month ${index + 1}`;
-    showToast(`Saved projection for ${month}: ${value}`);
-  }
-}
-
-// Studio Modal Canvas Drag Handlers
-function handleStudioPointDrag(datasetIndex, index, value) {
-  if (datasetIndex === 0) {
-    const sPro = document.getElementById(`slider-pro-${index}`);
-    const bPro = document.getElementById(`badge-pro-${index}`);
-    const inpPro = document.getElementById(`trend-pro-${index}`);
-    if (sPro) sPro.value = value;
-    if (bPro) bPro.textContent = value;
-    if (inpPro) inpPro.value = value;
-  } else {
-    const sWell = document.getElementById(`slider-well-${index}`);
-    const bWell = document.getElementById(`badge-well-${index}`);
-    const inpWell = document.getElementById(`trend-well-${index}`);
-    if (sWell) sWell.value = value;
-    if (bWell) bWell.textContent = value;
-    if (inpWell) inpWell.value = value;
-  }
-}
-
-function handleStudioPointDragEnd(datasetIndex, index, value) {
-  handleStudioPointDrag(datasetIndex, index, value);
-  const metric = datasetIndex === 0 ? 'Professional Impact' : 'Well-being';
-  showToast(`Studio: set ${metric} point ${index + 1} to ${value}`);
+  showToast('⚡ Calculated real-time momentum forecast from trends!');
 }
 
 // Dynamic Forecast Checklist Methods
@@ -585,19 +569,15 @@ function applyTrendPreset(type) {
   }
 
   for (let i = 0; i < 6; i++) {
-    const sPro = document.getElementById(`slider-pro-${i}`);
-    const sWell = document.getElementById(`slider-well-${i}`);
     const inpPro = document.getElementById(`trend-pro-${i}`);
     const inpWell = document.getElementById(`trend-well-${i}`);
-    const bPro = document.getElementById(`badge-pro-${i}`);
-    const bWell = document.getElementById(`badge-well-${i}`);
+    const meterPro = document.getElementById(`meter-pro-${i}`);
+    const meterWell = document.getElementById(`meter-well-${i}`);
 
-    if (sPro) sPro.value = selected.pro[i];
-    if (sWell) sWell.value = selected.well[i];
     if (inpPro) inpPro.value = selected.pro[i];
     if (inpWell) inpWell.value = selected.well[i];
-    if (bPro) bPro.textContent = selected.pro[i];
-    if (bWell) bWell.textContent = selected.well[i];
+    if (meterPro) meterPro.style.width = `${selected.pro[i]}%`;
+    if (meterWell) meterWell.style.width = `${selected.well[i]}%`;
   }
 
   if (window.updateStudioTrendPreview) {
@@ -663,13 +643,24 @@ function saveEditorChanges(e) {
   const inpQuestion = document.getElementById('edit-strategic-question');
   if (inpQuestion) currentData.strategicQuestion = inpQuestion.value.trim();
 
-  // Dynamic Forecast Summary
+  // Dynamic Forecast Summary & Targets
   const goalInputs = document.querySelectorAll('#forecastGoalsList .forecast-goal-input');
   const goals = Array.from(goalInputs).map(inp => inp.value.trim()).filter(v => v.length > 0);
   if (!currentData.forecast) currentData.forecast = {};
   currentData.forecast.summary = goals;
   const fNote = document.getElementById('edit-forecast-note');
   if (fNote) currentData.forecast.note = fNote.value.trim();
+
+  // Save 6-Month Forecast direct target values (Jul – Dec)
+  const newForecastVals = [];
+  for (let i = 0; i < 6; i++) {
+    const fInp = document.getElementById(`forecast-val-${i}`);
+    newForecastVals.push(fInp ? (parseInt(fInp.value, 10) || 50) : 50);
+  }
+  currentData.forecast.values = newForecastVals;
+  if (typeof calculateStatisticalTrendline === 'function') {
+    currentData.forecast.trendline = calculateStatisticalTrendline(newForecastVals);
+  }
 
   // Save to LocalStorage
   localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
@@ -854,7 +845,11 @@ window.handleAvatarUpload = handleAvatarUpload;
 window.resetAvatarPhoto = resetAvatarPhoto;
 window.stepKpiValue = stepKpiValue;
 window.updateKpiGauge = updateKpiGauge;
-window.onTrendSliderChange = onTrendSliderChange;
+window.onTrendNumInputChange = onTrendNumInputChange;
+window.stepTrendVal = stepTrendVal;
+window.toggleCardChartEdit = toggleCardChartEdit;
+window.onForecastNumInputChange = onForecastNumInputChange;
+window.autoCalculateForecastFromTrends = autoCalculateForecastFromTrends;
 window.addForecastGoalRow = addForecastGoalRow;
 window.removeForecastGoalRow = removeForecastGoalRow;
 window.onTrendRangeSelect = onTrendRangeSelect;

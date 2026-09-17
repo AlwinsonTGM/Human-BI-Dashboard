@@ -88,7 +88,8 @@ function initTrendChart(trendData) {
           displayColors: true,
           callbacks: {
             label: function(context) {
-              return `${context.dataset.label}: ${context.parsed.y} (Drag dot to adjust)`;
+              const isEdit = window.isCardCEditing;
+              return `${context.dataset.label}: ${context.parsed.y}${isEdit ? ' (Drag dot to adjust)' : ''}`;
             }
           }
         },
@@ -96,9 +97,11 @@ function initTrendChart(trendData) {
           round: 0,
           showTooltip: true,
           onDragStart: function(e, datasetIndex, index, value) {
+            if (!window.isCardCEditing) return false;
             if (e && e.target) e.target.style.cursor = 'ns-resize';
           },
           onDrag: function(e, datasetIndex, index, value) {
+            if (!window.isCardCEditing) return;
             if (e && e.target) e.target.style.cursor = 'ns-resize';
             const clamped = Math.max(0, Math.min(100, Math.round(value)));
             if (window.handleChartPointDrag) {
@@ -106,6 +109,7 @@ function initTrendChart(trendData) {
             }
           },
           onDragEnd: function(e, datasetIndex, index, value) {
+            if (!window.isCardCEditing) return;
             if (e && e.target) e.target.style.cursor = 'default';
             const clamped = Math.max(0, Math.min(100, Math.round(value)));
             if (window.handleChartPointDragEnd) {
@@ -144,6 +148,32 @@ function initTrendChart(trendData) {
   window.trendChartInstance = trendChartInstance;
 }
 
+function calculateStatisticalTrendline(values) {
+  if (!values || values.length === 0) return [];
+  const n = values.length;
+  let sumX = 0;
+  let sumY = 0;
+  let sumXY = 0;
+  let sumXX = 0;
+
+  for (let i = 0; i < n; i++) {
+    const y = values[i] || 0;
+    sumX += i;
+    sumY += y;
+    sumXY += i * y;
+    sumXX += i * i;
+  }
+
+  const denominator = (n * sumXX - sumX * sumX);
+  const slope = denominator !== 0 ? (n * sumXY - sumX * sumY) / denominator : 0;
+  const intercept = (sumY - slope * sumX) / n;
+
+  return values.map((_, i) => {
+    const projected = Math.round(slope * i + intercept);
+    return Math.max(0, Math.min(100, projected));
+  });
+}
+
 function initForecastChart(forecastData) {
   const ctx = document.getElementById('forecastChartCanvas');
   if (!ctx) return;
@@ -152,6 +182,10 @@ function initForecastChart(forecastData) {
     forecastChartInstance.destroy();
   }
 
+  const values = forecastData.values || [55, 62, 67, 72, 75, 82];
+  const dynamicLine = calculateStatisticalTrendline(values);
+  forecastData.trendline = dynamicLine;
+
   forecastChartInstance = new Chart(ctx, {
     data: {
       labels: forecastData.labels || ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -159,7 +193,7 @@ function initForecastChart(forecastData) {
         {
           type: 'bar',
           label: 'Projected Index',
-          data: forecastData.values,
+          data: values,
           backgroundColor: '#123861',
           borderRadius: 2,
           barPercentage: 0.65,
@@ -168,7 +202,7 @@ function initForecastChart(forecastData) {
         {
           type: 'line',
           label: 'Trend Trajectory',
-          data: forecastData.trendline,
+          data: dynamicLine,
           borderColor: '#94a3b8',
           borderWidth: 1.8,
           borderDash: [4, 4],
@@ -195,10 +229,11 @@ function initForecastChart(forecastData) {
           cornerRadius: 4,
           callbacks: {
             label: function(context) {
+              const isEdit = window.isCardGEditing;
               if (context.datasetIndex === 0) {
-                return `Projection: ${context.parsed.y} (Drag bar to edit)`;
+                return `Projection: ${context.parsed.y}${isEdit ? ' (Drag bar to edit)' : ''}`;
               }
-              return `Trend: ${context.parsed.y}`;
+              return `Trend Trajectory: ${context.parsed.y}`;
             }
           }
         },
@@ -206,11 +241,11 @@ function initForecastChart(forecastData) {
           round: 0,
           showTooltip: true,
           onDragStart: function(e, datasetIndex, index, value) {
-            if (datasetIndex !== 0) return false;
+            if (!window.isCardGEditing || datasetIndex !== 0) return false;
             if (e && e.target) e.target.style.cursor = 'ns-resize';
           },
           onDrag: function(e, datasetIndex, index, value) {
-            if (datasetIndex !== 0) return;
+            if (!window.isCardGEditing || datasetIndex !== 0) return;
             if (e && e.target) e.target.style.cursor = 'ns-resize';
             const clamped = Math.max(0, Math.min(100, Math.round(value)));
             if (window.handleChartPointDrag) {
@@ -218,8 +253,8 @@ function initForecastChart(forecastData) {
             }
           },
           onDragEnd: function(e, datasetIndex, index, value) {
+            if (!window.isCardGEditing || datasetIndex !== 0) return;
             if (e && e.target) e.target.style.cursor = 'default';
-            if (datasetIndex !== 0) return;
             const clamped = Math.max(0, Math.min(100, Math.round(value)));
             if (window.handleChartPointDragEnd) {
               window.handleChartPointDragEnd('forecast', datasetIndex, index, clamped);
@@ -243,7 +278,10 @@ function initForecastChart(forecastData) {
         },
         x: {
           ticks: {
-            font: { family: 'Segoe UI', size: 9 },
+            autoSkip: false, // Ensures all 6 months (Jul, Aug, Sep, Oct, Nov, Dec) always display
+            maxRotation: 0,
+            minRotation: 0,
+            font: { family: 'Segoe UI', size: 9, weight: '700' },
             color: '#475569'
           },
           grid: {
