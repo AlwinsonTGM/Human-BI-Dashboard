@@ -140,6 +140,8 @@ function initTrendChart(trendData) {
       }
     }
   });
+
+  window.trendChartInstance = trendChartInstance;
 }
 
 function initForecastChart(forecastData) {
@@ -251,6 +253,8 @@ function initForecastChart(forecastData) {
       }
     }
   });
+
+  window.forecastChartInstance = forecastChartInstance;
 }
 
 let studioTrendPreviewInstance = null;
@@ -408,5 +412,7 @@ function updateStudioTrendPreview(proData, wellData) {
 
 window.initCharts = initCharts;
 window.updateCharts = updateCharts;
+window.initTrendChart = initTrendChart;
+window.initForecastChart = initForecastChart;
 window.initStudioTrendPreview = initStudioTrendPreview;
 window.updateStudioTrendPreview = updateStudioTrendPreview;
