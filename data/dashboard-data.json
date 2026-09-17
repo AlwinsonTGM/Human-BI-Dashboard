@@ -1,0 +1,143 @@
+{
+  "profile": {
+    "name": "Mary Jane Sapiendante Legaspi",
+    "nickname": "Mary Jane",
+    "role": "Higher Education Faculty Member & Reserve Military",
+    "avatar": "assets/img/default-avatar.svg"
+  },
+  "kpis": [
+    {
+      "id": "learning_hours",
+      "label": "Learning Hours",
+      "value": "142",
+      "unit": "hrs / mo",
+      "change": "12",
+      "changeDirection": "up",
+      "changeType": "positive",
+      "icon": "book"
+    },
+    {
+      "id": "student_impact",
+      "label": "Student Impact",
+      "value": "268",
+      "unit": "students",
+      "change": "15",
+      "changeDirection": "up",
+      "changeType": "positive",
+      "icon": "users"
+    },
+    {
+      "id": "projects_initiatives",
+      "label": "Projects / Initiatives",
+      "value": "12",
+      "unit": "active",
+      "change": "9",
+      "changeDirection": "up",
+      "changeType": "positive",
+      "icon": "clipboard"
+    },
+    {
+      "id": "physical_readiness",
+      "label": "Physical Readiness",
+      "value": "87%",
+      "unit": "score",
+      "change": "5",
+      "changeDirection": "up",
+      "changeType": "positive",
+      "icon": "dumbbell"
+    },
+    {
+      "id": "wellbeing_index",
+      "label": "Well-being Index",
+      "value": "8.6",
+      "unit": "/ 10",
+      "change": "7",
+      "changeDirection": "up",
+      "changeType": "positive",
+      "icon": "heart"
+    }
+  ],
+  "trend": {
+    "period": "Period: Last 6 Months",
+    "activeRange": "last-6",
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    "datasets": {
+      "professionalImpact": [56, 61, 66, 80, 71, 86],
+      "personalWellbeing": [69, 58, 54, 68, 55, 75]
+    }
+  },
+  "longitudinalPool": {
+    "labels": ["Jul '24", "Aug '24", "Sep '24", "Oct '24", "Nov '24", "Dec '24", "Jan '25", "Feb '25", "Mar '25", "Apr '25", "May '25", "Jun '25"],
+    "datasets": {
+      "professionalImpact": [48, 52, 55, 60, 58, 64, 56, 61, 66, 80, 71, 86],
+      "personalWellbeing": [62, 65, 60, 58, 63, 67, 69, 58, 54, 68, 55, 75]
+    },
+    "ranges": {
+      "last-6": {
+        "label": "Current Semester (Jan – Jun '25)",
+        "indices": [6, 7, 8, 9, 10, 11]
+      },
+      "last-3": {
+        "label": "Recent Sprint / Q2 (Apr – Jun '25)",
+        "indices": [9, 10, 11]
+      },
+      "q1": {
+        "label": "Baseline / Q1 (Jan – Mar '25)",
+        "indices": [6, 7, 8]
+      },
+      "prior-6": {
+        "label": "Prior Semester (Jul – Dec '24)",
+        "indices": [0, 1, 2, 3, 4, 5]
+      },
+      "full-year": {
+        "label": "Full Annual Cycle (Jul '24 – Jun '25)",
+        "indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      }
+    }
+  },
+  "insights": [
+    "Consistent investment in learning and well-being drives higher professional impact and student outcomes.",
+    "Balancing academic responsibilities and reserve military duties builds discipline, resilience, and purpose."
+  ],
+  "anomaly": {
+    "title": "April shows a spike in professional impact while well-being dips.",
+    "reason": "High academic deliverables and military training overlap.",
+    "action": "Monitor workload balance and protect recovery time."
+  },
+  "strategicQuestion": "How can I leverage data and partnerships to scale student success and national service without compromising well-being?",
+  "forecast": {
+    "labels": ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "values": [55, 62, 67, 72, 75, 82],
+    "trendline": [53, 59, 65, 71, 76, 82],
+    "summary": [
+      "Professional Impact: ↑ 12–18%",
+      "Student Impact: ↑ 15–20%",
+      "Learning Hours: 130+ hrs/mo",
+      "Well-being Index: 8.5+"
+    ],
+    "note": "Assumes consistent habits and support systems."
+  },
+  "governance": [
+    "Data sources: Self-tracking, LMS, fitness tracker, official reports",
+    "Data used for personal growth and professional improvement",
+    "No sharing of personal data without consent",
+    "Committed to data accuracy, ethics, and responsible use"
+  ],
+  "identity": {
+    "quote": "I turn purpose into performance through data, discipline, and dedication.",
+    "title": "Educator. Soldier. Servant Leader.",
+    "subtitle": "Driven by values. Guided by data. Committed to impact."
+  },
+  "declarations": {
+    "declaration": "I hereby declare that this Human BI Dashboard is an original work reflecting my personal data, insights, and aspirations.",
+    "aiDisclosure": "AI tools were used for layout design, content refinement, and visual suggestions only."
+  },
+  "gisSummary": {
+    "totalEvents": 68545,
+    "maxMagnitude": 7.8,
+    "avgMagnitude": 4.83,
+    "avgDepthKm": 63.89,
+    "studyArea": "Philippine Archipelago & Surrounding Basins",
+    "sourceDataset": "PHIVOLCS / USGS Earthquake Catalog (NAMRIA 2023 Boundary Baseline)"
+  }
+}

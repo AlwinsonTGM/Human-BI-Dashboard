@@ -1,0 +1,885 @@
+/* ==========================================================================
+   POWER BI THEME & DASHBOARD CARDS
+   Pixel-perfect match to Ma'am Mary Jane Legaspi's Human BI Dashboard
+   ========================================================================== */
+
+/* Main Canvas Wrapper */
+.pbi-dashboard-canvas {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(10, 30, 60, 0.08);
+  border: 1px solid #dce4ec;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dashboard Inner Title Banner */
+.pbi-banner {
+  background-color: #0b2545;
+  color: #ffffff;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #134074;
+}
+
+.banner-left-icons,
+.banner-right-icons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.banner-icon {
+  width: 24px;
+  height: 24px;
+  stroke: #ffffff;
+  stroke-width: 1.8;
+  fill: none;
+  opacity: 0.9;
+}
+
+.pbi-banner-title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+}
+
+/* 3x3 Grid Layout */
+.pbi-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1.1fr 1.15fr;
+  grid-auto-rows: minmax(180px, auto);
+  gap: 12px;
+  padding: 14px;
+  background-color: #eef2f7;
+}
+
+/* Generic PBI Card */
+.pbi-card {
+  background-color: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.pbi-card:hover {
+  box-shadow: 0 4px 12px rgba(15, 35, 65, 0.06);
+}
+
+.pbi-card.is-dragging {
+  opacity: 0.45;
+  transform: scale(0.98);
+  border: 2px dashed #2563eb;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+  cursor: grabbing !important;
+}
+
+.pbi-card.drag-over {
+  border: 2px solid #2563eb;
+  background-color: #f0f7ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+}
+
+/* Drag Handle */
+.card-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: grab;
+  padding: 2px;
+  border-radius: 3px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  user-select: none;
+}
+
+.card-drag-handle:hover {
+  color: #0b2545;
+  background-color: #e2e8f0;
+}
+
+.card-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Card Header with Letter Badge */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.card-letter-badge {
+  background-color: #133b63;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #0b2545;
+}
+
+.card-subtitle-period {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.trend-filter-bar {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pbi-select-dropdown {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0b2545;
+  padding: 3px 6px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pbi-select-dropdown:hover,
+.pbi-select-dropdown:focus {
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+.chart-drag-hint-badge {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 600;
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 2px 7px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: default;
+}
+
+.chart-drag-hint-badge svg {
+  color: #2563eb;
+}
+
+.pbi-card canvas {
+  cursor: default;
+}
+
+.pbi-card canvas:hover {
+  cursor: pointer;
+}
+
+.card-hide-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.pbi-card:hover .card-hide-btn {
+  opacity: 0.75;
+}
+
+.card-hide-btn:hover {
+  opacity: 1 !important;
+  background: #fee2e2;
+  color: #dc2626;
+  transform: scale(1.1);
+}
+
+.custom-pbi-card {
+  border-left: 3px solid #2563eb;
+}
+
+.custom-pbi-card .card-title[contenteditable="true"]:hover,
+.custom-pbi-card .card-body[contenteditable="true"]:hover {
+  background: #f8fafc;
+  outline: 1px dashed #cbd5e1;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   CARD A: EXECUTIVE PROFILE
+   ========================================================================== */
+.profile-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  flex-shrink: 0;
+}
+
+.profile-avatar-box {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #133b63;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  background: #f1f5f9;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-avatar-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.avatar-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 37, 69, 0.65);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 600;
+  text-align: center;
+  gap: 2px;
+  border-radius: 50%;
+}
+
+.avatar-hover-overlay svg {
+  width: 18px;
+  height: 18px;
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+
+.profile-avatar-box:hover .avatar-hover-overlay {
+  opacity: 1;
+}
+
+.profile-avatar-box:hover img {
+  transform: scale(1.06);
+}
+
+.avatar-edit-btn {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 30px;
+  height: 30px;
+  background: #2563eb;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 5;
+}
+
+.avatar-edit-btn:hover {
+  background: #1d4ed8;
+  transform: scale(1.12);
+}
+
+.avatar-edit-btn svg {
+  width: 15px;
+  height: 15px;
+  stroke: #ffffff;
+  stroke-width: 2.2;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.detail-icon-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.detail-icon-circle svg {
+  width: 15px;
+  height: 15px;
+  fill: #1e3a5f;
+}
+
+.detail-text {
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.detail-text strong {
+  display: block;
+  font-size: 11px;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.detail-text .name-primary {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0b2545;
+}
+
+.detail-text .nickname {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.detail-text .role-text {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* ==========================================================================
+   CARD B: 5 PERSONAL / PROF KPIs
+   ========================================================================== */
+.kpis-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  height: 100%;
+  align-items: stretch;
+}
+
+.kpi-tile {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.kpi-tile:hover {
+  transform: translateY(-2px);
+  border-color: #93c5fd;
+}
+
+.kpi-icon-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #0f2d4e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.kpi-icon-badge svg {
+  width: 18px;
+  height: 18px;
+  stroke: #ffffff;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+.kpi-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.2;
+  min-height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kpi-number-group {
+  margin: 4px 0 2px;
+}
+
+.kpi-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0b2545;
+  line-height: 1.1;
+}
+
+.kpi-unit {
+  font-size: 9.5px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.kpi-delta {
+  font-size: 10px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5px;
+  margin-top: 2px;
+}
+
+.kpi-delta.delta-up {
+  color: #107c41;
+}
+
+.kpi-delta.delta-down {
+  color: #d13438;
+}
+
+.kpi-delta .delta-arrow {
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.kpi-delta .delta-val {
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   CARD C: AUTHENTIC TREND
+   ========================================================================== */
+.trend-legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  font-size: 10.5px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-line-solid {
+  width: 22px;
+  height: 3px;
+  background-color: #0d3b66;
+  border-radius: 2px;
+}
+
+.legend-line-dashed {
+  width: 22px;
+  height: 2px;
+  border-top: 2px dashed #64748b;
+}
+
+.chart-wrapper {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 115px;
+}
+
+/* ==========================================================================
+   CARD D: INSIGHT BEHIND DATA
+   ========================================================================== */
+.insight-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  height: 100%;
+}
+
+.circle-icon-lead {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #0f2d4e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.circle-icon-lead svg {
+  width: 22px;
+  height: 22px;
+  stroke: #ffffff;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+.insight-text-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #1e293b;
+}
+
+.insight-item {
+  position: relative;
+  padding-left: 12px;
+}
+
+.insight-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #1b497e;
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   CARD E: ONE DATA ANOMALY
+   ========================================================================== */
+.anomaly-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  height: 100%;
+}
+
+.anomaly-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.anomaly-headline {
+  font-weight: 700;
+  color: #0b2545;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 6px;
+}
+
+.anomaly-item strong {
+  color: #1e3a5f;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   CARD F: STRATEGIC QUESTION
+   ========================================================================== */
+.question-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+}
+
+.strategic-question-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b2545;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   CARD G: 6-MONTH BI FORECAST
+   ========================================================================== */
+.forecast-body {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+.forecast-body .chart-wrapper {
+  width: 140px !important;
+  max-width: 140px !important;
+  height: 110px !important;
+  position: relative;
+}
+
+.forecast-summary-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.forecast-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #0b2545;
+  margin-bottom: 2px;
+}
+
+.summary-check-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #1e293b;
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: -0.25px;
+  white-space: nowrap;
+}
+
+.check-green {
+  color: #107c41;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.forecast-note {
+  font-size: 10px;
+  color: #64748b;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   CARD H: GOVERNANCE & PRIVACY
+   ========================================================================== */
+.governance-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  height: 100%;
+}
+
+.governance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11.5px;
+  color: #1e293b;
+}
+
+.gov-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  line-height: 1.35;
+}
+
+.gov-check-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #133b63;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.gov-check-icon svg {
+  width: 9px;
+  height: 9px;
+  stroke: #ffffff;
+  stroke-width: 2.5;
+  fill: none;
+}
+
+/* ==========================================================================
+   CARD I: YOUR BI IDENTITY
+   ========================================================================== */
+.identity-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+}
+
+.identity-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.identity-quote {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e293b;
+  line-height: 1.35;
+}
+
+.identity-titles {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0b2545;
+  letter-spacing: 0.3px;
+}
+
+.identity-values {
+  font-size: 11px;
+  color: #475569;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   DASHBOARD FOOTER DECLARATION & AI DISCLOSURE
+   ========================================================================== */
+.pbi-footer-banner {
+  background-color: #0b2545;
+  color: #ffffff;
+  padding: 12px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  border-top: 2px solid #134074;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-icon-box {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-icon-box svg {
+  width: 26px;
+  height: 26px;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.footer-text {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #e2e8f0;
+}
+
+.footer-text strong {
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .pbi-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .pbi-card:nth-child(2) {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .pbi-banner {
+    padding: 10px 14px;
+  }
+  .pbi-banner-title {
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+  .pbi-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+  .pbi-card:nth-child(2) {
+    grid-column: span 1;
+  }
+  .kpis-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .kpi-tile:last-child {
+    grid-column: span 2;
+  }
+  .forecast-body {
+    grid-template-columns: 1fr;
+  }
+  .pbi-footer-banner {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 12px 16px;
+  }
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

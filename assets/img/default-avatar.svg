@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="avatarBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a5f" />
+      <stop offset="100%" stop-color="#0b2545" />
+    </linearGradient>
+    <linearGradient id="silhouetteGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#94a3b8" />
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <rect width="120" height="120" fill="url(#avatarBg)" />
+  
+  <!-- Head & Shoulders Silhouette -->
+  <!-- Head -->
+  <circle cx="60" cy="46" r="22" fill="url(#silhouetteGrad)" />
+  <!-- Body/Shoulders -->
+  <path d="M22 108 C22 84, 40 76, 60 76 C80 76, 98 84, 98 108 Z" fill="url(#silhouetteGrad)" />
+</svg>

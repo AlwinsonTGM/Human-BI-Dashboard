@@ -1,0 +1,91 @@
+/* ==========================================================================
+   PRINT & PDF EXPORT STYLESHEET
+   Formats the Human BI Dashboard into a clean 1-page A4 Landscape report
+   ========================================================================== */
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 6mm 8mm;
+  }
+
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Hide interactive web UI components */
+  .app-header,
+  .header-actions,
+  .action-btn,
+  .toast-msg,
+  .edit-drawer-overlay,
+  .edit-drawer,
+  .gis-header-bar,
+  #view-gis,
+  #view-methodology,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Force Human BI Dashboard view to be visible and expanded */
+  #view-dashboard {
+    display: block !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .pbi-dashboard-canvas {
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    page-break-inside: avoid !important;
+  }
+
+  .pbi-banner {
+    background-color: #0b2545 !important;
+    color: #ffffff !important;
+    padding: 10px 18px !important;
+  }
+
+  .pbi-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1.3fr 1.3fr !important;
+    grid-auto-rows: auto !important;
+    gap: 8px !important;
+    padding: 8px !important;
+    background-color: #f1f4f9 !important;
+  }
+
+  .pbi-card {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 8px 10px !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+  }
+
+  .chart-wrapper {
+    min-height: 100px !important;
+    max-height: 120px !important;
+  }
+
+  .pbi-footer-banner {
+    background-color: #0b2545 !important;
+    color: #ffffff !important;
+    padding: 8px 18px !important;
+  }
+}
