@@ -4,8 +4,128 @@
    Provides instant in-browser editing, LocalStorage sync, and JSON import/export
    ========================================================================== */
 
-const STORAGE_KEY = 'human_bi_dashboard_state_v3';
+const STORAGE_KEY = 'human_bi_dashboard_state_v4';
 let currentData = null;
+
+const TimelineEngine = {
+  MONTH_NAMES: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+
+  getRollingHistorical(anchorYear = 2026, anchorMonth = 9, count = 6) {
+    const res = [];
+    for (let i = count - 1; i >= 0; i--) {
+      let m = anchorMonth - i;
+      let y = anchorYear;
+      while (m <= 0) {
+        m += 12;
+        y -= 1;
+      }
+      res.push({
+        monthName: this.MONTH_NAMES[m - 1],
+        shortYear: String(y).slice(-2),
+        label: `${this.MONTH_NAMES[m - 1]} '${String(y).slice(-2)}`,
+        shortLabel: this.MONTH_NAMES[m - 1],
+        year: y,
+        monthIndex: m - 1
+      });
+    }
+    return res;
+  },
+
+  getRollingForecast(anchorYear = 2026, anchorMonth = 9, count = 6) {
+    const res = [];
+    for (let i = 1; i <= count; i++) {
+      let m = anchorMonth + i;
+      let y = anchorYear;
+      while (m > 12) {
+        m -= 12;
+        y += 1;
+      }
+      res.push({
+        monthName: this.MONTH_NAMES[m - 1],
+        shortYear: String(y).slice(-2),
+        label: `${this.MONTH_NAMES[m - 1]} '${String(y).slice(-2)}`,
+        shortLabel: this.MONTH_NAMES[m - 1],
+        year: y,
+        monthIndex: m - 1
+      });
+    }
+    return res;
+  }
+};
+
+function applyTimeline(year, month, shouldSave = true) {
+  if (!currentData) return;
+  currentData.timeline = {
+    anchorYear: year,
+    anchorMonth: month,
+    anchorFormatted: `${TimelineEngine.MONTH_NAMES[month - 1]} ${year}`
+  };
+
+  const hist = TimelineEngine.getRollingHistorical(year, month, 6);
+  const fore = TimelineEngine.getRollingForecast(year, month, 6);
+
+  if (!currentData.trend) currentData.trend = {};
+  currentData.trend.labels = hist.map(x => x.shortLabel);
+
+  if (!currentData.forecast) currentData.forecast = {};
+  currentData.forecast.labels = fore.map(x => x.shortLabel);
+
+  // Update real-time banner pill
+  const rtBadge = document.getElementById('realtimeStatusBadge');
+  if (rtBadge) {
+    rtBadge.innerHTML = `<span class="material-symbols-rounded" style="font-size:13px; color:#4caf50;">fiber_manual_record</span> Real-Time Active • ${TimelineEngine.MONTH_NAMES[month - 1]} ${year}`;
+  }
+
+  // Update forecast horizon tags
+  const fcBannerTag = document.getElementById('forecastHorizonBadge');
+  const fcCardTag = document.getElementById('forecastPeriodTag');
+  const fcPeriodStr = `H2: ${fore[0].shortLabel} '${fore[0].shortYear}–${fore[5].shortLabel} '${fore[5].shortYear}`;
+  if (fcBannerTag) fcBannerTag.textContent = `Forecast: ${fore[0].shortLabel} '${fore[0].shortYear}–${fore[5].shortLabel} '${fore[5].shortYear}`;
+  if (fcCardTag) fcCardTag.textContent = fcPeriodStr;
+
+  // Update month labels in studio
+  hist.forEach((item, i) => {
+    const lbl = document.getElementById(`trend-lbl-${i}`);
+    if (lbl) lbl.textContent = item.shortLabel;
+  });
+
+  fore.forEach((item, i) => {
+    const lbl = document.getElementById(`forecast-lbl-${i}`);
+    if (lbl) lbl.textContent = item.shortLabel;
+  });
+
+  // Re-render charts
+  if (window.updateCharts) {
+    window.updateCharts(currentData);
+  }
+
+  if (shouldSave) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
+  }
+}
+
+function onStudioAnchorMonthChange(val) {
+  if (!val) return;
+  const parts = val.split('-');
+  const y = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  applyTimeline(y, m, true);
+  if (typeof showToast === 'function') {
+    showToast(`Calendar shifted to ${TimelineEngine.MONTH_NAMES[m - 1]} ${y}`);
+  }
+}
+
+function syncStudioToCurrentDate() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth() + 1;
+  const inp = document.getElementById('studioAnchorMonth');
+  if (inp) inp.value = `${y}-${String(m).padStart(2, '0')}`;
+  applyTimeline(y, m, true);
+  if (typeof showToast === 'function') {
+    showToast(`Calendar synchronized with current system date (${TimelineEngine.MONTH_NAMES[m - 1]} ${y})`);
+  }
+}
 
 function renderKpiDeltaElement(el, changeVal, changeDir) {
   if (!el) return;
@@ -39,7 +159,6 @@ async function loadInitialData() {
   if (cached) {
     try {
       currentData = JSON.parse(cached);
-      // Ensure longitudinal pool exists if cached under older schema
       if (defaultData && !currentData.longitudinalPool) {
         currentData.longitudinalPool = defaultData.longitudinalPool;
       }
@@ -55,8 +174,13 @@ async function loadInitialData() {
     currentData = defaultData;
   }
 
+  const anchorYear = currentData?.timeline?.anchorYear || 2026;
+  const anchorMonth = currentData?.timeline?.anchorMonth || 9;
+  applyTimeline(anchorYear, anchorMonth, false);
+
   renderDashboard(currentData);
   syncTrendRangeSelector();
+  window.dashboardData = currentData;
   return currentData;
 }
 
@@ -64,6 +188,38 @@ function syncTrendRangeSelector() {
   const sel = document.getElementById('trendRangeSelect');
   if (sel && currentData && currentData.trend && currentData.trend.activeRange) {
     sel.value = currentData.trend.activeRange;
+  }
+}
+
+function onTrendRangeSelect(rangeKey) {
+  if (!currentData) return;
+  if (!currentData.trend) currentData.trend = {};
+  currentData.trend.activeRange = rangeKey;
+
+  const pool = currentData.longitudinalPool;
+  if (pool && pool.ranges && pool.ranges[rangeKey]) {
+    const rConfig = pool.ranges[rangeKey];
+    const indices = rConfig.indices;
+    const labels = indices.map(i => pool.labels[i]);
+    const proData = indices.map(i => pool.datasets.professionalImpact[i]);
+    const wellData = indices.map(i => pool.datasets.personalWellbeing[i]);
+
+    currentData.trend.labels = labels;
+    currentData.trend.datasets = {
+      professionalImpact: proData,
+      personalWellbeing: wellData
+    };
+    currentData.trend.period = `Period: ${rConfig.label}`;
+
+    const periodTag = document.getElementById('trendPeriodTag');
+    if (periodTag) periodTag.textContent = `Period: ${rConfig.label}`;
+
+    if (window.updateCharts) {
+      window.updateCharts(currentData);
+    }
+    if (typeof showToast === 'function') {
+      showToast(`Trendline filter changed to ${rConfig.label}`);
+    }
   }
 }
 
@@ -119,7 +275,8 @@ function renderDashboard(data) {
   // 5. Strategic Question
   if (data.strategicQuestion) {
     const qEl = document.getElementById('strategicQuestionText');
-    if (qEl) qEl.textContent = data.strategicQuestion;
+    const qText = typeof data.strategicQuestion === 'string' ? data.strategicQuestion : (data.strategicQuestion.question || '');
+    if (qEl) qEl.textContent = qText;
   }
 
   // 6. Forecast Summary
@@ -160,6 +317,11 @@ function openDataEditor() {
 
   // Pre-fill inputs
   if (currentData) {
+    const anchorY = currentData?.timeline?.anchorYear || 2026;
+    const anchorM = currentData?.timeline?.anchorMonth || 9;
+    const studioAnchor = document.getElementById('studioAnchorMonth');
+    if (studioAnchor) studioAnchor.value = `${anchorY}-${String(anchorM).padStart(2, '0')}`;
+
     // Profile
     if (currentData.profile) {
       const inpName = document.getElementById('edit-profile-name');
@@ -226,7 +388,11 @@ function openDataEditor() {
 
     // Strategic question
     const inpQuestion = document.getElementById('edit-strategic-question');
-    if (inpQuestion) inpQuestion.value = currentData.strategicQuestion;
+    if (inpQuestion && currentData.strategicQuestion) {
+      inpQuestion.value = typeof currentData.strategicQuestion === 'string'
+        ? currentData.strategicQuestion
+        : (currentData.strategicQuestion.question || '');
+    }
 
     // Direct Forecast Monthly Target Values (Jul – Dec)
     if (currentData.forecast && Array.isArray(currentData.forecast.values)) {
@@ -847,14 +1013,18 @@ window.stepKpiValue = stepKpiValue;
 window.updateKpiGauge = updateKpiGauge;
 window.onTrendNumInputChange = onTrendNumInputChange;
 window.stepTrendVal = stepTrendVal;
-window.toggleCardChartEdit = toggleCardChartEdit;
+window.toggleCardChartEdit = () => {};
 window.onForecastNumInputChange = onForecastNumInputChange;
 window.autoCalculateForecastFromTrends = autoCalculateForecastFromTrends;
 window.addForecastGoalRow = addForecastGoalRow;
 window.removeForecastGoalRow = removeForecastGoalRow;
 window.onTrendRangeSelect = onTrendRangeSelect;
 window.syncTrendRangeSelector = syncTrendRangeSelector;
-window.handleChartPointDrag = handleChartPointDrag;
-window.handleChartPointDragEnd = handleChartPointDragEnd;
-window.handleStudioPointDrag = handleStudioPointDrag;
-window.handleStudioPointDragEnd = handleStudioPointDragEnd;
+window.handleChartPointDrag = () => {};
+window.handleChartPointDragEnd = () => {};
+window.handleStudioPointDrag = () => {};
+window.handleStudioPointDragEnd = () => {};
+window.TimelineEngine = TimelineEngine;
+window.applyTimeline = applyTimeline;
+window.onStudioAnchorMonthChange = onStudioAnchorMonthChange;
+window.syncStudioToCurrentDate = syncStudioToCurrentDate;

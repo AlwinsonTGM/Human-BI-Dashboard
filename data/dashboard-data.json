@@ -5,6 +5,12 @@
     "role": "Higher Education Faculty Member & Reserve Military",
     "avatar": "assets/img/default-avatar.svg"
   },
+  "timeline": {
+    "anchorYear": 2026,
+    "anchorMonth": 9,
+    "anchorFormatted": "Sep 2026",
+    "historicalRange": "last-6"
+  },
   "kpis": [
     {
       "id": "learning_hours",
@@ -14,7 +20,7 @@
       "change": "12",
       "changeDirection": "up",
       "changeType": "positive",
-      "icon": "book"
+      "icon": "school"
     },
     {
       "id": "student_impact",
@@ -24,7 +30,7 @@
       "change": "15",
       "changeDirection": "up",
       "changeType": "positive",
-      "icon": "users"
+      "icon": "groups"
     },
     {
       "id": "projects_initiatives",
@@ -34,7 +40,7 @@
       "change": "9",
       "changeDirection": "up",
       "changeType": "positive",
-      "icon": "clipboard"
+      "icon": "task_alt"
     },
     {
       "id": "physical_readiness",
@@ -44,7 +50,7 @@
       "change": "5",
       "changeDirection": "up",
       "changeType": "positive",
-      "icon": "dumbbell"
+      "icon": "fitness_center"
     },
     {
       "id": "wellbeing_index",
@@ -54,43 +60,43 @@
       "change": "7",
       "changeDirection": "up",
       "changeType": "positive",
-      "icon": "heart"
+      "icon": "favorite"
     }
   ],
   "trend": {
-    "period": "Period: Last 6 Months",
+    "period": "Period: Rolling 6 Months (Apr–Sep '26)",
     "activeRange": "last-6",
-    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    "labels": ["Apr", "May", "Jun", "Jul", "Aug", "Sep"],
     "datasets": {
       "professionalImpact": [56, 61, 66, 80, 71, 86],
       "personalWellbeing": [69, 58, 54, 68, 55, 75]
     }
   },
   "longitudinalPool": {
-    "labels": ["Jul '24", "Aug '24", "Sep '24", "Oct '24", "Nov '24", "Dec '24", "Jan '25", "Feb '25", "Mar '25", "Apr '25", "May '25", "Jun '25"],
+    "labels": ["Oct '25", "Nov '25", "Dec '25", "Jan '26", "Feb '26", "Mar '26", "Apr '26", "May '26", "Jun '26", "Jul '26", "Aug '26", "Sep '26"],
     "datasets": {
       "professionalImpact": [48, 52, 55, 60, 58, 64, 56, 61, 66, 80, 71, 86],
       "personalWellbeing": [62, 65, 60, 58, 63, 67, 69, 58, 54, 68, 55, 75]
     },
     "ranges": {
       "last-6": {
-        "label": "Current Semester (Jan – Jun '25)",
+        "label": "Rolling 6 Months (Apr – Sep '26)",
         "indices": [6, 7, 8, 9, 10, 11]
       },
       "last-3": {
-        "label": "Recent Sprint / Q2 (Apr – Jun '25)",
+        "label": "Recent Quarter / Q3 (Jul – Sep '26)",
         "indices": [9, 10, 11]
       },
       "q1": {
-        "label": "Baseline / Q1 (Jan – Mar '25)",
+        "label": "Baseline / Q2 (Apr – Jun '26)",
         "indices": [6, 7, 8]
       },
       "prior-6": {
-        "label": "Prior Semester (Jul – Dec '24)",
+        "label": "Prior 6 Months (Oct '25 – Mar '26)",
         "indices": [0, 1, 2, 3, 4, 5]
       },
       "full-year": {
-        "label": "Full Annual Cycle (Jul '24 – Jun '25)",
+        "label": "Full 12-Month Annual Cycle (Oct '25 – Sep '26)",
         "indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
       }
     }
@@ -100,44 +106,38 @@
     "Balancing academic responsibilities and reserve military duties builds discipline, resilience, and purpose."
   ],
   "anomaly": {
-    "title": "April shows a spike in professional impact while well-being dips.",
-    "reason": "High academic deliverables and military training overlap.",
-    "action": "Monitor workload balance and protect recovery time."
+    "title": "One Data Anomaly",
+    "observation": "Spike in professional impact while well-being dips.",
+    "possibleReason": "Academic finals grading, research deliverables, and reserve military field exercises overlapped.",
+    "action": "Monitor workload distribution, institute recovery buffers, and protect sleep hygiene."
   },
-  "strategicQuestion": "How can I leverage data and partnerships to scale student success and national service without compromising well-being?",
+  "strategicQuestion": {
+    "question": "How can I leverage data and partnerships to scale student success and national service without compromising well-being?"
+  },
   "forecast": {
-    "labels": ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "period": "Forward Horizon (Oct '26 – Mar '27)",
+    "labels": ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar"],
     "values": [55, 62, 67, 72, 75, 82],
-    "trendline": [53, 59, 65, 71, 76, 82],
-    "summary": [
+    "goals": [
       "Professional Impact: ↑ 12–18%",
       "Student Impact: ↑ 15–20%",
       "Learning Hours: 130+ hrs/mo",
       "Well-being Index: 8.5+"
     ],
-    "note": "Assumes consistent habits and support systems."
+    "note": "Assumes consistent habits, structured recovery, and academic support systems."
   },
-  "governance": [
-    "Data sources: Self-tracking, LMS, fitness tracker, official reports",
-    "Data used for personal growth and professional improvement",
-    "No sharing of personal data without consent",
-    "Committed to data accuracy, ethics, and responsible use"
-  ],
+  "governance": {
+    "title": "Governance & Privacy",
+    "points": [
+      "Data sources: Self-tracking, LMS, fitness tracker, official reports",
+      "Data used for personal growth and professional improvement",
+      "No sharing of personal data without consent",
+      "Committed to data accuracy, ethics, and responsible use"
+    ]
+  },
   "identity": {
     "quote": "I turn purpose into performance through data, discipline, and dedication.",
-    "title": "Educator. Soldier. Servant Leader.",
-    "subtitle": "Driven by values. Guided by data. Committed to impact."
-  },
-  "declarations": {
-    "declaration": "I hereby declare that this Human BI Dashboard is an original work reflecting my personal data, insights, and aspirations.",
-    "aiDisclosure": "AI tools were used for layout design, content refinement, and visual suggestions only."
-  },
-  "gisSummary": {
-    "totalEvents": 68545,
-    "maxMagnitude": 7.8,
-    "avgMagnitude": 4.83,
-    "avgDepthKm": 63.89,
-    "studyArea": "Philippine Archipelago & Surrounding Basins",
-    "sourceDataset": "PHIVOLCS / USGS Earthquake Catalog (NAMRIA 2023 Boundary Baseline)"
+    "motto": "Educator. Soldier. Servant Leader.",
+    "subtext": "Driven by values. Guided by data. Committed to impact."
   }
 }

@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initCardDragAndDrop();
 
   // 4. Tab Navigation
-  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabButtons = document.querySelectorAll('.tab-btn, .nav-pill-btn');
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const targetView = btn.dataset.view;
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // View Switcher Function
 function switchView(viewName) {
   // Update Tab Buttons
-  document.querySelectorAll('.tab-btn').forEach(btn => {
+  document.querySelectorAll('.tab-btn, .nav-pill-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.view === viewName);
   });
 

@@ -5,68 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Human BI Dashboard & QuakeSpots GIS Portal - Mary Jane Legaspi</title>
   
-  <!-- Microsoft / Power BI Typography Font -->
+  <!-- Fonts and Icons for Creative Tim Material Dashboard 3 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link href="assets/css/material/nucleo-icons.css" rel="stylesheet" />
+  <link href="assets/css/material/nucleo-svg.css" rel="stylesheet" />
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/powerbi-theme.css">
+  <link rel="stylesheet" href="assets/css/material-custom.css">
   <link rel="stylesheet" href="assets/css/print-pdf.css">
 
   <!-- Chart.js and Plugins -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="assets/js/chartjs-plugin-dragdata.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-<body>
+<body class="bg-gray-100">
 
   <!-- ==========================================================================
-       GLOBAL APP HEADER & TOP CONTROLS
+       GLOBAL APP HEADER & TOP CONTROLS (MATERIAL DASHBOARD 3 NAVBAR)
        ========================================================================== -->
-  <header class="app-header no-print">
-    <div class="header-branding">
-      <div class="pbi-logo-badge" title="Microsoft Power BI Visual Engine">
-        <svg viewBox="0 0 24 24">
-          <path d="M4 18h2.5V11H4v7zm5.5 0h2.5V6H9.5v12zm5.5 0h2.5v-8H15v8zm5.5 0H23V2h-2.5v16z"/>
-        </svg>
+  <header class="material-navbar no-print">
+    <div class="brand-section">
+      <div class="brand-logo-badge" title="Material Executive Analytics Engine">
+        <span class="material-symbols-rounded">dashboard</span>
       </div>
-      <div class="branding-text">
-        <h1>HUMAN BI & QUAKESPOTS GIS PORTAL</h1>
-        <div class="role-subtitle">Faculty & Reserve Military Executive Performance Cockpit</div>
+      <div class="brand-info">
+        <span class="brand-breadcrumbs">Pages / Executive Cockpit</span>
+        <div class="brand-title">Human BI & QuakeSpots GIS Portal</div>
       </div>
     </div>
 
     <!-- Tab View Switcher -->
-    <nav class="header-nav">
-      <button class="tab-btn active" data-view="dashboard">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+    <nav class="nav-pill-tabs">
+      <button class="nav-pill-btn active" data-view="dashboard">
+        <span class="material-symbols-rounded" style="font-size:16px;">analytics</span>
         Human BI Dashboard
       </button>
-      <button class="tab-btn" data-view="gis">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      <button class="nav-pill-btn" data-view="gis">
+        <span class="material-symbols-rounded" style="font-size:16px;">map</span>
         QuakeSpots GIS Map
       </button>
-      <button class="tab-btn" data-view="methodology">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        Paano Ginawa (Methodology)
+      <button class="nav-pill-btn" data-view="methodology">
+        <span class="material-symbols-rounded" style="font-size:16px;">menu_book</span>
+        Methodology
       </button>
     </nav>
 
     <!-- Quick Action Buttons -->
-    <div class="header-actions">
-      <button class="action-btn" id="btnEditData" title="Live update KPIs and trends without code">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    <div class="nav-actions">
+      <button class="btn-material btn-material-outline" id="btnEditData" title="Live update KPIs and timeline without code">
+        <span class="material-symbols-rounded" style="font-size:16px; color:#e91e63;">edit</span>
         Quick Edit Data
       </button>
-      <button class="action-btn primary" id="btnExportPDF" title="Export landscape executive PDF">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      <button class="btn-material btn-material-primary" id="btnExportPDF" title="Export landscape executive PDF">
+        <span class="material-symbols-rounded" style="font-size:16px;">picture_as_pdf</span>
         Export PDF
       </button>
-      <button class="action-btn" id="btnShareLink" title="Copy view-only shareable link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Share Link
+      <button class="btn-material btn-material-outline" id="btnShareLink" title="Copy view-only shareable link">
+        <span class="material-symbols-rounded" style="font-size:16px;">share</span>
+        Share
       </button>
     </div>
   </header>
@@ -78,17 +79,19 @@
     <div class="pbi-dashboard-canvas" id="dashboardCanvas">
       
       <!-- Top Title Bar -->
-      <div class="pbi-banner">
-        <div class="banner-left-icons">
-          <!-- Bar chart & line chart icons -->
-          <svg class="banner-icon" viewBox="0 0 24 24"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>
-          <svg class="banner-icon" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><circle cx="22" cy="7" r="1.5"/><circle cx="13.5" cy="15.5" r="1.5"/><circle cx="8.5" cy="10.5" r="1.5"/><circle cx="2" cy="17" r="1.5"/></svg>
-        </div>
-        <h2 class="pbi-banner-title">HUMAN BI DASHBOARD</h2>
-        <div class="banner-right-icons">
-          <!-- Pie chart & user avatar icons -->
-          <svg class="banner-icon" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
-          <svg class="banner-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+      <div class="material-banner">
+        <h2 class="material-banner-title">
+          <span class="material-symbols-rounded" style="color:#e91e63;">space_dashboard</span>
+          HUMAN BI EXECUTIVE DASHBOARD
+        </h2>
+        <div class="material-banner-meta">
+          <span class="material-banner-pill" id="realtimeStatusBadge">
+            <span class="material-symbols-rounded" style="font-size:13px; color:#4caf50;">fiber_manual_record</span>
+            Real-Time Active • September 2026
+          </span>
+          <span class="material-banner-pill" id="forecastHorizonBadge">
+            H2 Forecast: Oct '26 – Mar '27
+          </span>
         </div>
       </div>
 
@@ -99,8 +102,12 @@
         <div class="pbi-card" id="pbi-card-a" data-card-id="card-a" draggable="true">
           <div class="card-header">
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="card-letter-badge">A</span>
+            <span class="material-letter-badge badge-dark">A</span>
             <span class="card-title">EXECUTIVE PROFILE</span>
+            <button type="button" class="btn-card-detail" onclick="openCardDetail('a')" title="Open full detail deep-dive">
+              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
+              <span>Detail</span>
+            </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-a', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
           <div class="profile-content">
@@ -108,19 +115,19 @@
               <div class="profile-avatar-box" id="avatarBoxClick" title="Click to upload profile photo">
                 <img id="profileAvatar" src="assets/img/default-avatar.svg" alt="Profile Picture">
                 <div class="avatar-hover-overlay">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  <span class="material-symbols-rounded" style="font-size:24px;">photo_camera</span>
                   <span>Upload</span>
                 </div>
               </div>
               <button type="button" class="avatar-edit-btn" id="btnChangeAvatar" title="Click to insert/upload photo" aria-label="Insert profile photo">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <span class="material-symbols-rounded" style="font-size:12px;">edit</span>
               </button>
               <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
             </div>
             <div class="profile-details">
               <div class="detail-row">
-                <div class="detail-icon-circle">
-                  <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+                <div class="floating-icon-box icon-gradient-dark" style="width:32px;height:32px;border-radius:8px;">
+                  <span class="material-symbols-rounded" style="font-size:16px;">person</span>
                 </div>
                 <div class="detail-text">
                   <strong>Name:</strong>
@@ -129,8 +136,8 @@
                 </div>
               </div>
               <div class="detail-row">
-                <div class="detail-icon-circle">
-                  <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <div class="floating-icon-box icon-gradient-info" style="width:32px;height:32px;border-radius:8px;">
+                  <span class="material-symbols-rounded" style="font-size:16px;">military_tech</span>
                 </div>
                 <div class="detail-text">
                   <strong>Role:</strong>
@@ -145,74 +152,68 @@
         <div class="pbi-card" id="pbi-card-b" data-card-id="card-b" draggable="true">
           <div class="card-header">
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="card-letter-badge">B</span>
+            <span class="material-letter-badge badge-info">B</span>
             <span class="card-title">5 PERSONAL / PROF KPIs</span>
+            <button type="button" class="btn-card-detail" onclick="openCardDetail('b')" title="Open full detail deep-dive">
+              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
+              <span>Detail</span>
+            </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-b', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
-          <div class="kpis-container">
+          <div class="material-kpi-grid">
             <!-- KPI 1: Learning Hours -->
-            <div class="kpi-tile">
-              <div class="kpi-icon-badge">
-                <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <div class="material-kpi-tile">
+              <div class="material-kpi-icon icon-gradient-dark">
+                <span class="material-symbols-rounded" style="font-size:16px;">school</span>
               </div>
-              <span class="kpi-label">Learning Hours</span>
-              <div class="kpi-number-group">
-                <div class="kpi-value" id="kpi-val-learning_hours">142</div>
-                <div class="kpi-unit" id="kpi-unit-learning_hours">hrs / mo</div>
-              </div>
-              <div class="kpi-delta delta-up" id="kpi-change-learning_hours"><span class="delta-arrow">↑</span> <span class="delta-val">12%</span></div>
+              <span class="material-kpi-label">Learning Hours</span>
+              <div class="material-kpi-value" id="kpi-val-learning_hours">142</div>
+              <div class="material-kpi-unit" id="kpi-unit-learning_hours">hrs / mo</div>
+              <div class="material-kpi-delta delta-positive" id="kpi-change-learning_hours"><span class="delta-arrow">↑</span> <span class="delta-val">12%</span></div>
             </div>
 
             <!-- KPI 2: Student Impact -->
-            <div class="kpi-tile">
-              <div class="kpi-icon-badge">
-                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div class="material-kpi-tile">
+              <div class="material-kpi-icon icon-gradient-info">
+                <span class="material-symbols-rounded" style="font-size:16px;">groups</span>
               </div>
-              <span class="kpi-label">Student Impact</span>
-              <div class="kpi-number-group">
-                <div class="kpi-value" id="kpi-val-student_impact">268</div>
-                <div class="kpi-unit" id="kpi-unit-student_impact">students</div>
-              </div>
-              <div class="kpi-delta delta-up" id="kpi-change-student_impact"><span class="delta-arrow">↑</span> <span class="delta-val">15%</span></div>
+              <span class="material-kpi-label">Student Impact</span>
+              <div class="material-kpi-value" id="kpi-val-student_impact">268</div>
+              <div class="material-kpi-unit" id="kpi-unit-student_impact">students</div>
+              <div class="material-kpi-delta delta-positive" id="kpi-change-student_impact"><span class="delta-arrow">↑</span> <span class="delta-val">15%</span></div>
             </div>
 
             <!-- KPI 3: Projects / Initiatives -->
-            <div class="kpi-tile">
-              <div class="kpi-icon-badge">
-                <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <div class="material-kpi-tile">
+              <div class="material-kpi-icon icon-gradient-success">
+                <span class="material-symbols-rounded" style="font-size:16px;">task_alt</span>
               </div>
-              <span class="kpi-label">Projects / Initiatives</span>
-              <div class="kpi-number-group">
-                <div class="kpi-value" id="kpi-val-projects_initiatives">12</div>
-                <div class="kpi-unit" id="kpi-unit-projects_initiatives">active</div>
-              </div>
-              <div class="kpi-delta delta-up" id="kpi-change-projects_initiatives"><span class="delta-arrow">↑</span> <span class="delta-val">9%</span></div>
+              <span class="material-kpi-label">Projects / Active</span>
+              <div class="material-kpi-value" id="kpi-val-projects_initiatives">12</div>
+              <div class="material-kpi-unit" id="kpi-unit-projects_initiatives">active</div>
+              <div class="material-kpi-delta delta-positive" id="kpi-change-projects_initiatives"><span class="delta-arrow">↑</span> <span class="delta-val">9%</span></div>
             </div>
 
             <!-- KPI 4: Physical Readiness -->
-            <div class="kpi-tile">
-              <div class="kpi-icon-badge">
-                <svg viewBox="0 0 24 24"><path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/></svg>
+            <div class="material-kpi-tile">
+              <div class="material-kpi-icon icon-gradient-warning">
+                <span class="material-symbols-rounded" style="font-size:16px;">fitness_center</span>
               </div>
-              <span class="kpi-label">Physical Readiness</span>
-              <div class="kpi-number-group">
-                <div class="kpi-value" id="kpi-val-physical_readiness">87%</div>
-                <div class="kpi-unit" id="kpi-unit-physical_readiness">score</div>
-              </div>
-              <div class="kpi-delta delta-up" id="kpi-change-physical_readiness"><span class="delta-arrow">↑</span> <span class="delta-val">5%</span></div>
+              <span class="material-kpi-label">Physical Readiness</span>
+              <div class="material-kpi-value" id="kpi-val-physical_readiness">87%</div>
+              <div class="material-kpi-unit" id="kpi-unit-physical_readiness">score</div>
+              <div class="material-kpi-delta delta-positive" id="kpi-change-physical_readiness"><span class="delta-arrow">↑</span> <span class="delta-val">5%</span></div>
             </div>
 
             <!-- KPI 5: Well-being Index -->
-            <div class="kpi-tile">
-              <div class="kpi-icon-badge">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <div class="material-kpi-tile">
+              <div class="material-kpi-icon icon-gradient-primary">
+                <span class="material-symbols-rounded" style="font-size:16px;">favorite</span>
               </div>
-              <span class="kpi-label">Well-being Index</span>
-              <div class="kpi-number-group">
-                <div class="kpi-value" id="kpi-val-wellbeing_index">8.6</div>
-                <div class="kpi-unit" id="kpi-unit-wellbeing_index">/ 10</div>
-              </div>
-              <div class="kpi-delta delta-up" id="kpi-change-wellbeing_index"><span class="delta-arrow">↑</span> <span class="delta-val">7%</span></div>
+              <span class="material-kpi-label">Well-being Index</span>
+              <div class="material-kpi-value" id="kpi-val-wellbeing_index">8.6</div>
+              <div class="material-kpi-unit" id="kpi-unit-wellbeing_index">/ 10</div>
+              <div class="material-kpi-delta delta-positive" id="kpi-change-wellbeing_index"><span class="delta-arrow">↑</span> <span class="delta-val">7%</span></div>
             </div>
           </div>
         </div>
@@ -221,38 +222,34 @@
         <div class="pbi-card" id="pbi-card-c" data-card-id="card-c" draggable="true">
           <div class="card-header">
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="card-letter-badge">C</span>
+            <span class="material-letter-badge badge-dark">C</span>
             <span class="card-title">AUTHENTIC TREND</span>
             <div class="trend-filter-bar">
               <select id="trendRangeSelect" class="pbi-select-dropdown" onchange="onTrendRangeSelect(this.value)" title="Select time horizon">
-                <option value="last-6" selected>Current (Jan–Jun '25)</option>
-                <option value="last-3">Recent / Q2 (Apr–Jun '25)</option>
-                <option value="q1">Baseline / Q1 (Jan–Mar '25)</option>
-                <option value="prior-6">Prior Sem (Jul–Dec '24)</option>
-                <option value="full-year">12-Mo Annual (Jul '24–Jun '25)</option>
+                <option value="last-6" selected>Rolling 6M (Apr–Sep '26)</option>
+                <option value="last-3">Recent Q3 (Jul–Sep '26)</option>
+                <option value="q1">Baseline Q2 (Apr–Jun '26)</option>
+                <option value="prior-6">Prior 6M (Oct '25–Mar '26)</option>
+                <option value="full-year">12-Mo Annual Cycle</option>
               </select>
             </div>
-            <button type="button" class="card-chart-edit-btn" id="btnEditCardC" onclick="toggleCardChartEdit('c')" title="Enable interactive point dragging">
-              <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-              <span id="btnEditCardCText">Edit Dots</span>
+            <button type="button" class="btn-card-detail" onclick="openCardDetail('c')" title="Open full detail deep-dive">
+              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
+              <span>Detail</span>
             </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-c', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
           <div class="trend-legend-bar">
             <div class="legend-item">
-              <span class="legend-line-solid"></span>
+              <span class="legend-line-solid" style="background-color: #1a73e8;"></span>
               <span>Professional Impact</span>
             </div>
             <div class="legend-item">
-              <span class="legend-line-dashed"></span>
+              <span class="legend-line-dashed" style="border-top-color: #fb8c00;"></span>
               <span>Personal Well-being</span>
             </div>
-            <span class="chart-drag-hint-badge" id="cardCDragHint" style="display: none;" title="Drag dots to adjust values">
-              <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/></svg>
-              Drag dots to edit (Click Done to lock)
-            </span>
           </div>
-          <div class="chart-wrapper">
+          <div class="material-chart-wrapper" style="height: 145px;">
             <canvas id="trendChartCanvas"></canvas>
           </div>
         </div>
@@ -261,13 +258,17 @@
         <div class="pbi-card" id="pbi-card-d" data-card-id="card-d" draggable="true">
           <div class="card-header">
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="card-letter-badge">D</span>
+            <span class="material-letter-badge badge-info">D</span>
             <span class="card-title">INSIGHT BEHIND DATA</span>
+            <button type="button" class="btn-card-detail" onclick="openCardDetail('d')" title="Open full detail deep-dive">
+              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
+              <span>Detail</span>
+            </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-d', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
           <div class="insight-body">
-            <div class="circle-icon-lead">
-              <svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/></svg>
+            <div class="floating-icon-box icon-gradient-info" style="width:36px;height:36px;border-radius:10px;">
+              <span class="material-symbols-rounded" style="font-size:20px;">insights</span>
             </div>
             <div class="insight-text-list" id="insightsList">
               <div class="insight-item">Consistent investment in learning and well-being drives higher professional impact and student outcomes.</div>
@@ -280,13 +281,17 @@
         <div class="pbi-card" id="pbi-card-e" data-card-id="card-e" draggable="true">
           <div class="card-header">
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="card-letter-badge">E</span>
+            <span class="material-letter-badge badge-warning">E</span>
             <span class="card-title">ONE DATA ANOMALY</span>
+            <button type="button" class="btn-card-detail" onclick="openCardDetail('e')" title="Open full detail deep-dive">
+              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
+              <span>Detail</span>
+            </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-e', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
           <div class="anomaly-body">
-            <div class="circle-icon-lead">
-              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="12"/><line x1="11" y1="15" x2="11.01" y2="15"/></svg>
+            <div class="floating-icon-box icon-gradient-warning" style="width:36px;height:36px;border-radius:10px;">
+              <span class="material-symbols-rounded" style="font-size:20px;">warning</span>
             </div>
             <div class="anomaly-content">
               <div class="anomaly-headline" id="anomalyTitle">April shows a spike in professional impact while well-being dips.</div>
@@ -300,13 +305,17 @@
         <div class="pbi-card" id="pbi-card-f" data-card-id="card-f" draggable="true">
           <div class="card-header">
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="card-letter-badge">F</span>
+            <span class="material-letter-badge badge-primary">F</span>
             <span class="card-title">STRATEGIC QUESTION</span>
+            <button type="button" class="btn-card-detail" onclick="openCardDetail('f')" title="Open full detail deep-dive">
+              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
+              <span>Detail</span>
+            </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-f', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
           <div class="question-body">
-            <div class="circle-icon-lead">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div class="floating-icon-box icon-gradient-primary" style="width:36px;height:36px;border-radius:10px;">
+              <span class="material-symbols-rounded" style="font-size:20px;">crisis_alert</span>
             </div>
             <div class="strategic-question-text" id="strategicQuestionText">
               How can I leverage data and partnerships to scale student success and national service without compromising well-being?
@@ -318,32 +327,25 @@
         <div class="pbi-card" id="pbi-card-g" data-card-id="card-g" draggable="true">
           <div class="card-header">
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="card-letter-badge">G</span>
+            <span class="material-letter-badge badge-dark">G</span>
             <span class="card-title">6-MONTH BI FORECAST</span>
-            <span class="forecast-period-tag" id="forecastPeriodTag">H2: Jul–Dec '25</span>
-            <span class="chart-drag-hint-badge" id="cardGDragHint" style="display: none;" title="Drag bar tops to adjust projections">
-              <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/></svg>
-              Drag bars to edit
-            </span>
-            <button type="button" class="card-chart-edit-btn" id="btnEditCardG" onclick="toggleCardChartEdit('g')" title="Enable interactive bar dragging">
-              <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-              <span id="btnEditCardGText">Edit Bars</span>
+            <span class="forecast-period-tag" id="forecastPeriodTag">H2: Oct '26–Mar '27</span>
+            <button type="button" class="btn-card-detail" onclick="openCardDetail('g')" title="Open full detail deep-dive">
+              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
+              <span>Detail</span>
             </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-g', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
-          <div class="forecast-body">
-            <div class="chart-wrapper">
+          <div class="material-forecast-body">
+            <div class="material-chart-wrapper" style="height: 120px;">
               <canvas id="forecastChartCanvas"></canvas>
             </div>
-            <div class="forecast-summary-box">
-              <div class="forecast-title">Forecast Summary</div>
-              <div id="forecastSummaryList">
-                <div class="summary-check-item"><span class="check-green">✓</span> <span>Professional Impact: ↑ 12–18%</span></div>
-                <div class="summary-check-item"><span class="check-green">✓</span> <span>Student Impact: ↑ 15–20%</span></div>
-                <div class="summary-check-item"><span class="check-green">✓</span> <span>Learning Hours: 130+ hrs/mo</span></div>
-                <div class="summary-check-item"><span class="check-green">✓</span> <span>Well-being Index: 8.5+</span></div>
-              </div>
-              <div class="forecast-note" id="forecastNote">Assumes consistent habits and support systems.</div>
+            <div class="forecast-checks-box">
+              <div class="forecast-check-row"><span class="material-symbols-rounded">verified</span> <span>Professional Impact: ↑ 12–18%</span></div>
+              <div class="forecast-check-row"><span class="material-symbols-rounded">verified</span> <span>Student Impact: ↑ 15–20%</span></div>
+              <div class="forecast-check-row"><span class="material-symbols-rounded">verified</span> <span>Learning Hours: 130+ hrs/mo</span></div>
+              <div class="forecast-check-row"><span class="material-symbols-rounded">verified</span> <span>Well-being Index: 8.5+</span></div>
+              <div class="forecast-footnote" id="forecastNote">Assumes consistent habits and support systems.</div>
             </div>
           </div>
         </div>
@@ -352,29 +354,33 @@
         <div class="pbi-card" id="pbi-card-h" data-card-id="card-h" draggable="true">
           <div class="card-header">
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="card-letter-badge">H</span>
+            <span class="material-letter-badge badge-success">H</span>
             <span class="card-title">GOVERNANCE & PRIVACY</span>
+            <button type="button" class="btn-card-detail" onclick="openCardDetail('h')" title="Open full detail deep-dive">
+              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
+              <span>Detail</span>
+            </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-h', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
           <div class="governance-body">
-            <div class="circle-icon-lead">
-              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><rect x="9" y="10" width="6" height="5" rx="1"/><path d="M10 10V8a2 2 0 1 1 4 0v2"/></svg>
+            <div class="floating-icon-box icon-gradient-success" style="width:36px;height:36px;border-radius:10px;">
+              <span class="material-symbols-rounded" style="font-size:20px;">shield</span>
             </div>
             <div class="governance-list">
               <div class="gov-item">
-                <span class="gov-check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+                <span class="gov-check-icon"><span class="material-symbols-rounded" style="font-size:14px;color:#4caf50;">check</span></span>
                 <span>Data sources: Self-tracking, LMS, fitness tracker, official reports</span>
               </div>
               <div class="gov-item">
-                <span class="gov-check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+                <span class="gov-check-icon"><span class="material-symbols-rounded" style="font-size:14px;color:#4caf50;">check</span></span>
                 <span>Data used for personal growth and professional improvement</span>
               </div>
               <div class="gov-item">
-                <span class="gov-check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+                <span class="gov-check-icon"><span class="material-symbols-rounded" style="font-size:14px;color:#4caf50;">check</span></span>
                 <span>No sharing of personal data without consent</span>
               </div>
               <div class="gov-item">
-                <span class="gov-check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+                <span class="gov-check-icon"><span class="material-symbols-rounded" style="font-size:14px;color:#4caf50;">check</span></span>
                 <span>Committed to data accuracy, ethics, and responsible use</span>
               </div>
             </div>
@@ -385,13 +391,17 @@
         <div class="pbi-card" id="pbi-card-i" data-card-id="card-i" draggable="true">
           <div class="card-header">
             <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="card-letter-badge">I</span>
+            <span class="material-letter-badge badge-dark">I</span>
             <span class="card-title">YOUR BI IDENTITY</span>
+            <button type="button" class="btn-card-detail" onclick="openCardDetail('i')" title="Open full detail deep-dive">
+              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
+              <span>Detail</span>
+            </button>
             <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-i', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
           </div>
           <div class="identity-body">
-            <div class="circle-icon-lead">
-              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+            <div class="floating-icon-box icon-gradient-dark" style="width:36px;height:36px;border-radius:10px;">
+              <span class="material-symbols-rounded" style="font-size:20px;">military_tech</span>
             </div>
             <div class="identity-content">
               <div class="identity-quote" id="identityQuote">"I turn purpose into performance through data, discipline, and dedication."</div>
@@ -497,7 +507,7 @@
         </div>
         <div class="doc-content">
           <p>
-            This portal integrates two comprehensive data systems designed for <strong>Mary Jane Sapiendante Legaspi</strong> ("Ma'am Jane"):
+            This portal integrates two comprehensive data systems:
           </p>
           <ul style="margin: 10px 0 10px 24px;">
             <li><strong>Human BI Dashboard:</strong> An executive-level personal analytics cockpit modeled after enterprise Power BI reporting systems, quantifying faculty leadership, military reserve readiness, student reach, and holistic well-being.</li>
@@ -916,6 +926,17 @@ for i, nbrs in enumerate(neighbors):
         <div class="studio-panel" id="studio-panel-trends">
           <div class="studio-card">
             
+            <!-- Real-Time Timeline Horizon Selector -->
+            <div class="studio-timeline-bar" style="display:flex; align-items:center; justify-content:space-between; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; margin-bottom:14px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="material-symbols-rounded" style="color:#1a73e8; font-size:18px;">calendar_month</span>
+                <strong style="font-size:12px; color:#344767; text-transform:uppercase; letter-spacing:0.5px;">Active Calendar Month:</strong>
+                <input type="month" id="studioAnchorMonth" value="2026-09" onchange="onStudioAnchorMonthChange(this.value)" style="border:1px solid #cbd5e1; border-radius:6px; padding:4px 8px; font-size:13px; font-weight:600; color:#1e293b; background:#fff;">
+                <button type="button" class="preset-pill-btn" onclick="syncStudioToCurrentDate()" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; font-weight:600;">⚡ Sync to Today</button>
+              </div>
+              <span style="font-size:11px; color:#64748b;">Changing the active month dynamically rolls historical & forecast horizons.</span>
+            </div>
+
             <!-- Live Real-time Chart Preview Container -->
             <div class="studio-trend-preview-box">
               <div class="trend-preview-topbar">
@@ -952,9 +973,9 @@ for i, nbrs in enumerate(neighbors):
 
             <!-- 6 Month Grid with Direct Numerical Inputs, Steppers & Meter Tracks -->
             <div class="months-editor-grid">
-              <!-- JAN -->
+              <!-- MONTH 0 -->
               <div class="month-card" id="month-card-0">
-                <div class="month-title-badge">JAN</div>
+                <div class="month-title-badge" id="trend-lbl-0">Apr</div>
                 <div class="month-metric-group">
                   <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
                   <div class="trend-nudge-row">
@@ -975,9 +996,9 @@ for i, nbrs in enumerate(neighbors):
                 </div>
               </div>
 
-              <!-- FEB -->
+              <!-- MONTH 1 -->
               <div class="month-card" id="month-card-1">
-                <div class="month-title-badge">FEB</div>
+                <div class="month-title-badge" id="trend-lbl-1">May</div>
                 <div class="month-metric-group">
                   <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
                   <div class="trend-nudge-row">
@@ -998,9 +1019,9 @@ for i, nbrs in enumerate(neighbors):
                 </div>
               </div>
 
-              <!-- MAR -->
+              <!-- MONTH 2 -->
               <div class="month-card" id="month-card-2">
-                <div class="month-title-badge">MAR</div>
+                <div class="month-title-badge" id="trend-lbl-2">Jun</div>
                 <div class="month-metric-group">
                   <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
                   <div class="trend-nudge-row">
@@ -1021,9 +1042,9 @@ for i, nbrs in enumerate(neighbors):
                 </div>
               </div>
 
-              <!-- APR (Anomaly) -->
+              <!-- MONTH 3 (Anomaly) -->
               <div class="month-card anomaly-month-card" id="month-card-3">
-                <div class="month-title-badge anomaly-badge">APR (Anomaly)</div>
+                <div class="month-title-badge anomaly-badge" id="trend-lbl-3">Jul (Anomaly)</div>
                 <div class="month-metric-group">
                   <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
                   <div class="trend-nudge-row">
@@ -1044,9 +1065,9 @@ for i, nbrs in enumerate(neighbors):
                 </div>
               </div>
 
-              <!-- MAY -->
+              <!-- MONTH 4 -->
               <div class="month-card" id="month-card-4">
-                <div class="month-title-badge">MAY</div>
+                <div class="month-title-badge" id="trend-lbl-4">Aug</div>
                 <div class="month-metric-group">
                   <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
                   <div class="trend-nudge-row">
@@ -1067,9 +1088,9 @@ for i, nbrs in enumerate(neighbors):
                 </div>
               </div>
 
-              <!-- JUN -->
+              <!-- MONTH 5 -->
               <div class="month-card" id="month-card-5">
-                <div class="month-title-badge">JUN</div>
+                <div class="month-title-badge" id="trend-lbl-5">Sep</div>
                 <div class="month-metric-group">
                   <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
                   <div class="trend-nudge-row">
@@ -1127,7 +1148,7 @@ for i, nbrs in enumerate(neighbors):
           <div class="studio-card" style="margin-bottom: 14px;">
             <div class="forecast-panel-head">
               <div>
-                <h4 class="card-section-title">6-Month Forward Projection Targets (H2: Jul – Dec '25)</h4>
+                <h4 class="card-section-title">6-Month Forward Projection Targets (Rolling Horizon)</h4>
                 <p class="field-hint">Enter custom projected index values (0–100) or auto-calculate based on historical trend velocity.</p>
               </div>
               <button type="button" class="preset-pill-btn" onclick="autoCalculateForecastFromTrends()" title="Calculate next 6 months projection based on current trend velocity" style="border: 1px solid #2563eb; color: #2563eb; background: #eff6ff; font-weight: 700;">
@@ -1138,27 +1159,27 @@ for i, nbrs in enumerate(neighbors):
             <!-- Direct Monthly Forecast Inputs -->
             <div class="forecast-months-grid" id="forecastMonthsInputGrid">
               <div class="forecast-month-cell">
-                <span class="forecast-month-lbl">Jul</span>
+                <span class="forecast-month-lbl" id="forecast-lbl-0">Oct</span>
                 <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-0" value="55" oninput="onForecastNumInputChange(0, this.value)">
               </div>
               <div class="forecast-month-cell">
-                <span class="forecast-month-lbl">Aug</span>
+                <span class="forecast-month-lbl" id="forecast-lbl-1">Nov</span>
                 <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-1" value="62" oninput="onForecastNumInputChange(1, this.value)">
               </div>
               <div class="forecast-month-cell">
-                <span class="forecast-month-lbl">Sep</span>
+                <span class="forecast-month-lbl" id="forecast-lbl-2">Dec</span>
                 <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-2" value="67" oninput="onForecastNumInputChange(2, this.value)">
               </div>
               <div class="forecast-month-cell">
-                <span class="forecast-month-lbl">Oct</span>
+                <span class="forecast-month-lbl" id="forecast-lbl-3">Jan</span>
                 <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-3" value="72" oninput="onForecastNumInputChange(3, this.value)">
               </div>
               <div class="forecast-month-cell">
-                <span class="forecast-month-lbl">Nov</span>
+                <span class="forecast-month-lbl" id="forecast-lbl-4">Feb</span>
                 <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-4" value="75" oninput="onForecastNumInputChange(4, this.value)">
               </div>
               <div class="forecast-month-cell">
-                <span class="forecast-month-lbl">Dec</span>
+                <span class="forecast-month-lbl" id="forecast-lbl-5">Mar</span>
                 <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-5" value="82" oninput="onForecastNumInputChange(5, this.value)">
               </div>
             </div>
@@ -1271,6 +1292,8 @@ for i, nbrs in enumerate(neighbors):
 
   <!-- Scripts -->
   <script src="assets/js/charts.js"></script>
+  <script src="assets/js/doc-editor.js"></script>
+  <script src="assets/js/card-detail.js"></script>
   <script src="assets/js/data-manager.js"></script>
   <script src="assets/js/pdf-export.js"></script>
   <script src="assets/js/app.js"></script>
