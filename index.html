@@ -3,39 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Human BI Dashboard & QuakeSpots GIS Portal - Mary Jane Legaspi</title>
+  <title>Human BI Dashboard - Mary Jane Legaspi</title>
   
-  <!-- Fonts and Icons for Creative Tim Material Dashboard 3 -->
+  <!-- Fonts: Newsreader (Editorial Serif) & Plus Jakarta Sans (Data Sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-  <link href="assets/css/material/nucleo-icons.css" rel="stylesheet" />
-  <link href="assets/css/material/nucleo-svg.css" rel="stylesheet" />
   
-  <!-- Stylesheets -->
+  <!-- Quill.js v2 WYSIWYG Stylesheet -->
+  <link rel="stylesheet" href="assets/vendor/quill/quill.snow.css">
+
+  <!-- High-Stature Executive Brief Theme & Stylesheets -->
   <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/powerbi-theme.css">
-  <link rel="stylesheet" href="assets/css/material-custom.css">
+  <link rel="stylesheet" href="assets/css/executive-theme.css">
   <link rel="stylesheet" href="assets/css/print-pdf.css">
 
-  <!-- Chart.js and Plugins -->
+  <!-- Chart.js & html2pdf -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-<body class="bg-gray-100">
+<body>
 
   <!-- ==========================================================================
-       GLOBAL APP HEADER & TOP CONTROLS (MATERIAL DASHBOARD 3 NAVBAR)
+       EXECUTIVE MASTHEAD & GLOBAL CONTROLS
        ========================================================================== -->
   <header class="material-navbar no-print">
     <div class="brand-section">
-      <div class="brand-logo-badge" title="Material Executive Analytics Engine">
-        <span class="material-symbols-rounded">dashboard</span>
+      <div class="brand-logo-badge" title="Executive Intelligence Platform">
+        <span class="material-symbols-rounded">shield</span>
       </div>
       <div class="brand-info">
-        <span class="brand-breadcrumbs">Pages / Executive Cockpit</span>
-        <div class="brand-title">Human BI & QuakeSpots GIS Portal</div>
+        <span class="brand-breadcrumbs">Executive Intelligence · BI Cockpit</span>
+        <div class="brand-title">Human BI Executive Dashboard</div>
       </div>
     </div>
 
@@ -45,27 +45,23 @@
         <span class="material-symbols-rounded" style="font-size:16px;">analytics</span>
         Human BI Dashboard
       </button>
-      <button class="nav-pill-btn" data-view="gis">
-        <span class="material-symbols-rounded" style="font-size:16px;">map</span>
-        QuakeSpots GIS Map
-      </button>
       <button class="nav-pill-btn" data-view="methodology">
         <span class="material-symbols-rounded" style="font-size:16px;">menu_book</span>
-        Methodology
+        Defense Methodology
       </button>
     </nav>
 
     <!-- Quick Action Buttons -->
     <div class="nav-actions">
-      <button class="btn-material btn-material-outline" id="btnEditData" title="Live update KPIs and timeline without code">
-        <span class="material-symbols-rounded" style="font-size:16px; color:#e91e63;">edit</span>
-        Quick Edit Data
+      <button class="btn-material btn-material-outline" id="btnEditData" onclick="openUnifiedEditor('a')" title="Open Unified Executive Dossier & Strategic Editor">
+        <span class="material-symbols-rounded" style="font-size:16px; color:var(--c-brass-400);">edit_note</span>
+        Executive Editor
       </button>
-      <button class="btn-material btn-material-primary" id="btnExportPDF" title="Export landscape executive PDF">
+      <button class="btn-material btn-material-primary" id="btnExportPDF" title="Export landscape executive PDF report">
         <span class="material-symbols-rounded" style="font-size:16px;">picture_as_pdf</span>
         Export PDF
       </button>
-      <button class="btn-material btn-material-outline" id="btnShareLink" title="Copy view-only shareable link">
+      <button class="btn-material btn-material-outline" id="btnShareLink" title="Copy shareable link">
         <span class="material-symbols-rounded" style="font-size:16px;">share</span>
         Share
       </button>
@@ -73,21 +69,20 @@
   </header>
 
   <!-- ==========================================================================
-       VIEW 1: HUMAN BI DASHBOARD (EXACT POWER BI REPLICA)
+       VIEW 1: HUMAN BI DASHBOARD (TAILORED EXECUTIVE DOSSIER)
        ========================================================================== -->
   <main id="view-dashboard" class="view-section active">
     <div class="pbi-dashboard-canvas" id="dashboardCanvas">
       
-      <!-- Top Title Bar -->
+      <!-- Stately Section Header Bar -->
       <div class="material-banner">
         <h2 class="material-banner-title">
-          <span class="material-symbols-rounded" style="color:#e91e63;">space_dashboard</span>
+          <span class="material-symbols-rounded banner-crest-icon">verified</span>
           HUMAN BI EXECUTIVE DASHBOARD
         </h2>
         <div class="material-banner-meta">
           <span class="material-banner-pill" id="realtimeStatusBadge">
-            <span class="material-symbols-rounded" style="font-size:13px; color:#4caf50;">fiber_manual_record</span>
-            Real-Time Active • September 2026
+            Friday, September 18, 2026
           </span>
           <span class="material-banner-pill" id="forecastHorizonBadge">
             H2 Forecast: Oct '26 – Mar '27
@@ -95,320 +90,397 @@
         </div>
       </div>
 
-      <!-- 3x3 Grid Layout -->
+      <!-- Tailored Executive Dossier Layout -->
       <div class="pbi-grid">
 
-        <!-- [A] EXECUTIVE PROFILE -->
-        <div class="pbi-card" id="pbi-card-a" data-card-id="card-a" draggable="true">
-          <div class="card-header">
-            <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="material-letter-badge badge-dark">A</span>
-            <span class="card-title">EXECUTIVE PROFILE</span>
-            <button type="button" class="btn-card-detail" onclick="openCardDetail('a')" title="Open full detail deep-dive">
-              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
-              <span>Detail</span>
-            </button>
-            <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-a', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
-          </div>
-          <div class="profile-content">
-            <div class="profile-avatar-wrapper">
-              <div class="profile-avatar-box" id="avatarBoxClick" title="Click to upload profile photo">
-                <img id="profileAvatar" src="assets/img/default-avatar.svg" alt="Profile Picture">
-                <div class="avatar-hover-overlay">
-                  <span class="material-symbols-rounded" style="font-size:24px;">photo_camera</span>
-                  <span>Upload</span>
-                </div>
+        <!-- ==================================================================
+             ROW 1: TOP EXECUTIVE COMMAND STRIP (Cards A & B)
+             ================================================================== -->
+        <div class="dossier-top-strip">
+
+          <!-- [A] EXECUTIVE PROFILE -->
+          <div class="pbi-card" id="pbi-card-a" data-card-id="card-a">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="module-key-badge brass">MODULE A</span>
+                <span class="card-title">Executive Profile</span>
               </div>
-              <button type="button" class="avatar-edit-btn" id="btnChangeAvatar" title="Click to insert/upload photo" aria-label="Insert profile photo">
-                <span class="material-symbols-rounded" style="font-size:12px;">edit</span>
+              <button type="button" class="btn-card-detail" onclick="openUnifiedEditor('a')" title="Inspect and edit module dossier">
+                <span class="material-symbols-rounded" style="font-size:13px;">edit_note</span>
+                <span>Dossier & Edit</span>
               </button>
-              <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
             </div>
-            <div class="profile-details">
-              <div class="detail-row">
-                <div class="floating-icon-box icon-gradient-dark" style="width:32px;height:32px;border-radius:8px;">
-                  <span class="material-symbols-rounded" style="font-size:16px;">person</span>
+            <div class="profile-content">
+              <div class="profile-avatar-wrapper">
+                <div class="profile-avatar-box" id="avatarBoxClick" title="Click to upload portrait">
+                  <img id="profileAvatar" src="assets/mary_jane.jpg" onerror="this.src='assets/img/default-avatar.svg'" alt="Profile Picture">
+                  <div class="avatar-hover-overlay">
+                    <span class="material-symbols-rounded" style="font-size:22px;">photo_camera</span>
+                    <span>Update</span>
+                  </div>
                 </div>
-                <div class="detail-text">
-                  <strong>Name:</strong>
+                <button type="button" class="avatar-edit-btn" id="btnChangeAvatar" title="Change photo" aria-label="Change photo">
+                  <span class="material-symbols-rounded" style="font-size:12px;">edit</span>
+                </button>
+                <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
+              </div>
+              <div class="profile-details">
+                <div class="profile-name-block">
                   <span class="name-primary" id="profileName">Mary Jane Sapiendante Legaspi</span>
                   <span class="nickname" id="profileNickname">("Mary Jane")</span>
                 </div>
-              </div>
-              <div class="detail-row">
-                <div class="floating-icon-box icon-gradient-info" style="width:32px;height:32px;border-radius:8px;">
-                  <span class="material-symbols-rounded" style="font-size:16px;">military_tech</span>
-                </div>
-                <div class="detail-text">
-                  <strong>Role:</strong>
+                <div class="role-pill">
+                  <span class="material-symbols-rounded" style="font-size:15px; color:var(--c-brass-600);">military_tech</span>
                   <span class="role-text" id="profileRole">Higher Education Faculty Member & Reserve Military</span>
                 </div>
+                <div class="role-credentials">
+                  <span class="cred-tag">Faculty Lead</span>
+                  <span class="cred-tag">Reserve Officer</span>
+                  <span class="cred-tag">CHED Compliant</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- [B] 5 PERSONAL / PROF KPIs -->
-        <div class="pbi-card" id="pbi-card-b" data-card-id="card-b" draggable="true">
-          <div class="card-header">
-            <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="material-letter-badge badge-info">B</span>
-            <span class="card-title">5 PERSONAL / PROF KPIs</span>
-            <button type="button" class="btn-card-detail" onclick="openCardDetail('b')" title="Open full detail deep-dive">
-              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
-              <span>Detail</span>
-            </button>
-            <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-b', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
-          </div>
-          <div class="material-kpi-grid">
-            <!-- KPI 1: Learning Hours -->
-            <div class="material-kpi-tile">
-              <div class="material-kpi-icon icon-gradient-dark">
-                <span class="material-symbols-rounded" style="font-size:16px;">school</span>
+          <!-- [B] 5 PERSONAL / PROF KPIs -->
+          <div class="pbi-card" id="pbi-card-b" data-card-id="card-b">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="module-key-badge">MODULE B</span>
+                <span class="card-title">5 Core Operational KPIs</span>
               </div>
-              <span class="material-kpi-label">Learning Hours</span>
-              <div class="material-kpi-value" id="kpi-val-learning_hours">142</div>
-              <div class="material-kpi-unit" id="kpi-unit-learning_hours">hrs / mo</div>
-              <div class="material-kpi-delta delta-positive" id="kpi-change-learning_hours"><span class="delta-arrow">↑</span> <span class="delta-val">12%</span></div>
+              <button type="button" class="btn-card-detail" onclick="openUnifiedEditor('b')" title="Inspect and edit module dossier">
+                <span class="material-symbols-rounded" style="font-size:13px;">edit_note</span>
+                <span>Dossier & Edit</span>
+              </button>
             </div>
+            <div class="kpis-content">
+              <div class="kpis-grid">
+                <!-- KPI 1: Learning Hours -->
+                <div class="kpi-tile">
+                  <div class="kpi-tile-header">
+                    <span class="kpi-label">Learning Hours</span>
+                    <span class="material-symbols-rounded kpi-icon">school</span>
+                  </div>
+                  <div class="kpi-data-row">
+                    <span class="kpi-val" id="kpi-val-learning_hours">142</span>
+                    <span class="kpi-unit" id="kpi-unit-learning_hours">hrs / mo</span>
+                  </div>
+                  <div class="kpi-delta delta-up" id="kpi-change-learning_hours">
+                    <span class="delta-arrow">↑</span> <span class="delta-val">12%</span>
+                  </div>
+                </div>
 
-            <!-- KPI 2: Student Impact -->
-            <div class="material-kpi-tile">
-              <div class="material-kpi-icon icon-gradient-info">
-                <span class="material-symbols-rounded" style="font-size:16px;">groups</span>
+                <!-- KPI 2: Student Impact -->
+                <div class="kpi-tile">
+                  <div class="kpi-tile-header">
+                    <span class="kpi-label">Student Impact</span>
+                    <span class="material-symbols-rounded kpi-icon">groups</span>
+                  </div>
+                  <div class="kpi-data-row">
+                    <span class="kpi-val" id="kpi-val-student_impact">268</span>
+                    <span class="kpi-unit" id="kpi-unit-student_impact">students</span>
+                  </div>
+                  <div class="kpi-delta delta-up" id="kpi-change-student_impact">
+                    <span class="delta-arrow">↑</span> <span class="delta-val">15%</span>
+                  </div>
+                </div>
+
+                <!-- KPI 3: Projects / Initiatives -->
+                <div class="kpi-tile">
+                  <div class="kpi-tile-header">
+                    <span class="kpi-label">Active Projects</span>
+                    <span class="material-symbols-rounded kpi-icon">task_alt</span>
+                  </div>
+                  <div class="kpi-data-row">
+                    <span class="kpi-val" id="kpi-val-projects_initiatives">12</span>
+                    <span class="kpi-unit" id="kpi-unit-projects_initiatives">active</span>
+                  </div>
+                  <div class="kpi-delta delta-up" id="kpi-change-projects_initiatives">
+                    <span class="delta-arrow">↑</span> <span class="delta-val">9%</span>
+                  </div>
+                </div>
+
+                <!-- KPI 4: Physical Readiness -->
+                <div class="kpi-tile">
+                  <div class="kpi-tile-header">
+                    <span class="kpi-label">Physical Readiness</span>
+                    <span class="material-symbols-rounded kpi-icon">fitness_center</span>
+                  </div>
+                  <div class="kpi-data-row">
+                    <span class="kpi-val" id="kpi-val-physical_readiness">87%</span>
+                    <span class="kpi-unit" id="kpi-unit-physical_readiness">score</span>
+                  </div>
+                  <div class="kpi-delta delta-up" id="kpi-change-physical_readiness">
+                    <span class="delta-arrow">↑</span> <span class="delta-val">5%</span>
+                  </div>
+                </div>
+
+                <!-- KPI 5: Well-being Index -->
+                <div class="kpi-tile">
+                  <div class="kpi-tile-header">
+                    <span class="kpi-label">Well-Being Index</span>
+                    <span class="material-symbols-rounded kpi-icon">favorite</span>
+                  </div>
+                  <div class="kpi-data-row">
+                    <span class="kpi-val" id="kpi-val-wellbeing_index">8.6</span>
+                    <span class="kpi-unit" id="kpi-unit-wellbeing_index">/ 10</span>
+                  </div>
+                  <div class="kpi-delta delta-up" id="kpi-change-wellbeing_index">
+                    <span class="delta-arrow">↑</span> <span class="delta-val">7%</span>
+                  </div>
+                </div>
               </div>
-              <span class="material-kpi-label">Student Impact</span>
-              <div class="material-kpi-value" id="kpi-val-student_impact">268</div>
-              <div class="material-kpi-unit" id="kpi-unit-student_impact">students</div>
-              <div class="material-kpi-delta delta-positive" id="kpi-change-student_impact"><span class="delta-arrow">↑</span> <span class="delta-val">15%</span></div>
             </div>
+          </div>
 
-            <!-- KPI 3: Projects / Initiatives -->
-            <div class="material-kpi-tile">
-              <div class="material-kpi-icon icon-gradient-success">
-                <span class="material-symbols-rounded" style="font-size:16px;">task_alt</span>
+        </div>
+
+        <!-- ==================================================================
+             ROW 2: ANALYTICAL CORE (Cards C & G)
+             ================================================================== -->
+        <div class="dossier-analytics-row">
+
+          <!-- [C] AUTHENTIC TREND -->
+          <div class="pbi-card" id="pbi-card-c" data-card-id="card-c">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="module-key-badge">MODULE C</span>
+                <span class="card-title">Longitudinal Impact Trend</span>
               </div>
-              <span class="material-kpi-label">Projects / Active</span>
-              <div class="material-kpi-value" id="kpi-val-projects_initiatives">12</div>
-              <div class="material-kpi-unit" id="kpi-unit-projects_initiatives">active</div>
-              <div class="material-kpi-delta delta-positive" id="kpi-change-projects_initiatives"><span class="delta-arrow">↑</span> <span class="delta-val">9%</span></div>
-            </div>
-
-            <!-- KPI 4: Physical Readiness -->
-            <div class="material-kpi-tile">
-              <div class="material-kpi-icon icon-gradient-warning">
-                <span class="material-symbols-rounded" style="font-size:16px;">fitness_center</span>
+              <div class="chart-header-controls">
+                <span class="period-tag" id="trendPeriodTag" style="display:none;">Rolling 6M (Apr–Sep '26)</span>
+                <select id="trendRangeSelect" class="range-select" onchange="onTrendRangeSelect(this.value)" title="Select time horizon">
+                  <option value="last-6" selected>Rolling 6M</option>
+                  <option value="last-3">Recent Q3</option>
+                  <option value="q1">Baseline Q2</option>
+                  <option value="prior-6">Prior 6M</option>
+                  <option value="full-year">12-Mo Annual</option>
+                  <option value="custom">Custom Range</option>
+                </select>
+                <button type="button" class="btn-card-detail" onclick="openUnifiedEditor('c')" title="Inspect and edit module dossier">
+                  <span class="material-symbols-rounded" style="font-size:13px;">edit_note</span>
+                  <span>Dossier & Edit</span>
+                </button>
               </div>
-              <span class="material-kpi-label">Physical Readiness</span>
-              <div class="material-kpi-value" id="kpi-val-physical_readiness">87%</div>
-              <div class="material-kpi-unit" id="kpi-unit-physical_readiness">score</div>
-              <div class="material-kpi-delta delta-positive" id="kpi-change-physical_readiness"><span class="delta-arrow">↑</span> <span class="delta-val">5%</span></div>
             </div>
-
-            <!-- KPI 5: Well-being Index -->
-            <div class="material-kpi-tile">
-              <div class="material-kpi-icon icon-gradient-primary">
-                <span class="material-symbols-rounded" style="font-size:16px;">favorite</span>
+            <div class="chart-card-body">
+              <div class="chart-legend-custom">
+                <div class="legend-item">
+                  <span class="legend-indicator indicator-pro"></span>
+                  <span>Professional Impact Index</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-indicator indicator-wellbeing"></span>
+                  <span>Personal Well-being Index</span>
+                </div>
               </div>
-              <span class="material-kpi-label">Well-being Index</span>
-              <div class="material-kpi-value" id="kpi-val-wellbeing_index">8.6</div>
-              <div class="material-kpi-unit" id="kpi-unit-wellbeing_index">/ 10</div>
-              <div class="material-kpi-delta delta-positive" id="kpi-change-wellbeing_index"><span class="delta-arrow">↑</span> <span class="delta-val">7%</span></div>
+              <div class="chart-canvas-wrapper">
+                <canvas id="trendChartCanvas"></canvas>
+              </div>
             </div>
           </div>
+
+          <!-- [G] 6-MONTH BI FORECAST -->
+          <div class="pbi-card" id="pbi-card-g" data-card-id="card-g">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="module-key-badge brass">MODULE G</span>
+                <span class="card-title">Predictive Forecast</span>
+              </div>
+              <div class="chart-header-controls">
+                <span class="period-tag" id="forecastPeriodTag">H2: Oct '26–Mar '27</span>
+                <button type="button" class="btn-card-detail" onclick="openUnifiedEditor('g')" title="Inspect and edit module dossier">
+                  <span class="material-symbols-rounded" style="font-size:13px;">edit_note</span>
+                  <span>Dossier & Edit</span>
+                </button>
+              </div>
+            </div>
+            <div class="chart-card-body">
+              <div class="chart-canvas-wrapper" style="height: 190px;">
+                <canvas id="forecastChartCanvas"></canvas>
+              </div>
+              <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--c-text-muted);">
+                <div style="display:flex; justify-content:space-between;">
+                  <span>• Projected Impact Trajectory: <strong style="color:var(--c-navy-900);">+12% to +18% MoM</strong></span>
+                  <span>• Target Retention: <strong style="color:var(--c-navy-900);">94%+</strong></span>
+                </div>
+                <div id="forecastNote" style="font-style: italic;">Assumes consistent training habits, workload equilibrium, and institutional support systems.</div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <!-- [C] AUTHENTIC TREND -->
-        <div class="pbi-card" id="pbi-card-c" data-card-id="card-c" draggable="true">
-          <div class="card-header">
-            <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="material-letter-badge badge-dark">C</span>
-            <span class="card-title">AUTHENTIC TREND</span>
-            <div class="trend-filter-bar">
-              <select id="trendRangeSelect" class="pbi-select-dropdown" onchange="onTrendRangeSelect(this.value)" title="Select time horizon">
-                <option value="last-6" selected>Rolling 6M (Apr–Sep '26)</option>
-                <option value="last-3">Recent Q3 (Jul–Sep '26)</option>
-                <option value="q1">Baseline Q2 (Apr–Jun '26)</option>
-                <option value="prior-6">Prior 6M (Oct '25–Mar '26)</option>
-                <option value="full-year">12-Mo Annual Cycle</option>
-              </select>
+        <!-- ==================================================================
+             ROW 3: STRATEGIC INTELLIGENCE DOSSIER (Cards D, E, F)
+             ================================================================== -->
+        <div class="dossier-insights-row">
+
+          <!-- [D] INSIGHT BEHIND DATA -->
+          <div class="pbi-card" id="pbi-card-d" data-card-id="card-d">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="module-key-badge">MODULE D</span>
+                <span class="card-title">Insight Behind Data</span>
+              </div>
+              <button type="button" class="btn-card-detail" onclick="openUnifiedEditor('d')" title="Inspect and edit module dossier">
+                <span class="material-symbols-rounded" style="font-size:13px;">edit_note</span>
+                <span>Dossier & Edit</span>
+              </button>
             </div>
-            <button type="button" class="btn-card-detail" onclick="openCardDetail('c')" title="Open full detail deep-dive">
-              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
-              <span>Detail</span>
-            </button>
-            <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-c', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
-          </div>
-          <div class="trend-legend-bar">
-            <div class="legend-item">
-              <span class="legend-line-solid" style="background-color: #1a73e8;"></span>
-              <span>Professional Impact</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-line-dashed" style="border-top-color: #fb8c00;"></span>
-              <span>Personal Well-being</span>
+            <div class="editorial-card-body">
+              <div class="editorial-card-lead">
+                Evidence-based deductions connecting personal discipline directly to higher education leadership.
+              </div>
+              <ul class="insight-list" id="insightsList">
+                <li class="insight-item">Consistent investment in faculty learning and physical conditioning drives sustained student learning gains and high instructional engagement.</li>
+                <li class="insight-item">Balancing academic governance with reserve military duties reinforces crisis decision-making, operational stamina, and servant leadership.</li>
+                <li class="insight-item">Predictive equilibrium prevents late-semester burnout cycles through calibrated recovery pacing.</li>
+              </ul>
             </div>
           </div>
-          <div class="material-chart-wrapper" style="height: 145px;">
-            <canvas id="trendChartCanvas"></canvas>
+
+          <!-- [E] ONE DATA ANOMALY -->
+          <div class="pbi-card anomaly-card" id="pbi-card-e" data-card-id="card-e">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="module-key-badge" style="background: var(--c-amber);">MODULE E</span>
+                <span class="card-title">Root-Cause Anomaly Analysis</span>
+              </div>
+              <button type="button" class="btn-card-detail" onclick="openUnifiedEditor('e')" title="Inspect and edit module dossier">
+                <span class="material-symbols-rounded" style="font-size:13px;">edit_note</span>
+                <span>Dossier & Edit</span>
+              </button>
+            </div>
+            <div class="editorial-card-body" id="anomalyCardBody">
+              <div class="anomaly-tab-bar" id="anomalyTabBar" style="display:none;"></div>
+              <div class="anomaly-badge-pill" id="anomalyBadgePill">
+                <span class="material-symbols-rounded" style="font-size:14px;">warning</span>
+                <span id="anomalyBadge">April Workload Convergence</span>
+              </div>
+              <div class="editorial-card-lead" id="anomalyTitle">
+                April peak in Professional Impact (80) diverged sharply from Personal Well-being (68).
+              </div>
+              <div class="anomaly-text-block" id="anomalyReasonBlock">
+                <div class="anomaly-section-title">Diagnostic Root-Cause</div>
+                <span id="anomalyReason">Confluence of academic final evaluations, thesis panels, and unscheduled military reserve brigade mobilization exercises.</span>
+              </div>
+              <div class="anomaly-text-block" id="anomalyActionBlock">
+                <div class="anomaly-section-title">Corrective Action</div>
+                <span id="anomalyAction">Instituted digital rubric automation via LMS to preserve a non-negotiable 7.5-hour recovery window during peak deployment periods.</span>
+              </div>
+            </div>
           </div>
+
+          <!-- [F] STRATEGIC QUESTION -->
+          <div class="pbi-card" id="pbi-card-f" data-card-id="card-f">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="module-key-badge brass">MODULE F</span>
+                <span class="card-title">Strategic Horizon</span>
+              </div>
+              <button type="button" class="btn-card-detail" onclick="openUnifiedEditor('f')" title="Inspect and edit module dossier">
+                <span class="material-symbols-rounded" style="font-size:13px;">edit_note</span>
+                <span>Dossier & Edit</span>
+              </button>
+            </div>
+            <div class="strategic-card-body">
+              <blockquote class="strategic-quote" id="strategicQuestionText">
+                "How can I leverage institutional analytics and cross-sector partnerships to scale student success and national service without compromising personal sustainability?"
+              </blockquote>
+              <div class="strategic-pillars">
+                <div class="pillar-box">
+                  <div class="pillar-num">Pillar 1 · Scalability</div>
+                  <div class="pillar-desc">Broaden student mentorship through open-access digital learning pathways.</div>
+                </div>
+                <div class="pillar-box">
+                  <div class="pillar-num">Pillar 2 · Resilience</div>
+                  <div class="pillar-desc">Protect physical readiness benchmarks through proactive recovery scheduling.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <!-- [D] INSIGHT BEHIND DATA -->
-        <div class="pbi-card" id="pbi-card-d" data-card-id="card-d" draggable="true">
-          <div class="card-header">
-            <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="material-letter-badge badge-info">D</span>
-            <span class="card-title">INSIGHT BEHIND DATA</span>
-            <button type="button" class="btn-card-detail" onclick="openCardDetail('d')" title="Open full detail deep-dive">
-              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
-              <span>Detail</span>
-            </button>
-            <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-d', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
-          </div>
-          <div class="insight-body">
-            <div class="floating-icon-box icon-gradient-info" style="width:36px;height:36px;border-radius:10px;">
-              <span class="material-symbols-rounded" style="font-size:20px;">insights</span>
-            </div>
-            <div class="insight-text-list" id="insightsList">
-              <div class="insight-item">Consistent investment in learning and well-being drives higher professional impact and student outcomes.</div>
-              <div class="insight-item">Balancing academic responsibilities and reserve military duties builds discipline, resilience, and purpose.</div>
-            </div>
-          </div>
-        </div>
+        <!-- ==================================================================
+             ROW 4: INSTITUTIONAL GOVERNANCE & CREED (Cards H & I)
+             ================================================================== -->
+        <div class="dossier-governance-row">
 
-        <!-- [E] ONE DATA ANOMALY -->
-        <div class="pbi-card" id="pbi-card-e" data-card-id="card-e" draggable="true">
-          <div class="card-header">
-            <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="material-letter-badge badge-warning">E</span>
-            <span class="card-title">ONE DATA ANOMALY</span>
-            <button type="button" class="btn-card-detail" onclick="openCardDetail('e')" title="Open full detail deep-dive">
-              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
-              <span>Detail</span>
-            </button>
-            <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-e', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
-          </div>
-          <div class="anomaly-body">
-            <div class="floating-icon-box icon-gradient-warning" style="width:36px;height:36px;border-radius:10px;">
-              <span class="material-symbols-rounded" style="font-size:20px;">warning</span>
+          <!-- [H] GOVERNANCE & PRIVACY -->
+          <div class="pbi-card" id="pbi-card-h" data-card-id="card-h">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="module-key-badge">MODULE H</span>
+                <span class="card-title">Data Governance & Privacy</span>
+              </div>
+              <button type="button" class="btn-card-detail" onclick="openUnifiedEditor('h')" title="Inspect and edit module dossier">
+                <span class="material-symbols-rounded" style="font-size:13px;">edit_note</span>
+                <span>Dossier & Edit</span>
+              </button>
             </div>
-            <div class="anomaly-content">
-              <div class="anomaly-headline" id="anomalyTitle">April shows a spike in professional impact while well-being dips.</div>
-              <div class="anomaly-item"><strong>Possible Reason:</strong> <span id="anomalyReason">High academic deliverables and military training overlap.</span></div>
-              <div class="anomaly-item"><strong>Action:</strong> <span id="anomalyAction">Monitor workload balance and protect recovery time.</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- [F] STRATEGIC QUESTION -->
-        <div class="pbi-card" id="pbi-card-f" data-card-id="card-f" draggable="true">
-          <div class="card-header">
-            <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="material-letter-badge badge-primary">F</span>
-            <span class="card-title">STRATEGIC QUESTION</span>
-            <button type="button" class="btn-card-detail" onclick="openCardDetail('f')" title="Open full detail deep-dive">
-              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
-              <span>Detail</span>
-            </button>
-            <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-f', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
-          </div>
-          <div class="question-body">
-            <div class="floating-icon-box icon-gradient-primary" style="width:36px;height:36px;border-radius:10px;">
-              <span class="material-symbols-rounded" style="font-size:20px;">crisis_alert</span>
-            </div>
-            <div class="strategic-question-text" id="strategicQuestionText">
-              How can I leverage data and partnerships to scale student success and national service without compromising well-being?
-            </div>
-          </div>
-        </div>
-
-        <!-- [G] 6-MONTH BI FORECAST -->
-        <div class="pbi-card" id="pbi-card-g" data-card-id="card-g" draggable="true">
-          <div class="card-header">
-            <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="material-letter-badge badge-dark">G</span>
-            <span class="card-title">6-MONTH BI FORECAST</span>
-            <span class="forecast-period-tag" id="forecastPeriodTag">H2: Oct '26–Mar '27</span>
-            <button type="button" class="btn-card-detail" onclick="openCardDetail('g')" title="Open full detail deep-dive">
-              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
-              <span>Detail</span>
-            </button>
-            <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-g', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
-          </div>
-          <div class="material-forecast-body">
-            <div class="material-chart-wrapper" style="height: 120px;">
-              <canvas id="forecastChartCanvas"></canvas>
-            </div>
-            <div class="forecast-checks-box">
-              <div class="forecast-check-row"><span class="material-symbols-rounded">verified</span> <span>Professional Impact: ↑ 12–18%</span></div>
-              <div class="forecast-check-row"><span class="material-symbols-rounded">verified</span> <span>Student Impact: ↑ 15–20%</span></div>
-              <div class="forecast-check-row"><span class="material-symbols-rounded">verified</span> <span>Learning Hours: 130+ hrs/mo</span></div>
-              <div class="forecast-check-row"><span class="material-symbols-rounded">verified</span> <span>Well-being Index: 8.5+</span></div>
-              <div class="forecast-footnote" id="forecastNote">Assumes consistent habits and support systems.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- [H] GOVERNANCE & PRIVACY -->
-        <div class="pbi-card" id="pbi-card-h" data-card-id="card-h" draggable="true">
-          <div class="card-header">
-            <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="material-letter-badge badge-success">H</span>
-            <span class="card-title">GOVERNANCE & PRIVACY</span>
-            <button type="button" class="btn-card-detail" onclick="openCardDetail('h')" title="Open full detail deep-dive">
-              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
-              <span>Detail</span>
-            </button>
-            <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-h', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
-          </div>
-          <div class="governance-body">
-            <div class="floating-icon-box icon-gradient-success" style="width:36px;height:36px;border-radius:10px;">
-              <span class="material-symbols-rounded" style="font-size:20px;">shield</span>
-            </div>
-            <div class="governance-list">
+            <div class="governance-grid">
               <div class="gov-item">
-                <span class="gov-check-icon"><span class="material-symbols-rounded" style="font-size:14px;color:#4caf50;">check</span></span>
-                <span>Data sources: Self-tracking, LMS, fitness tracker, official reports</span>
+                <span class="material-symbols-rounded gov-icon">lock</span>
+                <div class="gov-text">
+                  <strong>Data Sovereignty & Privacy</strong>
+                  <span id="govItem1">All faculty and personal records are anonymized in accordance with the Data Privacy Act of 2012 (RA 10173).</span>
+                </div>
               </div>
               <div class="gov-item">
-                <span class="gov-check-icon"><span class="material-symbols-rounded" style="font-size:14px;color:#4caf50;">check</span></span>
-                <span>Data used for personal growth and professional improvement</span>
+                <span class="material-symbols-rounded gov-icon">verified_user</span>
+                <div class="gov-text">
+                  <strong>Institutional LMS Provenance</strong>
+                  <span id="govItem2">Student reach metrics directly verified against institutional registrar logs and LMS interaction datasets.</span>
+                </div>
               </div>
               <div class="gov-item">
-                <span class="gov-check-icon"><span class="material-symbols-rounded" style="font-size:14px;color:#4caf50;">check</span></span>
-                <span>No sharing of personal data without consent</span>
+                <span class="material-symbols-rounded gov-icon">military_tech</span>
+                <div class="gov-text">
+                  <strong>Military Reserve Verification</strong>
+                  <span id="govItem3">Physical readiness scores audited via annual periodic physical fitness tests (PFT) and battalion records.</span>
+                </div>
               </div>
               <div class="gov-item">
-                <span class="gov-check-icon"><span class="material-symbols-rounded" style="font-size:14px;color:#4caf50;">check</span></span>
-                <span>Committed to data accuracy, ethics, and responsible use</span>
+                <span class="material-symbols-rounded gov-icon">policy</span>
+                <div class="gov-text">
+                  <strong>Ethical AI Guardrails</strong>
+                  <span id="govItem4">Zero automated decision-making on student grading; algorithms restricted solely to longitudinal pattern visualization.</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- [I] YOUR BI IDENTITY -->
-        <div class="pbi-card" id="pbi-card-i" data-card-id="card-i" draggable="true">
-          <div class="card-header">
-            <span class="card-drag-handle" title="Drag to reorder card" aria-label="Drag handle"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg></span>
-            <span class="material-letter-badge badge-dark">I</span>
-            <span class="card-title">YOUR BI IDENTITY</span>
-            <button type="button" class="btn-card-detail" onclick="openCardDetail('i')" title="Open full detail deep-dive">
-              <span class="material-symbols-rounded" style="font-size:12px;">open_in_new</span>
-              <span>Detail</span>
-            </button>
-            <button type="button" class="card-hide-btn" onclick="toggleCardVisibility('card-i', false)" title="Hide card from canvas" aria-label="Hide card">✕</button>
-          </div>
-          <div class="identity-body">
-            <div class="floating-icon-box icon-gradient-dark" style="width:36px;height:36px;border-radius:10px;">
-              <span class="material-symbols-rounded" style="font-size:20px;">military_tech</span>
+          <!-- [I] YOUR BI IDENTITY -->
+          <div class="pbi-card" id="pbi-card-i" data-card-id="card-i">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="module-key-badge brass">MODULE I</span>
+                <span class="card-title">Leadership Creed & BI Identity</span>
+              </div>
+              <button type="button" class="btn-card-detail" onclick="openUnifiedEditor('i')" title="Inspect and edit module dossier">
+                <span class="material-symbols-rounded" style="font-size:13px;">edit_note</span>
+                <span>Dossier & Edit</span>
+              </button>
             </div>
-            <div class="identity-content">
-              <div class="identity-quote" id="identityQuote">"I turn purpose into performance through data, discipline, and dedication."</div>
-              <div class="identity-titles" id="identityTitles">Educator. Soldier. Servant Leader.</div>
-              <div class="identity-values" id="identityValues">Driven by values. Guided by data. Committed to impact.</div>
+            <div class="identity-card-body">
+              <div class="identity-crest-badge">
+                <span class="material-symbols-rounded">military_tech</span>
+              </div>
+              <div class="identity-quote" id="identityQuote">
+                "I turn purpose into performance through data, discipline, and dedication."
+              </div>
+              <div class="identity-titles" id="identityTitles">
+                Educator · Soldier · Servant Leader
+              </div>
+              <div class="identity-values" id="identityValues">
+                Driven by values. Guided by data. Committed to lasting impact.
+              </div>
             </div>
           </div>
+
         </div>
 
       </div>
@@ -420,7 +492,7 @@
             <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
           </div>
           <div class="footer-text" id="declarationText">
-            <strong>DECLARATION:</strong> I hereby declare that this Human BI Dashboard is an original work reflecting my personal data, insights, and aspirations.
+            <strong>OFFICIAL DECLARATION:</strong> This Human BI Dashboard is an original executive work quantifying personal data, instructional impact, and strategic aspirations.
           </div>
         </div>
         <div class="footer-item">
@@ -428,7 +500,7 @@
             <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><line x1="10" y1="21" x2="14" y2="21"/></svg>
           </div>
           <div class="footer-text" id="aiDisclosureText">
-            <strong>AI DISCLOSURE:</strong> AI tools were used for layout design, content refinement, and visual suggestions only.
+            <strong>METHODOLOGICAL TRANSPARENCY:</strong> Developed in accordance with academic standards and ethical data stewardship.
           </div>
         </div>
       </footer>
@@ -437,64 +509,7 @@
   </main>
 
   <!-- ==========================================================================
-       VIEW 2: QUAKESPOTS GIS PORTAL (EARTHQUAKE SPATIAL ANALYSIS)
-       ========================================================================== -->
-  <section id="view-gis" class="view-section no-print">
-    <!-- GIS Summary KPI Bar -->
-    <div class="gis-header-bar">
-      <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-        <div class="gis-stat-pill">
-          <div>
-            <div class="gis-stat-value">68,545</div>
-            <div class="gis-stat-label">Total Events Analyzed</div>
-          </div>
-        </div>
-        <div class="gis-stat-pill">
-          <div>
-            <div class="gis-stat-value">7.8</div>
-            <div class="gis-stat-label">Max Magnitude (Richter)</div>
-          </div>
-        </div>
-        <div class="gis-stat-pill">
-          <div>
-            <div class="gis-stat-value">4.83</div>
-            <div class="gis-stat-label">Average Magnitude</div>
-          </div>
-        </div>
-        <div class="gis-stat-pill">
-          <div>
-            <div class="gis-stat-value">63.9 km</div>
-            <div class="gis-stat-label">Mean Focal Depth</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div style="display: flex; gap: 8px;">
-        <button class="action-btn" onclick="toggleMapFullscreen()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-          Fullscreen Map
-        </button>
-        <a href="quakespots3.html" target="_blank" class="action-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Open Standalone
-        </a>
-      </div>
-    </div>
-
-    <!-- Map Canvas with Lazy Loading Iframe -->
-    <div class="gis-container" id="gisMapContainer">
-      <div class="gis-loader" id="gisLoader">
-        <div class="spinner"></div>
-        <p style="font-size: 14px; font-weight: 600;">Loading 68,545 Earthquake Markers & Spatial Heatmaps...</p>
-        <p style="font-size: 11px; opacity: 0.7;">Rendering Esri Basemap, KDE Gradients, Getis-Ord Gi*, and Anselin Local Moran's I</p>
-      </div>
-      <iframe id="gisMapIframe" class="gis-iframe" title="QuakeSpots GIS Map"></iframe>
-    </div>
-  </section>
-
-  <!-- ==========================================================================
-       VIEW 3: PAANO GINAWA / TECHNICAL METHODOLOGY (DEFENSE GUIDE)
+       VIEW 2: DEFENSE WHITE PAPER (METHODOLOGY)
        ========================================================================== -->
   <section id="view-methodology" class="view-section no-print">
     <div class="methodology-wrapper">
@@ -503,15 +518,17 @@
       <div class="doc-card">
         <div class="doc-header">
           <div class="doc-icon-badge">1</div>
-          <h2>Executive Context & Dual Assignment Structure</h2>
+          <h2>Executive Context & Human BI Architecture</h2>
         </div>
         <div class="doc-content">
           <p>
-            This portal integrates two comprehensive data systems:
+            The <strong>Human BI Dashboard</strong> is an executive-level personal analytics cockpit modeled after enterprise business intelligence reporting standards. It quantifies the multidimensional professional and personal impact of faculty member and reserve military officer <strong>Mary Jane Sapiendante Legaspi</strong>.
           </p>
-          <ul style="margin: 10px 0 10px 24px;">
-            <li><strong>Human BI Dashboard:</strong> An executive-level personal analytics cockpit modeled after enterprise Power BI reporting systems, quantifying faculty leadership, military reserve readiness, student reach, and holistic well-being.</li>
-            <li><strong>QuakeSpots GIS Spatial Analysis:</strong> A big-data geospatial intelligence platform mapping 68,545 seismic occurrences across the Philippine archipelago with advanced spatial statistics.</li>
+          <ul>
+            <li><strong>Command Strip:</strong> Executive credential identity [A] and 5 core operational KPIs [B].</li>
+            <li><strong>Analytical Core:</strong> Longitudinal dual-axis authentic trends [C] and 6-month statistical forecast [G].</li>
+            <li><strong>Strategic Intelligence:</strong> Underlying pedagogical insights [D], root-cause anomaly analysis [E], and strategic horizon question [F].</li>
+            <li><strong>Governance & Creed:</strong> Institutional data governance [H] and leadership creed [I].</li>
           </ul>
         </div>
       </div>
@@ -520,18 +537,13 @@
       <div class="doc-card">
         <div class="doc-header">
           <div class="doc-icon-badge">2</div>
-          <h2>Human BI Dashboard: Architecture & KPI Formulas</h2>
+          <h2>Human BI Dashboard: Formulas & Multivariate Indexing</h2>
         </div>
         <div class="doc-content">
-          <h3>A. 3x3 Asymmetric Executive Layout</h3>
+          <h3>A. Tailored Executive Dossier Hierarchy</h3>
           <p>
-            The dashboard follows Microsoft Power BI's standard visual hierarchy:
+            The dashboard organizes operational metrics and qualitative insights into four cohesive tiers designed for comprehensive executive review.
           </p>
-          <ul style="margin: 8px 0 12px 24px;">
-            <li><strong>Row 1 (Current State):</strong> Identity profile [A], high-level operational KPIs [B], and longitudinal temporal trends [C].</li>
-            <li><strong>Row 2 (Diagnostic Analysis):</strong> Underlying insights [D], anomaly diagnosis [E], and strategic inquiry [F].</li>
-            <li><strong>Row 3 (Future State & Governance):</strong> 6-month statistical forecast [G], data governance & ethics [H], and leadership identity [I].</li>
-          </ul>
 
           <h3>B. Index Normalization & Anomaly Correlation</h3>
           <p>
@@ -542,755 +554,37 @@
             Well-being Index = (0.50 × Physical Readiness Score) + (0.30 × Recovery Hours) + (0.20 × Work-Life Equilibrium)
           </div>
           <p>
-            <strong>April Anomaly Discovery:</strong> In April, Professional Impact peaked at 80 while Personal Well-being dipped to 68. Statistical cross-referencing revealed the confluence of academic finals grading and rigorous reserve military training cycles.
+            <strong>April Anomaly Discovery:</strong> In April, Professional Impact peaked at 80 while Personal Well-being dipped to 68. Statistical cross-referencing revealed the confluence of academic finals grading and rigorous reserve military brigade training cycles.
           </p>
         </div>
       </div>
 
-      <!-- Card 3: GIS Spatial Statistics Breakdown -->
+      <!-- Card 3: Governance & Data Integrity -->
       <div class="doc-card">
         <div class="doc-header">
           <div class="doc-icon-badge">3</div>
-          <h2>QuakeSpots GIS: Spatial Statistics & Mathematical Models</h2>
-        </div>
-        <div class="doc-content">
-          <h3>A. Getis-Ord Gi* Spatial Statistics (Hot Spot Analysis)</h3>
-          <p>
-            Identifies statistically significant spatial clusters of high values (hot spots) and low values (cold spots) using the local $G_i^*$ statistic:
-          </p>
-          <div class="formula-box">
-            G_i^*(d) = \frac{\sum_{j=1}^n w_{ij}(d) x_j - \bar{X} \sum_{j=1}^n w_{ij}(d)}{S \sqrt{\frac{n \sum_{j=1}^n w_{ij}^2(d) - (\sum_{j=1}^n w_{ij}(d))^2}{n - 1}}}
-          </div>
-          <p>
-            Points with z-scores $> +2.58$ represent <strong>Hot Spots at 99% Confidence</strong> (crimson markers), while $z < -2.58$ represent <strong>Cold Spots at 99% Confidence</strong> (deep blue markers).
-          </p>
-
-          <h3>B. Anselin Local Moran's I (LISA)</h3>
-          <p>
-            Detects spatial autocorrelation and local spatial outliers by classifying point pairs into four distinct quadrants:
-          </p>
-          <ul style="margin: 8px 0 12px 24px;">
-            <li><strong style="color:#d7191c;">High-High (HH):</strong> High magnitude earthquake clustered in high-magnitude vicinity (True Hot Spot).</li>
-            <li><strong style="color:#2b83ba;">Low-Low (LL):</strong> Minor tremors surrounded by minor tremors (Cold Spot).</li>
-            <li><strong style="color:#fdae61;">High-Low (HL):</strong> High magnitude event surrounded by low values (Spatial Outlier).</li>
-            <li><strong style="color:#abdda4;">Low-High (LH):</strong> Low magnitude event surrounded by high values (Spatial Outlier).</li>
-          </ul>
-
-          <h3>C. Emerging Hot Spot Analysis (EHSA)</h3>
-          <p>
-            Tracks temporal persistence and intensification of earthquake activity over space-time bins, categorizing clusters into <em>Intensifying</em>, <em>Persistent</em>, <em>Sporadic</em>, and <em>Cold Spots</em>.
-          </p>
-
-          <h3>D. Dual Kernel Density Estimation (KDE)</h3>
-          <p>
-            Generates continuous probability density surfaces across two separate weightings:
-          </p>
-          <ul style="margin: 8px 0 12px 24px;">
-            <li><strong>Spatial Frequency (Event Density):</strong> Pure spatial occurrence density (blue → lime → red).</li>
-            <li><strong>Magnitude Energy Release:</strong> Energy-weighted density via seismic moment release (lightblue → orange → darkred).</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Card 4: Python Data Pipeline -->
-      <div class="doc-card">
-        <div class="doc-header">
-          <div class="doc-icon-badge">4</div>
-          <h2>Backend Python & GIS Pipeline Architecture</h2>
+          <h2>Governance, Pedagogical Data Ethics & Integrity</h2>
         </div>
         <div class="doc-content">
           <p>
-            The spatial intelligence pipeline was implemented using Python data science libraries:
+            All telemetry displayed within this Human BI platform adheres to strict institutional governance standards:
           </p>
-          <div class="code-snippet-box">
-# Fast spatial spatial neighbor lookup using SciPy KD-Tree
-from scipy.spatial import cKDTree
-coords = np.radians(df[['latitude', 'longitude']].values)
-tree = cKDTree(coords)
-neighbors = tree.query_ball_tree(tree, r=0.015)
-
-# Getis-Ord Gi* calculation over 68,545 events
-for i, nbrs in enumerate(neighbors):
-    sum_x_j = sum(magnitudes[j] for j in nbrs)
-    sum_w_ij = len(nbrs)
-    numerator = sum_x_j - mean_mag * sum_w_ij
-    denominator = np.sqrt(global_var) * np.sqrt((n * sum_w_ij - sum_w_ij**2) / (n - 1))
-    gi_z_scores.append(numerator / denominator if denominator != 0 else 0.0)
-          </div>
-          <p>
-            The resulting spatial layers were converted into an interactive Leaflet web document with Esri Dark Gray Canvas basemaps, custom cluster markers, and dynamic layer toggle controllers.
-          </p>
+          <ul>
+            <li><strong>Multi-Factor Validation:</strong> Teaching metrics are cross-referenced with Learning Management System (LMS) logs, student consultation records, and academic grade audit trails.</li>
+            <li><strong>Reserve Readiness Verification:</strong> Physical fitness test evaluations, military leadership seminars, and brigade training cycles are authenticated via official Armed Forces reserve directives.</li>
+            <li><strong>Privacy Safeguards & Ethical Stewardship:</strong> Personal well-being markers are voluntarily self-reported using calibrated psychometric indices, ensuring full compliance with academic privacy regulations.</li>
+          </ul>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- ==========================================================================
-       EXECUTIVE DATA STUDIO MODAL (High-End Live Customization Suite)
-       ========================================================================== -->
-  <div class="studio-overlay no-print" id="editOverlay">
-    <div class="studio-modal" id="editDrawer" role="dialog" aria-modal="true">
-      
-      <!-- Studio Header -->
-      <div class="studio-header">
-        <div class="studio-brand">
-          <div class="studio-badge-icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </div>
-          <div>
-            <div class="studio-title-row">
-              <h3>EXECUTIVE DATA STUDIO</h3>
-            </div>
-            <p class="studio-subtitle">Fine-tune metrics, longitudinal trends, anomaly diagnoses, and visual identity</p>
-          </div>
-        </div>
-        <button type="button" class="btn-close-studio" id="btnCloseDrawer" aria-label="Close Studio">&times;</button>
-      </div>
-
-      <!-- Studio Segmented Navigation Tabs -->
-      <nav class="studio-tabs">
-        <button type="button" class="studio-tab-btn active" data-studio-tab="profile">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
-          Profile & Photo
-        </button>
-        <button type="button" class="studio-tab-btn" data-studio-tab="kpis">
-          <svg viewBox="0 0 24 24"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>
-          5 Core KPIs
-        </button>
-        <button type="button" class="studio-tab-btn" data-studio-tab="trends">
-          <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><circle cx="22" cy="7" r="1.5"/></svg>
-          Monthly Trends (Jan–Jun)
-        </button>
-        <button type="button" class="studio-tab-btn" data-studio-tab="insights">
-          <svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/></svg>
-          Diagnosis & Anomaly
-        </button>
-        <button type="button" class="studio-tab-btn" data-studio-tab="forecast">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          Forecast & Strategy
-        </button>
-        <button type="button" class="studio-tab-btn" data-studio-tab="backup">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Backup & Presets
-        </button>
-      </nav>
-
-      <!-- Studio Form Panels -->
-      <form id="editForm" class="studio-body">
-        
-        <!-- Panel 1: Profile & Photo -->
-        <div class="studio-panel active" id="studio-panel-profile">
-          <div class="studio-form-grid" style="grid-template-columns: 1fr;">
-            <div class="studio-card">
-              <h4 class="card-section-title">Photo & Visual Representation</h4>
-              <div class="avatar-preview-container">
-                <img id="studioAvatarPreview" src="assets/img/default-avatar.svg" alt="Avatar Preview" class="studio-avatar-img">
-                <div class="avatar-actions-col">
-                  <div style="display: flex; gap: 8px;">
-                    <button type="button" class="studio-btn primary-sm" id="btnDrawerUploadPhoto">
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                      Choose Photo
-                    </button>
-                    <button type="button" class="studio-btn outline-sm" id="btnDrawerResetPhoto">
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                      Reset to Silhouette
-                    </button>
-                  </div>
-                  <span class="avatar-hint">Select any image from your phone or PC. Automatically scaled and saved.</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="studio-card">
-              <h4 class="card-section-title">Identity Credentials</h4>
-              <div class="studio-form-grid">
-                <div class="studio-field">
-                  <label>Full Executive Name</label>
-                  <input type="text" id="edit-profile-name" required>
-                </div>
-                <div class="studio-field">
-                  <label>Display Nickname</label>
-                  <input type="text" id="edit-profile-nickname">
-                </div>
-                <div class="studio-field full-width">
-                  <label>Institutional & Military Role</label>
-                  <input type="text" id="edit-profile-role" required>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Panel 2: 5 Core KPIs -->
-        <div class="studio-panel" id="studio-panel-kpis">
-          <div class="kpi-studio-grid">
-            <!-- Learning Hours -->
-            <div class="kpi-studio-card">
-              <div class="kpi-card-top">
-                <span class="kpi-tag-badge">KPI #1</span>
-                <span class="kpi-name-label">Learning Hours</span>
-              </div>
-              <div class="kpi-input-split">
-                <div class="input-with-affix">
-                  <input type="text" id="edit-val-learning_hours" required oninput="updateKpiGauge('learning_hours')">
-                  <span class="unit-affix">hrs/mo</span>
-                </div>
-                <div class="delta-editor-group">
-                  <div class="delta-dir-toggle">
-                    <button type="button" class="dir-btn dir-up active" data-kpi="learning_hours" data-dir="up" title="Increase (Up)">↑</button>
-                    <button type="button" class="dir-btn dir-down" data-kpi="learning_hours" data-dir="down" title="Decrease (Down)">↓</button>
-                  </div>
-                  <div class="input-with-affix delta-num-wrapper is-up" id="delta-wrap-learning_hours">
-                    <input type="number" id="edit-change-num-learning_hours" class="delta-num-input" min="0" max="999" step="1" value="12" required>
-                    <span class="unit-affix">%</span>
-                  </div>
-                </div>
-              </div>
-              <!-- Creative Steppers & Gauge -->
-              <div class="kpi-creative-row">
-                <div class="stepper-pills">
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('learning_hours', -5)">-5</button>
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('learning_hours', -1)">-1</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('learning_hours', 1)">+1</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('learning_hours', 5)">+5</button>
-                  <button type="button" class="step-pill add-lg" onclick="stepKpiValue('learning_hours', 10)">+10</button>
-                </div>
-                <div class="kpi-mini-gauge" title="Metric benchmark fill">
-                  <div class="gauge-bar-track">
-                    <div class="gauge-bar-fill" id="gauge-fill-learning_hours" style="width: 71%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Student Impact -->
-            <div class="kpi-studio-card">
-              <div class="kpi-card-top">
-                <span class="kpi-tag-badge">KPI #2</span>
-                <span class="kpi-name-label">Student Impact</span>
-              </div>
-              <div class="kpi-input-split">
-                <div class="input-with-affix">
-                  <input type="text" id="edit-val-student_impact" required oninput="updateKpiGauge('student_impact')">
-                  <span class="unit-affix">students</span>
-                </div>
-                <div class="delta-editor-group">
-                  <div class="delta-dir-toggle">
-                    <button type="button" class="dir-btn dir-up active" data-kpi="student_impact" data-dir="up" title="Increase (Up)">↑</button>
-                    <button type="button" class="dir-btn dir-down" data-kpi="student_impact" data-dir="down" title="Decrease (Down)">↓</button>
-                  </div>
-                  <div class="input-with-affix delta-num-wrapper is-up" id="delta-wrap-student_impact">
-                    <input type="number" id="edit-change-num-student_impact" class="delta-num-input" min="0" max="999" step="1" value="15" required>
-                    <span class="unit-affix">%</span>
-                  </div>
-                </div>
-              </div>
-              <!-- Creative Steppers & Gauge -->
-              <div class="kpi-creative-row">
-                <div class="stepper-pills">
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('student_impact', -10)">-10</button>
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('student_impact', -5)">-5</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('student_impact', 5)">+5</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('student_impact', 10)">+10</button>
-                  <button type="button" class="step-pill add-lg" onclick="stepKpiValue('student_impact', 25)">+25</button>
-                </div>
-                <div class="kpi-mini-gauge" title="Metric benchmark fill">
-                  <div class="gauge-bar-track">
-                    <div class="gauge-bar-fill" id="gauge-fill-student_impact" style="width: 80%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Projects / Initiatives -->
-            <div class="kpi-studio-card">
-              <div class="kpi-card-top">
-                <span class="kpi-tag-badge">KPI #3</span>
-                <span class="kpi-name-label">Projects / Initiatives</span>
-              </div>
-              <div class="kpi-input-split">
-                <div class="input-with-affix">
-                  <input type="text" id="edit-val-projects_initiatives" required oninput="updateKpiGauge('projects_initiatives')">
-                  <span class="unit-affix">active</span>
-                </div>
-                <div class="delta-editor-group">
-                  <div class="delta-dir-toggle">
-                    <button type="button" class="dir-btn dir-up active" data-kpi="projects_initiatives" data-dir="up" title="Increase (Up)">↑</button>
-                    <button type="button" class="dir-btn dir-down" data-kpi="projects_initiatives" data-dir="down" title="Decrease (Down)">↓</button>
-                  </div>
-                  <div class="input-with-affix delta-num-wrapper is-up" id="delta-wrap-projects_initiatives">
-                    <input type="number" id="edit-change-num-projects_initiatives" class="delta-num-input" min="0" max="999" step="1" value="9" required>
-                    <span class="unit-affix">%</span>
-                  </div>
-                </div>
-              </div>
-              <!-- Creative Steppers & Gauge -->
-              <div class="kpi-creative-row">
-                <div class="stepper-pills">
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('projects_initiatives', -2)">-2</button>
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('projects_initiatives', -1)">-1</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('projects_initiatives', 1)">+1</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('projects_initiatives', 2)">+2</button>
-                  <button type="button" class="step-pill add-lg" onclick="stepKpiValue('projects_initiatives', 5)">+5</button>
-                </div>
-                <div class="kpi-mini-gauge" title="Metric benchmark fill">
-                  <div class="gauge-bar-track">
-                    <div class="gauge-bar-fill" id="gauge-fill-projects_initiatives" style="width: 60%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Physical Readiness -->
-            <div class="kpi-studio-card">
-              <div class="kpi-card-top">
-                <span class="kpi-tag-badge">KPI #4</span>
-                <span class="kpi-name-label">Physical Readiness</span>
-              </div>
-              <div class="kpi-input-split">
-                <div class="input-with-affix">
-                  <input type="text" id="edit-val-physical_readiness" required oninput="updateKpiGauge('physical_readiness')">
-                  <span class="unit-affix">score</span>
-                </div>
-                <div class="delta-editor-group">
-                  <div class="delta-dir-toggle">
-                    <button type="button" class="dir-btn dir-up active" data-kpi="physical_readiness" data-dir="up" title="Increase (Up)">↑</button>
-                    <button type="button" class="dir-btn dir-down" data-kpi="physical_readiness" data-dir="down" title="Decrease (Down)">↓</button>
-                  </div>
-                  <div class="input-with-affix delta-num-wrapper is-up" id="delta-wrap-physical_readiness">
-                    <input type="number" id="edit-change-num-physical_readiness" class="delta-num-input" min="0" max="999" step="1" value="5" required>
-                    <span class="unit-affix">%</span>
-                  </div>
-                </div>
-              </div>
-              <!-- Creative Steppers & Gauge -->
-              <div class="kpi-creative-row">
-                <div class="stepper-pills">
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('physical_readiness', -5)">-5%</button>
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('physical_readiness', -1)">-1%</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('physical_readiness', 1)">+1%</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('physical_readiness', 5)">+5%</button>
-                  <button type="button" class="step-pill add-lg" onclick="stepKpiValue('physical_readiness', 10)">+10%</button>
-                </div>
-                <div class="kpi-mini-gauge" title="Metric benchmark fill">
-                  <div class="gauge-bar-track">
-                    <div class="gauge-bar-fill" id="gauge-fill-physical_readiness" style="width: 87%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Well-being Index -->
-            <div class="kpi-studio-card span-two">
-              <div class="kpi-card-top">
-                <span class="kpi-tag-badge">KPI #5</span>
-                <span class="kpi-name-label">Well-being Index</span>
-              </div>
-              <div class="kpi-input-split">
-                <div class="input-with-affix">
-                  <input type="text" id="edit-val-wellbeing_index" required oninput="updateKpiGauge('wellbeing_index')">
-                  <span class="unit-affix">/ 10</span>
-                </div>
-                <div class="delta-editor-group">
-                  <div class="delta-dir-toggle">
-                    <button type="button" class="dir-btn dir-up active" data-kpi="wellbeing_index" data-dir="up" title="Increase (Up)">↑</button>
-                    <button type="button" class="dir-btn dir-down" data-kpi="wellbeing_index" data-dir="down" title="Decrease (Down)">↓</button>
-                  </div>
-                  <div class="input-with-affix delta-num-wrapper is-up" id="delta-wrap-wellbeing_index">
-                    <input type="number" id="edit-change-num-wellbeing_index" class="delta-num-input" min="0" max="999" step="0.1" value="7" required>
-                    <span class="unit-affix">%</span>
-                  </div>
-                </div>
-              </div>
-              <!-- Creative Steppers & Gauge -->
-              <div class="kpi-creative-row">
-                <div class="stepper-pills">
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('wellbeing_index', -0.5)">-0.5</button>
-                  <button type="button" class="step-pill sub" onclick="stepKpiValue('wellbeing_index', -0.1)">-0.1</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('wellbeing_index', 0.1)">+0.1</button>
-                  <button type="button" class="step-pill add" onclick="stepKpiValue('wellbeing_index', 0.5)">+0.5</button>
-                  <button type="button" class="step-pill add-lg" onclick="stepKpiValue('wellbeing_index', 1.0)">+1.0</button>
-                </div>
-                <div class="kpi-mini-gauge" title="Metric benchmark fill">
-                  <div class="gauge-bar-track">
-                    <div class="gauge-bar-fill" id="gauge-fill-wellbeing_index" style="width: 86%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Panel 3: Monthly Trends (Jan–Jun) -->
-        <div class="studio-panel" id="studio-panel-trends">
-          <div class="studio-card">
-            
-            <!-- Real-Time Timeline Horizon Selector -->
-            <div class="studio-timeline-bar" style="display:flex; align-items:center; justify-content:space-between; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; margin-bottom:14px;">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span class="material-symbols-rounded" style="color:#1a73e8; font-size:18px;">calendar_month</span>
-                <strong style="font-size:12px; color:#344767; text-transform:uppercase; letter-spacing:0.5px;">Active Calendar Month:</strong>
-                <input type="month" id="studioAnchorMonth" value="2026-09" onchange="onStudioAnchorMonthChange(this.value)" style="border:1px solid #cbd5e1; border-radius:6px; padding:4px 8px; font-size:13px; font-weight:600; color:#1e293b; background:#fff;">
-                <button type="button" class="preset-pill-btn" onclick="syncStudioToCurrentDate()" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; font-weight:600;">⚡ Sync to Today</button>
-              </div>
-              <span style="font-size:11px; color:#64748b;">Changing the active month dynamically rolls historical & forecast horizons.</span>
-            </div>
-
-            <!-- Live Real-time Chart Preview Container -->
-            <div class="studio-trend-preview-box">
-              <div class="trend-preview-topbar">
-                <div class="trend-preview-title">
-                  <span class="preview-pulse-dot"></span>
-                  <strong>LIVE REAL-TIME TRENDLINE PREVIEW</strong>
-                </div>
-                <div class="trend-preview-badges">
-                  <span class="stat-pill-mini pro-pill"><span class="pill-dot pro-bg"></span> Pro Impact (Blue)</span>
-                  <span class="stat-pill-mini well-pill"><span class="pill-dot well-bg"></span> Well-being (Gold)</span>
-                  <span class="stat-pill-mini" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">💡 Drag dots directly</span>
-                </div>
-              </div>
-              <div class="trend-preview-canvas-holder">
-                <canvas id="studioTrendCanvas"></canvas>
-              </div>
-            </div>
-
-            <!-- Curve Shaper Preset Row -->
-            <div class="trend-panel-header" style="margin-top: 14px;">
-              <div>
-                <h4 class="card-section-title">Interactive Monthly Sliders & Curve Shapers (0 – 100)</h4>
-                <p class="field-hint">Drag any vertical slider or click a curve shaper. The preview chart above reflects changes in real time.</p>
-              </div>
-              <div class="trend-presets-row">
-                <button type="button" class="preset-pill-btn" onclick="applyTrendPreset('default')">Default Timeline</button>
-                <button type="button" class="preset-pill-btn" onclick="applyTrendPreset('high-impact')">High Impact</button>
-                <button type="button" class="preset-pill-btn" onclick="applyTrendPreset('balanced')">Balanced Recovery</button>
-                <button type="button" class="preset-pill-btn" onclick="applyTrendPreset('dip')">Mid-term Dip</button>
-                <button type="button" class="preset-pill-btn" onclick="applyTrendPreset('growth')">Exponential</button>
-                <button type="button" class="preset-pill-btn" onclick="applyTrendPreset('random')">🎲 Randomize</button>
-              </div>
-            </div>
-
-            <!-- 6 Month Grid with Direct Numerical Inputs, Steppers & Meter Tracks -->
-            <div class="months-editor-grid">
-              <!-- MONTH 0 -->
-              <div class="month-card" id="month-card-0">
-                <div class="month-title-badge" id="trend-lbl-0">Apr</div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(0, 'pro', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-0" value="56" oninput="onTrendNumInputChange(0, 'pro', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(0, 'pro', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-0" style="width: 56%;"></div></div>
-                </div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label well-label"><span>Well-being</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(0, 'well', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-0" value="69" oninput="onTrendNumInputChange(0, 'well', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(0, 'well', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-0" style="width: 69%;"></div></div>
-                </div>
-              </div>
-
-              <!-- MONTH 1 -->
-              <div class="month-card" id="month-card-1">
-                <div class="month-title-badge" id="trend-lbl-1">May</div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(1, 'pro', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-1" value="61" oninput="onTrendNumInputChange(1, 'pro', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(1, 'pro', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-1" style="width: 61%;"></div></div>
-                </div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label well-label"><span>Well-being</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(1, 'well', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-1" value="58" oninput="onTrendNumInputChange(1, 'well', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(1, 'well', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-1" style="width: 58%;"></div></div>
-                </div>
-              </div>
-
-              <!-- MONTH 2 -->
-              <div class="month-card" id="month-card-2">
-                <div class="month-title-badge" id="trend-lbl-2">Jun</div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(2, 'pro', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-2" value="66" oninput="onTrendNumInputChange(2, 'pro', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(2, 'pro', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-2" style="width: 66%;"></div></div>
-                </div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label well-label"><span>Well-being</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(2, 'well', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-2" value="54" oninput="onTrendNumInputChange(2, 'well', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(2, 'well', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-2" style="width: 54%;"></div></div>
-                </div>
-              </div>
-
-              <!-- MONTH 3 (Anomaly) -->
-              <div class="month-card anomaly-month-card" id="month-card-3">
-                <div class="month-title-badge anomaly-badge" id="trend-lbl-3">Jul (Anomaly)</div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(3, 'pro', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-3" value="80" oninput="onTrendNumInputChange(3, 'pro', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(3, 'pro', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-3" style="width: 80%;"></div></div>
-                </div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label well-label"><span>Well-being</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(3, 'well', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-3" value="68" oninput="onTrendNumInputChange(3, 'well', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(3, 'well', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-3" style="width: 68%;"></div></div>
-                </div>
-              </div>
-
-              <!-- MONTH 4 -->
-              <div class="month-card" id="month-card-4">
-                <div class="month-title-badge" id="trend-lbl-4">Aug</div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(4, 'pro', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-4" value="71" oninput="onTrendNumInputChange(4, 'pro', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(4, 'pro', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-4" style="width: 71%;"></div></div>
-                </div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label well-label"><span>Well-being</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(4, 'well', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-4" value="55" oninput="onTrendNumInputChange(4, 'well', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(4, 'well', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-4" style="width: 55%;"></div></div>
-                </div>
-              </div>
-
-              <!-- MONTH 5 -->
-              <div class="month-card" id="month-card-5">
-                <div class="month-title-badge" id="trend-lbl-5">Sep</div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label pro-label"><span>Pro Impact</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(5, 'pro', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input pro-input" id="trend-pro-5" value="86" oninput="onTrendNumInputChange(5, 'pro', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(5, 'pro', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill pro-meter-fill" id="meter-pro-5" style="width: 86%;"></div></div>
-                </div>
-                <div class="month-metric-group">
-                  <div class="month-metric-label well-label"><span>Well-being</span></div>
-                  <div class="trend-nudge-row">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(5, 'well', -5)">-5</button>
-                    <input type="number" min="0" max="100" class="trend-number-input well-input" id="trend-well-5" value="75" oninput="onTrendNumInputChange(5, 'well', this.value)">
-                    <button type="button" class="trend-step-btn" onclick="stepTrendVal(5, 'well', 5)">+5</button>
-                  </div>
-                  <div class="trend-meter-track"><div class="trend-meter-fill well-meter-fill" id="meter-well-5" style="width: 75%;"></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Panel 4: Diagnosis & Anomaly -->
-        <div class="studio-panel" id="studio-panel-insights">
-          <div class="studio-card">
-            <h4 class="card-section-title">Data Anomaly Diagnostic</h4>
-            <div class="studio-form-grid">
-              <div class="studio-field full-width">
-                <label>Observed Phenomenon Headline</label>
-                <input type="text" id="edit-anomaly-title">
-              </div>
-              <div class="studio-field full-width">
-                <label>Root Cause / Contextual Factor</label>
-                <input type="text" id="edit-anomaly-reason">
-              </div>
-              <div class="studio-field full-width">
-                <label>Prescriptive Corrective Action</label>
-                <input type="text" id="edit-anomaly-action">
-              </div>
-            </div>
-          </div>
-
-          <div class="studio-card" style="margin-top: 14px;">
-            <h4 class="card-section-title">Strategic Executive Question</h4>
-            <div class="studio-field full-width">
-              <label>Transformational Inquiry</label>
-              <textarea id="edit-strategic-question" rows="3"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- Panel 5: Forecast & Strategy -->
-        <div class="studio-panel" id="studio-panel-forecast">
-          <div class="studio-card" style="margin-bottom: 14px;">
-            <div class="forecast-panel-head">
-              <div>
-                <h4 class="card-section-title">6-Month Forward Projection Targets (Rolling Horizon)</h4>
-                <p class="field-hint">Enter custom projected index values (0–100) or auto-calculate based on historical trend velocity.</p>
-              </div>
-              <button type="button" class="preset-pill-btn" onclick="autoCalculateForecastFromTrends()" title="Calculate next 6 months projection based on current trend velocity" style="border: 1px solid #2563eb; color: #2563eb; background: #eff6ff; font-weight: 700;">
-                ⚡ Auto-Project from Real-Time Trends
-              </button>
-            </div>
-
-            <!-- Direct Monthly Forecast Inputs -->
-            <div class="forecast-months-grid" id="forecastMonthsInputGrid">
-              <div class="forecast-month-cell">
-                <span class="forecast-month-lbl" id="forecast-lbl-0">Oct</span>
-                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-0" value="55" oninput="onForecastNumInputChange(0, this.value)">
-              </div>
-              <div class="forecast-month-cell">
-                <span class="forecast-month-lbl" id="forecast-lbl-1">Nov</span>
-                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-1" value="62" oninput="onForecastNumInputChange(1, this.value)">
-              </div>
-              <div class="forecast-month-cell">
-                <span class="forecast-month-lbl" id="forecast-lbl-2">Dec</span>
-                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-2" value="67" oninput="onForecastNumInputChange(2, this.value)">
-              </div>
-              <div class="forecast-month-cell">
-                <span class="forecast-month-lbl" id="forecast-lbl-3">Jan</span>
-                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-3" value="72" oninput="onForecastNumInputChange(3, this.value)">
-              </div>
-              <div class="forecast-month-cell">
-                <span class="forecast-month-lbl" id="forecast-lbl-4">Feb</span>
-                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-4" value="75" oninput="onForecastNumInputChange(4, this.value)">
-              </div>
-              <div class="forecast-month-cell">
-                <span class="forecast-month-lbl" id="forecast-lbl-5">Mar</span>
-                <input type="number" min="0" max="100" class="forecast-num-input" id="forecast-val-5" value="82" oninput="onForecastNumInputChange(5, this.value)">
-              </div>
-            </div>
-          </div>
-
-          <div class="studio-card">
-            <div class="forecast-panel-head">
-              <div>
-                <h4 class="card-section-title">6-Month Statistical Forecast Summary Checklist</h4>
-                <p class="field-hint">Add, edit, or remove forecast goals freely. Card G dynamically renders as many check goals as you set.</p>
-              </div>
-              <button type="button" class="studio-btn primary-sm" id="btnAddForecastGoal" onclick="addForecastGoalRow()">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                + Add Goal / Target
-              </button>
-            </div>
-
-            <!-- Dynamic Forecast Items Container -->
-            <div class="forecast-goals-list" id="forecastGoalsList">
-              <!-- Dynamically populated rows via JavaScript -->
-            </div>
-
-            <div class="studio-field full-width" style="margin-top: 18px; border-top: 1px dashed #e2e8f0; padding-top: 14px;">
-              <label>Underlying Modeling Assumptions & Notes</label>
-              <input type="text" id="edit-forecast-note" value="Assumes consistent habits and support systems.">
-            </div>
-          </div>
-        </div>
-
-        <!-- Panel 6: Backup & Presets -->
-        <div class="studio-panel" id="studio-panel-backup">
-          <div class="studio-card">
-            <h4 class="card-section-title">Data Management & Presets</h4>
-            <p class="field-hint">Export your current metrics to JSON, reset card arrangement, or upload a saved configuration.</p>
-            <div class="backup-actions-grid">
-              <button type="button" class="studio-action-tile" id="btnExportJSON">
-                <div class="tile-icon-box">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                </div>
-                <strong>Backup JSON File</strong>
-                <span>Download data file</span>
-              </button>
-
-              <label class="studio-action-tile" style="cursor: pointer;">
-                <div class="tile-icon-box">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                </div>
-                <strong>Import JSON File</strong>
-                <span>Load saved JSON</span>
-                <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
-              </label>
-
-              <button type="button" class="studio-action-tile" id="btnResetLayout" onclick="resetCardLayout()">
-                <div class="tile-icon-box" style="background: rgba(37, 99, 235, 0.1); color: #2563eb;">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                </div>
-                <strong>Reset Card Layout</strong>
-                <span>Restore default A–I order</span>
-              </button>
-
-              <button type="button" class="studio-action-tile" id="btnAddCustomCard" onclick="addCustomCard()">
-                <div class="tile-icon-box" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                </div>
-                <strong>Add Custom Card</strong>
-                <span>New note/metric card</span>
-              </button>
-
-              <button type="button" class="studio-action-tile" id="btnRestoreAllCards" onclick="restoreAllHiddenCards()">
-                <div class="tile-icon-box" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                </div>
-                <strong>Restore Hidden Cards</strong>
-                <span>Unhide all cards</span>
-              </button>
-
-              <button type="button" class="studio-action-tile danger-tile" id="btnResetDefaults">
-                <div class="tile-icon-box danger-icon">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                </div>
-                <strong>Factory Reset</strong>
-                <span>Revert to original state</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </form>
-
-      <!-- Studio Footer -->
-      <div class="studio-footer">
-        <div class="studio-footer-status">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Changes are stored in LocalStorage and take effect immediately.</span>
-        </div>
-        <div class="studio-footer-btns">
-          <button type="button" class="studio-btn outline" id="btnCancelStudio" onclick="closeDataEditor()">Close Studio</button>
-          <button type="button" class="studio-btn primary" id="btnApplyChanges" onclick="saveEditorChanges(event)">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Apply & Save Dashboard
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Toast Message -->
-  <div class="toast-msg no-print" id="toastMsg">Changes saved successfully!</div>
+  <!-- Toast Notification Message -->
+  <div class="toast-notification no-print" id="toastMsg">Changes saved successfully!</div>
 
   <!-- Scripts -->
+  <script src="assets/vendor/quill/quill.js"></script>
   <script src="assets/js/charts.js"></script>
   <script src="assets/js/doc-editor.js"></script>
   <script src="assets/js/card-detail.js"></script>

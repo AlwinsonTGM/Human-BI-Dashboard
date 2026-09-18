@@ -3,7 +3,7 @@
     "name": "Mary Jane Sapiendante Legaspi",
     "nickname": "Mary Jane",
     "role": "Higher Education Faculty Member & Reserve Military",
-    "avatar": "assets/img/default-avatar.svg"
+    "avatar": "assets/mary_jane.jpg"
   },
   "timeline": {
     "anchorYear": 2026,
@@ -105,11 +105,22 @@
     "Consistent investment in learning and well-being drives higher professional impact and student outcomes.",
     "Balancing academic responsibilities and reserve military duties builds discipline, resilience, and purpose."
   ],
+  "anomalies": [
+    {
+      "id": "ano-1",
+      "badge": "April Workload Convergence",
+      "title": "April peak in Professional Impact (80) diverged sharply from Personal Well-being (68).",
+      "reason": "Confluence of academic final evaluations, thesis panels, and unscheduled military reserve brigade mobilization exercises.",
+      "action": "Instituted digital rubric automation via LMS to preserve a non-negotiable 7.5-hour recovery window during peak deployment periods."
+    }
+  ],
   "anomaly": {
-    "title": "One Data Anomaly",
-    "observation": "Spike in professional impact while well-being dips.",
-    "possibleReason": "Academic finals grading, research deliverables, and reserve military field exercises overlapped.",
-    "action": "Monitor workload distribution, institute recovery buffers, and protect sleep hygiene."
+    "badge": "April Workload Convergence",
+    "title": "April peak in Professional Impact (80) diverged sharply from Personal Well-being (68).",
+    "observation": "April peak in Professional Impact (80) diverged sharply from Personal Well-being (68).",
+    "reason": "Confluence of academic final evaluations, thesis panels, and unscheduled military reserve brigade mobilization exercises.",
+    "possibleReason": "Confluence of academic final evaluations, thesis panels, and unscheduled military reserve brigade mobilization exercises.",
+    "action": "Instituted digital rubric automation via LMS to preserve a non-negotiable 7.5-hour recovery window during peak deployment periods."
   },
   "strategicQuestion": {
     "question": "How can I leverage data and partnerships to scale student success and national service without compromising well-being?"

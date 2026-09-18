@@ -1,7 +1,7 @@
 @echo off
 echo ======================================================================
-echo  DEPLOY HUMAN BI DASHBOARD & QUAKESPOTS GIS TO GITHUB PAGES
-echo  Alwinson Bustamante - Faculty & Military Analytics
+echo  DEPLOY HUMAN BI EXECUTIVE DASHBOARD TO GITHUB PAGES
+echo  Alwinson Bustamante - Faculty & Military Analytics for Ma'am Jane
 echo ======================================================================
 echo.
 
@@ -15,15 +15,15 @@ if not exist ".git" (
 )
 
 echo [2/4] Staging files...
-git add index.html quakespots3.html data assets README.md DEPLOY_GITHUB_PAGES.md
+git add index.html data assets README.md DEPLOY_GITHUB_PAGES.md deploy.bat
 
 echo [3/4] Creating commit...
-git commit -m "Deploy: Human BI Dashboard and QuakeSpots GIS Portal for Ma'am Jane"
+git commit -m "Deploy: Human BI Executive Dashboard for Ma'am Jane"
 
 echo.
 echo [4/4] Next Steps:
 echo If you haven't linked your GitHub repository yet, run:
-echo    git remote add origin https://github.com/YOUR_USERNAME/quakespots-human-bi.git
+echo    git remote add origin https://github.com/YOUR_USERNAME/human-bi-dashboard.git
 echo    git push -u origin main
 echo.
 echo Then enable GitHub Pages under Repository Settings -> Pages -> Deploy from branch 'main'!

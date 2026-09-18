@@ -263,11 +263,13 @@ body {
 }
 
 .studio-modal {
-  width: 900px;
+  width: 1000px;
   max-width: 95vw;
-  max-height: 88vh;
+  height: 85vh;
+  min-height: 600px;
+  max-height: 85vh;
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15);
   display: flex;
   flex-direction: column;
@@ -289,6 +291,7 @@ body {
   align-items: center;
   justify-content: space-between;
   border-bottom: 2px solid #134074;
+  flex-shrink: 0;
 }
 
 .studio-brand {
@@ -358,6 +361,7 @@ body {
   align-items: center;
   gap: 4px;
   overflow-x: auto;
+  flex-shrink: 0;
 }
 
 .studio-tab-btn {
@@ -1229,6 +1233,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .studio-footer-status {

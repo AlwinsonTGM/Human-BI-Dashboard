@@ -1,0 +1,201 @@
+﻿/* ==========================================================================
+   MINIMALIST THEME OVERRIDE
+   One palette: near-black (#1a1a1a), warm white (#f9f8f6), mid-gray (#767676)
+   No gradients. No color. Clean, typographic, intentional.
+   ========================================================================== */
+
+/* Root palette reset */
+:root {
+  --bg-canvas:     #f5f4f2;
+  --header-bg:     #1a1a1a;
+  --header-text:   #f0efed;
+  --card-bg:       #ffffff;
+  --card-border:   #e8e6e2;
+  --card-shadow:   0 1px 4px rgba(0,0,0,0.07);
+  --text-primary:  #1a1a1a;
+  --text-secondary:#4a4a4a;
+  --text-muted:    #767676;
+  --border-light:  #e4e2de;
+  --accent:        #1a1a1a;
+  --trend-up:      #1a1a1a;
+  --trend-up-bg:   #f0efed;
+}
+
+body { background-color: var(--bg-canvas) !important; }
+
+/* App header */
+.app-header { background-color: #1a1a1a !important; box-shadow: 0 1px 0 rgba(255,255,255,0.06) !important; }
+
+.pbi-logo-badge { background: transparent !important; border: 1.5px solid rgba(255,255,255,0.25) !important; box-shadow: none !important; }
+.pbi-logo-badge svg { fill: #ffffff !important; }
+.branding-text .role-subtitle { color: rgba(255,255,255,0.45) !important; }
+
+.tab-btn { color: rgba(255,255,255,0.5) !important; }
+.tab-btn:hover { color: rgba(255,255,255,0.85) !important; background: rgba(255,255,255,0.07) !important; }
+.tab-btn.active { background: #ffffff !important; color: #1a1a1a !important; box-shadow: none !important; }
+
+.action-btn { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.14) !important; }
+.action-btn:hover { background: rgba(255,255,255,0.16) !important; }
+.action-btn.primary { background: #ffffff !important; color: #1a1a1a !important; border-color: #ffffff !important; }
+.action-btn.primary:hover { background: #f0efed !important; }
+
+/* Banner */
+.material-banner { background: #1a1a1a !important; box-shadow: none !important; }
+
+/* Cards */
+.pbi-card, .material-card { background: #ffffff !important; border: 1px solid #e4e2de !important; box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important; border-radius: 10px !important; }
+.pbi-card:hover, .material-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08) !important; transform: translateY(-1px) !important; }
+.card-header { border-bottom: 1px solid #f0efed !important; background: transparent !important; }
+.material-card-header { border-bottom-color: #f0efed !important; }
+
+/* Letter badges — strip all gradients */
+.material-letter-badge, .badge-dark, .badge-info, .badge-success, .badge-warning, .badge-primary {
+  background: #1a1a1a !important; box-shadow: none !important; color: #ffffff !important;
+}
+
+/* Floating icon boxes */
+.floating-icon-box, .icon-gradient-dark, .icon-gradient-info, .icon-gradient-success, .icon-gradient-warning, .icon-gradient-primary {
+  background: #eeece8 !important; color: #1a1a1a !important; box-shadow: none !important;
+}
+
+/* KPI tiles */
+.material-kpi-tile { background: #faf9f7 !important; border-color: #e8e6e2 !important; }
+.material-kpi-tile:hover { background: #ffffff !important; border-color: #c8c6c2 !important; box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important; }
+.material-kpi-icon, .material-kpi-icon.icon-gradient-dark, .material-kpi-icon.icon-gradient-info,
+.material-kpi-icon.icon-gradient-success, .material-kpi-icon.icon-gradient-warning, .material-kpi-icon.icon-gradient-primary {
+  background: #e8e6e2 !important; color: #1a1a1a !important; box-shadow: none !important;
+}
+.material-kpi-value { color: #1a1a1a !important; }
+.material-kpi-label { color: #767676 !important; }
+.material-kpi-unit  { color: #767676 !important; }
+
+/* KPI delta — no green/red */
+.material-kpi-delta, .kpi-delta, .delta-positive, .delta-negative, .delta-up, .delta-down { color: #4a4a4a !important; }
+.delta-arrow { opacity: 0.55; }
+
+/* Card action buttons */
+.btn-card-detail { background: #f5f4f2 !important; border: 1px solid #e0deda !important; color: #4a4a4a !important; box-shadow: none !important; }
+.btn-card-detail:hover { background: #1a1a1a !important; border-color: #1a1a1a !important; color: #ffffff !important; box-shadow: none !important; }
+.btn-card-hide:hover { background: #f0efed !important; color: #1a1a1a !important; }
+
+/* Material buttons */
+.btn-material-primary { background: #1a1a1a !important; box-shadow: none !important; }
+.btn-material-dark { background: #3a3a3a !important; box-shadow: none !important; }
+.btn-material-outline { background: #ffffff !important; border-color: #d0cec9 !important; color: #1a1a1a !important; }
+.btn-material-outline:hover { background: #f5f4f2 !important; border-color: #1a1a1a !important; }
+
+/* Forecast checks */
+.forecast-check-row .material-symbols-rounded { color: #4a4a4a !important; }
+.check-green { color: #4a4a4a !important; }
+.gov-check-icon .material-symbols-rounded { color: #767676 !important; }
+
+/* Identity */
+.identity-quote { color: #1a1a1a !important; }
+.identity-titles { color: #4a4a4a !important; }
+.identity-values { color: #767676 !important; }
+
+/* Toast */
+.toast-msg { background: #1a1a1a !important; border-left: 3px solid #767676 !important; box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important; }
+
+/* Studio Modal */
+.studio-overlay { background: rgba(10,10,10,0.6) !important; }
+.studio-modal { box-shadow: 0 8px 40px rgba(0,0,0,0.2), 0 0 0 1px #e4e2de !important; }
+.studio-header { background: #1a1a1a !important; border-bottom-color: #2e2e2e !important; }
+.studio-badge-icon { background: #2e2e2e !important; box-shadow: none !important; }
+.studio-tab-btn.active { color: #1a1a1a !important; box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important; }
+.studio-body { background: #f5f4f2 !important; }
+.studio-card { border-color: #e4e2de !important; box-shadow: none !important; }
+.card-section-title { color: #1a1a1a !important; }
+.studio-footer { background: #ffffff !important; border-top-color: #e4e2de !important; }
+.studio-btn.primary { background: #1a1a1a !important; border-color: #1a1a1a !important; box-shadow: none !important; }
+.studio-btn.primary:hover { background: #333 !important; }
+.studio-btn.outline { border-color: #d0cec9 !important; color: #4a4a4a !important; }
+.studio-btn.outline:hover { border-color: #1a1a1a !important; color: #1a1a1a !important; }
+.preset-pill-btn { background: #f5f4f2 !important; border: 1px solid #e0deda !important; color: #4a4a4a !important; box-shadow: none !important; }
+.preset-pill-btn:hover { background: #1a1a1a !important; border-color: #1a1a1a !important; color: #ffffff !important; }
+.kpi-studio-card { border-color: #e4e2de !important; background: #ffffff !important; box-shadow: none !important; }
+.kpi-tag-badge { background: #f0efed !important; color: #4a4a4a !important; border: 1px solid #e0deda !important; }
+
+.dir-btn.dir-up.active { background: #1a1a1a !important; color: #fff !important; border-color: #1a1a1a !important; }
+.dir-btn.dir-down.active { background: #4a4a4a !important; color: #fff !important; border-color: #4a4a4a !important; }
+.delta-num-wrapper.is-up, .delta-num-wrapper.is-down { background: #f5f4f2 !important; border-color: #c8c6c2 !important; }
+.gauge-bar-fill { background: #4a4a4a !important; }
+
+.month-card { border-color: #e4e2de !important; background: #ffffff !important; }
+.anomaly-month-card { border-color: #c8c6c2 !important; background: #f5f4f2 !important; }
+.anomaly-badge { background: #e4e2de !important; color: #4a4a4a !important; }
+.trend-meter-fill.pro-meter-fill { background: #4a4a4a !important; }
+.trend-meter-fill.well-meter-fill { background: #909090 !important; }
+.step-pill.add-lg { background: #1a1a1a !important; color: #fff !important; border-color: #1a1a1a !important; }
+.forecast-goal-row .goal-check-badge { color: #4a4a4a !important; }
+
+.studio-action-tile { background: #ffffff !important; border-color: #e4e2de !important; color: #1a1a1a !important; box-shadow: none !important; }
+.studio-action-tile:hover { background: #f5f4f2 !important; border-color: #b0aea9 !important; box-shadow: none !important; }
+.tile-icon-box { background: #f0efed !important; color: #4a4a4a !important; }
+.danger-tile { border-color: #d0cec9 !important; }
+.danger-icon { background: #f0efed !important; color: #4a4a4a !important; }
+
+/* Card Detail Modal */
+.card-detail-backdrop { background: rgba(10,10,10,0.6) !important; }
+.card-detail-window { background: #f5f4f2 !important; box-shadow: 0 8px 40px rgba(0,0,0,0.2), 0 0 0 1px #e4e2de !important; }
+.detail-modal-header { background: #1a1a1a !important; border-bottom-color: #2e2e2e !important; }
+.detail-mode-toggle { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.14) !important; }
+.detail-mode-btn { color: rgba(255,255,255,0.5) !important; }
+.detail-mode-btn:hover { color: rgba(255,255,255,0.85) !important; background: rgba(255,255,255,0.08) !important; }
+.detail-mode-btn.active { background: #ffffff !important; color: #1a1a1a !important; box-shadow: none !important; }
+.btn-studio-jump { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.14) !important; color: rgba(255,255,255,0.6) !important; }
+.btn-studio-jump:hover { background: rgba(255,255,255,0.16) !important; color: #ffffff !important; }
+.detail-nav-tabs { background: #eae8e4 !important; border-bottom-color: #d8d6d2 !important; }
+.detail-nav-tab-btn { color: #767676 !important; }
+.detail-nav-tab-btn:hover { background: rgba(0,0,0,0.05) !important; color: #1a1a1a !important; }
+.detail-nav-tab-btn.active { background: #ffffff !important; color: #1a1a1a !important; box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important; }
+.detail-modal-content { background: #f5f4f2 !important; }
+.detail-modal-footer { background: #ffffff !important; border-top: 1px solid #e4e2de !important; }
+.card-edit-section { background: #ffffff !important; border-color: #e4e2de !important; box-shadow: none !important; }
+.card-edit-section h4 { color: #1a1a1a !important; }
+.card-edit-field label { color: #767676 !important; }
+.card-edit-field input:focus, .card-edit-field select:focus, .card-edit-field textarea:focus { border-color: #1a1a1a !important; box-shadow: 0 0 0 2px rgba(26,26,26,0.08) !important; }
+.detail-card-panel { background: #ffffff !important; border-color: #e8e6e2 !important; box-shadow: none !important; }
+.detail-panel-title { color: #1a1a1a !important; }
+.doc-callout { background: #f0efed !important; border-left-color: #c8c6c2 !important; color: #4a4a4a !important; }
+.doc-callout.info { background: #f0efed !important; border-left-color: #4a4a4a !important; }
+.doc-callout.warning { background: #f0efed !important; border-left-color: #767676 !important; }
+.detail-metrics-table th { background: #f5f4f2 !important; color: #4a4a4a !important; }
+.detail-metrics-table td { color: #1a1a1a !important; }
+.detail-metrics-table tr:hover td { background: #faf9f7 !important; }
+
+/* Text color helpers */
+.text-info, .text-success, .text-primary { color: #4a4a4a !important; }
+.text-warning { color: #767676 !important; }
+.text-danger { color: #1a1a1a !important; font-weight: 700 !important; }
+.text-dark { color: #1a1a1a !important; }
+
+/* WYSIWYG ribbon */
+.doc-ribbon { background: #faf9f7 !important; border-bottom-color: #e4e2de !important; }
+.ribbon-btn:hover { background: #e8e6e2 !important; color: #1a1a1a !important; }
+.ribbon-btn.active { background: #1a1a1a !important; color: #ffffff !important; }
+
+/* Material navbar (secondary bar) */
+.material-navbar { background: rgba(255,255,255,0.9) !important; border-color: #e4e2de !important; box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important; }
+.nav-pill-btn.active { background: #1a1a1a !important; color: #ffffff !important; box-shadow: none !important; }
+
+/* GIS header */
+.gis-header-bar { background: #1a1a1a !important; }
+
+/* Methodology cards */
+.doc-card { background: #ffffff !important; border-color: #e4e2de !important; box-shadow: none !important; }
+.doc-header { background: #f5f4f2 !important; border-bottom-color: #e4e2de !important; }
+.doc-icon-badge { background: #1a1a1a !important; color: #fff !important; }
+
+/* PBI footer */
+.pbi-footer-banner { background: #1a1a1a !important; border-top-color: #2e2e2e !important; }
+.pbi-footer-banner .footer-text { color: rgba(255,255,255,0.65) !important; }
+.pbi-footer-banner strong { color: #ffffff !important; }
+.footer-icon-box { background: rgba(255,255,255,0.08) !important; color: rgba(255,255,255,0.5) !important; }
+
+/* Drag handle */
+.card-drag-handle { color: #c8c6c2 !important; }
+.card-drag-handle:hover { color: #767676 !important; }
+
+/* Insight items */
+.insight-item { border-left-color: #c8c6c2 !important; }

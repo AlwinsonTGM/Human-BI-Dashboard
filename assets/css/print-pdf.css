@@ -1,12 +1,12 @@
 /* ==========================================================================
-   PRINT & PDF EXPORT STYLESHEET
+   PRINT & PDF EXPORT STYLESHEET (HIGH-STATURE EXECUTIVE BRIEF)
    Formats the Human BI Dashboard into a clean 1-page A4 Landscape report
    ========================================================================== */
 
 @media print {
   @page {
     size: A4 landscape;
-    margin: 6mm 8mm;
+    margin: 8mm 10mm;
   }
 
   *,
@@ -18,24 +18,23 @@
   }
 
   body {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    font-size: 11px !important;
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    font-size: 10px !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
   /* Hide interactive web UI components */
-  .app-header,
-  .header-actions,
-  .action-btn,
-  .toast-msg,
-  .edit-drawer-overlay,
-  .edit-drawer,
-  .gis-header-bar,
+  .material-navbar,
+  .nav-actions,
+  .btn-card-detail,
+  .toast-notification,
+  .studio-overlay,
+  .card-detail-overlay,
+  .no-print,
   #view-gis,
-  #view-methodology,
-  .no-print {
+  #view-methodology {
     display: none !important;
   }
 
@@ -52,40 +51,67 @@
     box-shadow: none !important;
     border-radius: 0 !important;
     width: 100% !important;
+    padding: 0 !important;
     page-break-inside: avoid !important;
   }
 
-  .pbi-banner {
-    background-color: #0b2545 !important;
-    color: #ffffff !important;
-    padding: 10px 18px !important;
+  .material-banner {
+    background: #0E1B2E !important;
+    color: #FFFFFF !important;
+    border: 1px solid #0E1B2E !important;
+    padding: 10px 16px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .material-banner-title {
+    color: #FFFFFF !important;
+    font-size: 16px !important;
+  }
+
+  .material-banner-title .banner-crest-icon {
+    color: #CFAC6E !important;
+  }
+
+  .material-banner-pill {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
   }
 
   .pbi-grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1.3fr 1.3fr !important;
-    grid-auto-rows: auto !important;
-    gap: 8px !important;
-    padding: 8px !important;
-    background-color: #f1f4f9 !important;
+    gap: 12px !important;
   }
 
   .pbi-card {
-    background-color: #ffffff !important;
-    border: 1px solid #cbd5e1 !important;
-    padding: 8px 10px !important;
+    background-color: #FFFFFF !important;
+    border: 1px solid #CBD5DD !important;
     box-shadow: none !important;
     page-break-inside: avoid !important;
   }
 
-  .chart-wrapper {
-    min-height: 100px !important;
-    max-height: 120px !important;
+  .card-header {
+    padding: 8px 12px !important;
+    background-color: #F8FAFC !important;
+  }
+
+  .module-key-badge {
+    background: #0E1B2E !important;
+    color: #FFFFFF !important;
+  }
+
+  .chart-canvas-wrapper {
+    height: 180px !important;
   }
 
   .pbi-footer-banner {
-    background-color: #0b2545 !important;
-    color: #ffffff !important;
-    padding: 8px 18px !important;
+    background-color: #0E1B2E !important;
+    color: #BAC7D5 !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    margin-top: 12px !important;
+  }
+
+  .pbi-footer-banner strong {
+    color: #FFFFFF !important;
   }
 }

@@ -4,8 +4,16 @@
    Provides instant in-browser editing, LocalStorage sync, and JSON import/export
    ========================================================================== */
 
-const STORAGE_KEY = 'human_bi_dashboard_state_v4';
+const STORAGE_KEY = 'human_bi_dashboard_state_v5';
 let currentData = null;
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
 const TimelineEngine = {
   MONTH_NAMES: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -64,24 +72,40 @@ function applyTimeline(year, month, shouldSave = true) {
   const hist = TimelineEngine.getRollingHistorical(year, month, 6);
   const fore = TimelineEngine.getRollingForecast(year, month, 6);
 
-  if (!currentData.trend) currentData.trend = {};
-  currentData.trend.labels = hist.map(x => x.shortLabel);
+  if (!currentData.trend) currentData.trend = { activeRange: 'last-6' };
+  if (!currentData.trend.activeRange || currentData.trend.activeRange === 'last-6') {
+    currentData.trend.labels = hist.map(x => x.shortLabel);
+  }
 
   if (!currentData.forecast) currentData.forecast = {};
   currentData.forecast.labels = fore.map(x => x.shortLabel);
 
-  // Update real-time banner pill
+  // Update real-time banner pill with full executive date
   const rtBadge = document.getElementById('realtimeStatusBadge');
   if (rtBadge) {
-    rtBadge.innerHTML = `<span class="material-symbols-rounded" style="font-size:13px; color:#4caf50;">fiber_manual_record</span> Real-Time Active • ${TimelineEngine.MONTH_NAMES[month - 1]} ${year}`;
+    const today = new Date();
+    let day = today.getDate();
+    if (today.getFullYear() !== year || (today.getMonth() + 1) !== month) {
+      day = 1;
+    }
+    const d = new Date(year, month - 1, day);
+    const fullDateStr = d.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    rtBadge.textContent = fullDateStr;
   }
 
   // Update forecast horizon tags
   const fcBannerTag = document.getElementById('forecastHorizonBadge');
   const fcCardTag = document.getElementById('forecastPeriodTag');
-  const fcPeriodStr = `H2: ${fore[0].shortLabel} '${fore[0].shortYear}–${fore[5].shortLabel} '${fore[5].shortYear}`;
-  if (fcBannerTag) fcBannerTag.textContent = `Forecast: ${fore[0].shortLabel} '${fore[0].shortYear}–${fore[5].shortLabel} '${fore[5].shortYear}`;
-  if (fcCardTag) fcCardTag.textContent = fcPeriodStr;
+  if (fore && fore.length >= 6) {
+    const fcPeriodStr = `H2: ${fore[0].shortLabel} '${fore[0].shortYear}–${fore[5].shortLabel} '${fore[5].shortYear}`;
+    if (fcBannerTag) fcBannerTag.textContent = `Forecast: ${fore[0].shortLabel} '${fore[0].shortYear}–${fore[5].shortLabel} '${fore[5].shortYear}`;
+    if (fcCardTag) fcCardTag.textContent = fcPeriodStr;
+  }
 
   // Update month labels in studio
   hist.forEach((item, i) => {
@@ -166,6 +190,19 @@ async function loadInitialData() {
         if (!currentData.trend) currentData.trend = {};
         currentData.trend.activeRange = 'last-6';
       }
+      if (!currentData.anomalies || !Array.isArray(currentData.anomalies) || currentData.anomalies.length === 0) {
+        if (currentData.anomaly && (currentData.anomaly.badge || currentData.anomaly.title)) {
+          currentData.anomalies = [{
+            id: 'ano-1',
+            badge: currentData.anomaly.badge || 'April Workload Convergence',
+            title: currentData.anomaly.title || currentData.anomaly.observation || 'April peak in Professional Impact (80) diverged sharply from Personal Well-being (68).',
+            reason: currentData.anomaly.reason || currentData.anomaly.possibleReason || 'Confluence of academic final evaluations, thesis panels, and unscheduled military reserve brigade mobilization exercises.',
+            action: currentData.anomaly.action || 'Instituted digital rubric automation via LMS to preserve a non-negotiable 7.5-hour recovery window during peak deployment periods.'
+          }];
+        } else if (defaultData && defaultData.anomalies) {
+          currentData.anomalies = JSON.parse(JSON.stringify(defaultData.anomalies));
+        }
+      }
     } catch (e) {
       console.warn('Cached data invalid, falling back to JSON file', e);
       currentData = defaultData;
@@ -174,8 +211,11 @@ async function loadInitialData() {
     currentData = defaultData;
   }
 
-  const anchorYear = currentData?.timeline?.anchorYear || 2026;
-  const anchorMonth = currentData?.timeline?.anchorMonth || 9;
+  const now = new Date();
+  const sysYear = now.getFullYear();
+  const sysMonth = now.getMonth() + 1;
+  const anchorYear = currentData?.timeline?.anchorYear || sysYear;
+  const anchorMonth = currentData?.timeline?.anchorMonth || sysMonth;
   applyTimeline(anchorYear, anchorMonth, false);
 
   renderDashboard(currentData);
@@ -186,8 +226,54 @@ async function loadInitialData() {
 
 function syncTrendRangeSelector() {
   const sel = document.getElementById('trendRangeSelect');
-  if (sel && currentData && currentData.trend && currentData.trend.activeRange) {
-    sel.value = currentData.trend.activeRange;
+  if (!sel || !currentData || !currentData.trend) return;
+
+  let active = currentData.trend.activeRange;
+
+  // Normalize legacy values
+  if (!active || active === 'last-6' || (typeof active === 'string' && (active.includes('Current Semester') || active.includes('Rolling 6M') || active.includes('Rolling 6 Months')))) {
+    active = 'last-6';
+  } else if (active === 'last-3' || (typeof active === 'string' && (active.includes('Recent') || active.includes('Q3') || active.includes('Sprint')))) {
+    active = 'last-3';
+  } else if (active === 'q1' || (typeof active === 'string' && (active.includes('Baseline') || active.includes('Q1') || active.includes('Q2')))) {
+    active = 'q1';
+  } else if (active === 'prior-6' || (typeof active === 'string' && (active.includes('Prior Semester') || active.includes('Prior 6M') || active.includes('Prior 6 Months')))) {
+    active = 'prior-6';
+  } else if (active === 'full-year' || (typeof active === 'string' && (active.includes('Annual') || active.includes('full-year')))) {
+    active = 'full-year';
+  } else if (active !== 'custom') {
+    const directMatch = Array.from(sel.options).some(opt => opt.value === active);
+    if (!directMatch) {
+      active = 'last-6';
+    }
+  }
+
+  // Ensure "custom" option exists if active is custom
+  if (active === 'custom' && !sel.querySelector('option[value="custom"]')) {
+    const customOpt = document.createElement('option');
+    customOpt.value = 'custom';
+    customOpt.textContent = 'Custom Range';
+    sel.appendChild(customOpt);
+  }
+
+  sel.value = active;
+  if (sel.selectedIndex === -1) {
+    sel.selectedIndex = 0;
+    active = sel.value;
+  }
+  currentData.trend.activeRange = active;
+
+  // Sync period tag if present
+  const periodTag = document.getElementById('trendPeriodTag');
+  if (periodTag) {
+    if (active === 'custom') {
+      periodTag.textContent = `Custom (${currentData.trend.labels?.length || 0} Periods)`;
+    } else {
+      const pool = currentData.longitudinalPool;
+      if (pool && pool.ranges && pool.ranges[active]) {
+        periodTag.textContent = pool.ranges[active].label;
+      }
+    }
   }
 }
 
@@ -195,6 +281,16 @@ function onTrendRangeSelect(rangeKey) {
   if (!currentData) return;
   if (!currentData.trend) currentData.trend = {};
   currentData.trend.activeRange = rangeKey;
+
+  if (rangeKey === 'custom') {
+    const periodTag = document.getElementById('trendPeriodTag');
+    if (periodTag) periodTag.textContent = `Custom (${currentData.trend.labels?.length || 0} Periods)`;
+    if (typeof showToast === 'function') {
+      showToast('Switched to Custom Range.');
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
+    return;
+  }
 
   const pool = currentData.longitudinalPool;
   if (pool && pool.ranges && pool.ranges[rangeKey]) {
@@ -217,6 +313,7 @@ function onTrendRangeSelect(rangeKey) {
     if (window.updateCharts) {
       window.updateCharts(currentData);
     }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
     if (typeof showToast === 'function') {
       showToast(`Trendline filter changed to ${rConfig.label}`);
     }
@@ -262,15 +359,8 @@ function renderDashboard(data) {
     }
   }
 
-  // 4. Anomaly
-  if (data.anomaly) {
-    const titleEl = document.getElementById('anomalyTitle');
-    const reasonEl = document.getElementById('anomalyReason');
-    const actionEl = document.getElementById('anomalyAction');
-    if (titleEl) titleEl.textContent = data.anomaly.title;
-    if (reasonEl) reasonEl.textContent = data.anomaly.reason;
-    if (actionEl) actionEl.textContent = data.anomaly.action;
-  }
+  // 4. Anomaly Forensics (Multi-Anomaly Support)
+  renderDashboardAnomalies(data);
 
   // 5. Strategic Question
   if (data.strategicQuestion) {
@@ -297,8 +387,8 @@ function renderDashboard(data) {
     const titlesEl = document.getElementById('identityTitles');
     const valuesEl = document.getElementById('identityValues');
     if (quoteEl) quoteEl.textContent = `"${data.identity.quote}"`;
-    if (titlesEl) titlesEl.textContent = data.identity.title;
-    if (valuesEl) valuesEl.textContent = data.identity.subtitle;
+    if (titlesEl) titlesEl.textContent = data.identity.motto || data.identity.title || '';
+    if (valuesEl) valuesEl.textContent = data.identity.subtext || data.identity.subtitle || '';
   }
 
   // 8. Declarations
@@ -310,13 +400,116 @@ function renderDashboard(data) {
   }
 }
 
-/// Open Studio Modal & Pre-fill
-function openDataEditor() {
+function switchDashboardAnomaly(index) {
+  window._activeAnomalyIndex = index;
+  if (window.dashboardData) {
+    renderDashboardAnomalies(window.dashboardData);
+  } else if (currentData) {
+    renderDashboardAnomalies(currentData);
+  }
+}
+window.switchDashboardAnomaly = switchDashboardAnomaly;
+
+function renderDashboardAnomalies(data) {
+  const cardBody = document.getElementById('anomalyCardBody');
+  const tabBar = document.getElementById('anomalyTabBar');
+  const badgeEl = document.getElementById('anomalyBadge');
+  const badgePill = document.getElementById('anomalyBadgePill');
+  const titleEl = document.getElementById('anomalyTitle');
+  const reasonEl = document.getElementById('anomalyReason');
+  const actionEl = document.getElementById('anomalyAction');
+  const reasonBlock = document.getElementById('anomalyReasonBlock');
+  const actionBlock = document.getElementById('anomalyActionBlock');
+
+  if (!cardBody) return;
+
+  let anomalies = [];
+  if (data && Array.isArray(data.anomalies) && data.anomalies.length > 0) {
+    anomalies = data.anomalies;
+  } else if (data && data.anomaly) {
+    anomalies = [{
+      id: 'ano-1',
+      badge: data.anomaly.badge || 'April Workload Convergence',
+      title: data.anomaly.title || data.anomaly.observation || '',
+      reason: data.anomaly.reason || data.anomaly.possibleReason || '',
+      action: data.anomaly.action || ''
+    }];
+  }
+
+  if (anomalies.length === 0) {
+    if (tabBar) tabBar.style.display = 'none';
+    if (badgePill) badgePill.style.display = 'none';
+    if (titleEl) titleEl.textContent = 'No operational anomalies recorded.';
+    if (reasonBlock) reasonBlock.style.display = 'none';
+    if (actionBlock) actionBlock.style.display = 'none';
+    return;
+  }
+
+  if (typeof window._activeAnomalyIndex !== 'number' || window._activeAnomalyIndex < 0 || window._activeAnomalyIndex >= anomalies.length) {
+    window._activeAnomalyIndex = 0;
+  }
+  const activeIndex = window._activeAnomalyIndex;
+  const activeAno = anomalies[activeIndex] || anomalies[0];
+
+  const color = activeAno.color || 'amber';
+  const icon = activeAno.icon || 'warning';
+
+  // Render tabs if more than 1 anomaly
+  if (tabBar) {
+    if (anomalies.length > 1) {
+      tabBar.style.display = 'flex';
+      tabBar.innerHTML = anomalies.map((ano, idx) => {
+        const isActive = idx === activeIndex;
+        const tabColor = ano.color || 'amber';
+        const tabIcon = ano.icon || 'warning';
+        const rawLabel = ano.badge || `Anomaly ${idx + 1}`;
+        const cleanLabel = escapeHtml(rawLabel);
+        return `<button type="button" class="anomaly-tab-pill pill-${tabColor} ${isActive ? 'active' : ''}" onclick="switchDashboardAnomaly(${idx})">
+          <span class="material-symbols-rounded" style="font-size:12px; vertical-align:middle; margin-right:4px;">${escapeHtml(tabIcon)}</span>${cleanLabel}
+        </button>`;
+      }).join('');
+    } else {
+      tabBar.style.display = 'none';
+    }
+  }
+
+  if (badgePill) {
+    badgePill.style.display = 'inline-flex';
+    badgePill.className = `anomaly-badge-pill pill-${color}`;
+    badgePill.innerHTML = `<span class="material-symbols-rounded" style="font-size:14px; line-height:1;">${escapeHtml(icon)}</span> <span id="anomalyBadge">${escapeHtml(activeAno.badge || 'Anomaly Highlight')}</span>`;
+  }
+  if (titleEl) {
+    titleEl.textContent = activeAno.title || '';
+  }
+  if (reasonBlock) reasonBlock.style.display = 'block';
+  if (actionBlock) actionBlock.style.display = 'block';
+  if (reasonEl) {
+    reasonEl.textContent = activeAno.reason || activeAno.possibleReason || 'No root cause specified.';
+  }
+  if (actionEl) {
+    actionEl.textContent = activeAno.action || 'No corrective action defined.';
+  }
+}
+window.renderDashboardAnomalies = renderDashboardAnomalies;
+
+/// Open Studio Modal & Pre-fill (delegates to Unified Executive Editor)
+function openDataEditor(targetTab) {
+  if (typeof window.openUnifiedEditor === 'function') {
+    window.openUnifiedEditor(targetTab || 'a');
+    return;
+  }
+  if (!targetTab || typeof targetTab !== 'string') {
+    targetTab = 'profile';
+  }
   const overlay = document.getElementById('editOverlay');
   if (!overlay) return;
+  overlay.classList.add('show');
+  overlay.classList.add('active');
 
   // Pre-fill inputs
   if (currentData) {
+    if (!currentData.narratives) currentData.narratives = {};
+
     const anchorY = currentData?.timeline?.anchorYear || 2026;
     const anchorM = currentData?.timeline?.anchorMonth || 9;
     const studioAnchor = document.getElementById('studioAnchorMonth');
@@ -378,15 +571,23 @@ function openDataEditor() {
       }, 50);
     }
 
-    // Anomaly
+    // Insights (Card D)
+    if (currentData.insights && Array.isArray(currentData.insights)) {
+      const ins0 = document.getElementById('edit-insight-0');
+      const ins1 = document.getElementById('edit-insight-1');
+      if (ins0) ins0.value = currentData.insights[0] || '';
+      if (ins1) ins1.value = currentData.insights[1] || '';
+    }
+
+    // Anomaly (Card E)
     const inpAnoTitle = document.getElementById('edit-anomaly-title');
     const inpAnoReason = document.getElementById('edit-anomaly-reason');
     const inpAnoAction = document.getElementById('edit-anomaly-action');
-    if (inpAnoTitle) inpAnoTitle.value = currentData.anomaly.title;
-    if (inpAnoReason) inpAnoReason.value = currentData.anomaly.reason;
-    if (inpAnoAction) inpAnoAction.value = currentData.anomaly.action;
+    if (inpAnoTitle) inpAnoTitle.value = currentData.anomaly?.title || '';
+    if (inpAnoReason) inpAnoReason.value = currentData.anomaly?.reason || currentData.anomaly?.possibleReason || '';
+    if (inpAnoAction) inpAnoAction.value = currentData.anomaly?.action || '';
 
-    // Strategic question
+    // Strategic question (Card F)
     const inpQuestion = document.getElementById('edit-strategic-question');
     if (inpQuestion && currentData.strategicQuestion) {
       inpQuestion.value = typeof currentData.strategicQuestion === 'string'
@@ -419,17 +620,38 @@ function openDataEditor() {
     if (fNote && currentData.forecast && currentData.forecast.note) {
       fNote.value = currentData.forecast.note;
     }
+
+    // Governance (Card H)
+    if (currentData.governance && Array.isArray(currentData.governance.points)) {
+      for (let i = 0; i < 4; i++) {
+        const gp = document.getElementById(`edit-gov-${i}`);
+        if (gp) gp.value = currentData.governance.points[i] || '';
+      }
+    }
+
+    // Identity (Card I)
+    if (currentData.identity) {
+      const idQuote = document.getElementById('edit-identity-quote');
+      const idMotto = document.getElementById('edit-identity-motto');
+      const idValues = document.getElementById('edit-identity-values');
+      if (idQuote) idQuote.value = currentData.identity.quote || '';
+      if (idMotto) idMotto.value = currentData.identity.motto || currentData.identity.title || '';
+      if (idValues) idValues.value = currentData.identity.subtext || currentData.identity.subtitle || '';
+    }
   }
 
-  // Switch to default profile tab on open
-  switchStudioTab('profile');
+  // Switch to target or default tab on open
+  switchStudioTab(targetTab || 'profile');
 
   overlay.classList.add('show');
 }
 
 function closeDataEditor() {
   const overlay = document.getElementById('editOverlay');
-  if (overlay) overlay.classList.remove('show');
+  if (overlay) {
+    overlay.classList.remove('show');
+    overlay.classList.remove('active');
+  }
 }
 
 // Studio Tab Switcher
@@ -805,7 +1027,15 @@ function saveEditorChanges(e) {
   if (inpAnoReason) currentData.anomaly.reason = inpAnoReason.value.trim();
   if (inpAnoAction) currentData.anomaly.action = inpAnoAction.value.trim();
 
-  // Strategic Question
+  // Update Insights (Card D)
+  const ins0 = document.getElementById('edit-insight-0');
+  const ins1 = document.getElementById('edit-insight-1');
+  if (ins0 && ins1) {
+    const list = [ins0.value.trim(), ins1.value.trim()].filter(Boolean);
+    if (list.length) currentData.insights = list;
+  }
+
+  // Strategic Question (Card F)
   const inpQuestion = document.getElementById('edit-strategic-question');
   if (inpQuestion) currentData.strategicQuestion = inpQuestion.value.trim();
 
@@ -826,6 +1056,34 @@ function saveEditorChanges(e) {
   currentData.forecast.values = newForecastVals;
   if (typeof calculateStatisticalTrendline === 'function') {
     currentData.forecast.trendline = calculateStatisticalTrendline(newForecastVals);
+  }
+
+  // Update Governance (Card H)
+  const govPts = [];
+  for (let i = 0; i < 4; i++) {
+    const gp = document.getElementById(`edit-gov-${i}`);
+    if (gp && gp.value.trim()) govPts.push(gp.value.trim());
+  }
+  if (govPts.length) {
+    if (!currentData.governance) currentData.governance = {};
+    currentData.governance.points = govPts;
+  }
+
+  // Update Identity (Card I)
+  const idQuote = document.getElementById('edit-identity-quote');
+  const idMotto = document.getElementById('edit-identity-motto');
+  const idValues = document.getElementById('edit-identity-values');
+  if (idQuote || idMotto || idValues) {
+    if (!currentData.identity) currentData.identity = {};
+    if (idQuote) currentData.identity.quote = idQuote.value.trim();
+    if (idMotto) {
+      currentData.identity.motto = idMotto.value.trim();
+      currentData.identity.title = idMotto.value.trim();   // compatibility alias
+    }
+    if (idValues) {
+      currentData.identity.subtext = idValues.value.trim();
+      currentData.identity.subtitle = idValues.value.trim(); // compatibility alias
+    }
   }
 
   // Save to LocalStorage
@@ -997,6 +1255,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.loadInitialData = loadInitialData;
+window.renderDashboard = renderDashboard;
+window.getCurrentData = () => currentData;
 window.openDataEditor = openDataEditor;
 window.closeDataEditor = closeDataEditor;
 window.switchStudioTab = switchStudioTab;
@@ -1028,3 +1288,11 @@ window.TimelineEngine = TimelineEngine;
 window.applyTimeline = applyTimeline;
 window.onStudioAnchorMonthChange = onStudioAnchorMonthChange;
 window.syncStudioToCurrentDate = syncStudioToCurrentDate;
+
+function openDetailFromStudio(cardKey) {
+  closeDataEditor();
+  if (typeof window.openCardDetail === 'function') {
+    window.openCardDetail(cardKey);
+  }
+}
+window.openDetailFromStudio = openDetailFromStudio;

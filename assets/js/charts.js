@@ -1,7 +1,7 @@
 /* ==========================================================================
-   CHARTS MODULE (Chart.js Integration - Material Dashboard Theme)
+   CHARTS MODULE (Chart.js Integration - High-Stature Executive Brief)
    Powers the Authentic Trend dual-line chart and 6-Month Forecast bar chart
-   Engineered for clean, fluid responsiveness and Material Design aesthetics.
+   Engineered for clean, authoritative data visualization.
    ========================================================================== */
 
 let trendChartInstance = null;
@@ -37,39 +37,40 @@ function initTrendChart(trendData) {
       labels: labels,
       datasets: [
         {
-          label: 'Professional Impact',
+          label: 'Professional Impact Index',
           data: proImpact,
-          borderColor: '#1a73e8',
-          backgroundColor: 'rgba(26, 115, 232, 0.08)',
-          borderWidth: 3,
-          tension: 0.35,
+          borderColor: '#0E1B2E',
+          backgroundColor: 'rgba(14, 27, 46, 0.06)',
+          borderWidth: 2.25,
+          tension: 0.3,
           fill: true,
           pointRadius: 4,
-          pointHoverRadius: 7,
-          pointBackgroundColor: '#1a73e8',
-          pointBorderColor: '#ffffff',
+          pointHoverRadius: 6,
+          pointBackgroundColor: '#0E1B2E',
+          pointBorderColor: '#FFFFFF',
           pointBorderWidth: 2,
           borderDash: []
         },
         {
-          label: 'Personal Well-being',
+          label: 'Personal Well-being Index',
           data: wellbeing,
-          borderColor: '#fb8c00',
+          borderColor: '#9B7738',
           backgroundColor: 'transparent',
-          borderWidth: 2.2,
-          tension: 0.35,
+          borderWidth: 2,
+          tension: 0.3,
           pointRadius: 4,
-          pointHoverRadius: 7,
-          pointBackgroundColor: '#fb8c00',
-          pointBorderColor: '#ffffff',
+          pointHoverRadius: 6,
+          pointBackgroundColor: '#9B7738',
+          pointBorderColor: '#FFFFFF',
           pointBorderWidth: 2,
-          borderDash: [5, 5]
+          borderDash: [5, 4]
         }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: false,
       interaction: {
         mode: 'index',
         intersect: false
@@ -79,12 +80,16 @@ function initTrendChart(trendData) {
           display: false
         },
         tooltip: {
-          backgroundColor: '#344767',
-          titleFont: { family: 'Inter', size: 12, weight: 'bold' },
-          bodyFont: { family: 'Inter', size: 11 },
+          backgroundColor: '#0E1B2E',
+          titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: '700' },
+          bodyFont: { family: 'Plus Jakarta Sans', size: 11, weight: '500' },
           padding: 10,
-          cornerRadius: 8,
-          displayColors: true
+          cornerRadius: 6,
+          borderColor: 'rgba(155, 119, 56, 0.4)',
+          borderWidth: 1,
+          displayColors: true,
+          boxWidth: 8,
+          boxHeight: 8
         }
       },
       scales: {
@@ -94,33 +99,34 @@ function initTrendChart(trendData) {
             drawBorder: false
           },
           ticks: {
-            color: '#7b809a',
-            font: { family: 'Inter', size: 11, weight: '500' }
+            color: '#64748B',
+            font: { family: 'Plus Jakarta Sans', size: labels.length > 8 ? 9.5 : 11, weight: '600' },
+            autoSkip: false
           }
         },
         y: {
           min: 0,
           max: 100,
           grid: {
-            color: 'rgba(0, 0, 0, 0.05)',
-            drawBorder: false
+            color: '#E2E6EC',
+            drawBorder: false,
+            borderDash: [3, 3]
           },
           ticks: {
             stepSize: 25,
-            color: '#7b809a',
-            font: { family: 'Inter', size: 10 }
+            color: '#64748B',
+            font: { family: 'Plus Jakarta Sans', size: 10, weight: '500' }
           }
         }
       }
     }
   });
+  window.trendChartInstance = trendChartInstance;
 }
 
 function calculateTargetTrajectory(values) {
   if (!values || values.length === 0) return [];
-  // Calculate a smooth smoothed target curve that directly aligns with the tops of the bars
-  return values.map((val, idx) => {
-    // Slight target elevation representing forward momentum
+  return values.map((val) => {
     return Math.min(100, Math.round(val * 1.03));
   });
 }
@@ -145,22 +151,23 @@ function initForecastChart(forecastData) {
           type: 'bar',
           label: 'Projected Index',
           data: values,
-          backgroundColor: '#344767',
-          borderRadius: 6,
+          backgroundColor: '#0E1B2E',
+          hoverBackgroundColor: '#172B48',
+          borderRadius: 4,
           barPercentage: 0.65
         },
         {
           type: 'line',
           label: 'Target Trajectory',
           data: trajectoryLine,
-          borderColor: '#1a73e8',
+          borderColor: '#9B7738',
           borderWidth: 2,
-          borderDash: [4, 4],
+          borderDash: [4, 3],
           pointRadius: 4,
-          pointBackgroundColor: '#1a73e8',
-          pointBorderColor: '#ffffff',
+          pointBackgroundColor: '#9B7738',
+          pointBorderColor: '#FFFFFF',
           pointBorderWidth: 1.5,
-          tension: 0.35,
+          tension: 0.3,
           fill: false
         }
       ]
@@ -168,16 +175,19 @@ function initForecastChart(forecastData) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: false,
       plugins: {
         legend: {
           display: false
         },
         tooltip: {
-          backgroundColor: '#344767',
-          titleFont: { family: 'Inter', size: 11, weight: 'bold' },
-          bodyFont: { family: 'Inter', size: 10 },
+          backgroundColor: '#0E1B2E',
+          titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: '700' },
+          bodyFont: { family: 'Plus Jakarta Sans', size: 10, weight: '500' },
           padding: 8,
-          cornerRadius: 6
+          cornerRadius: 6,
+          borderColor: 'rgba(155, 119, 56, 0.4)',
+          borderWidth: 1
         }
       },
       scales: {
@@ -187,28 +197,30 @@ function initForecastChart(forecastData) {
             drawBorder: false
           },
           ticks: {
-            color: '#7b809a',
-            font: { family: 'Inter', size: 10, weight: '600' },
+            color: '#64748B',
+            font: { family: 'Plus Jakarta Sans', size: labels.length > 8 ? 9 : 10, weight: '600' },
             autoSkip: false,
-            maxRotation: 0
+            maxRotation: labels.length > 10 ? 30 : 0
           }
         },
         y: {
           min: 0,
           max: 100,
           grid: {
-            color: 'rgba(0, 0, 0, 0.05)',
-            drawBorder: false
+            color: '#E2E6EC',
+            drawBorder: false,
+            borderDash: [3, 3]
           },
           ticks: {
             stepSize: 25,
-            color: '#7b809a',
-            font: { family: 'Inter', size: 9 }
+            color: '#64748B',
+            font: { family: 'Plus Jakarta Sans', size: 9, weight: '500' }
           }
         }
       }
     }
   });
+  window.forecastChartInstance = forecastChartInstance;
 }
 
 // Global Exports

@@ -1,278 +1,337 @@
 /* ==========================================================================
-   MICROSOFT WORD / GOOGLE DOCS-STYLE WYSIWYG DOCUMENT EDITOR
-   Provides a familiar rich editing ribbon with headings, font sizes,
-   bulleting, check symbols (✓), and a searchable icon picker.
+   EXECUTIVE STRATEGIC NARRATIVE & WYSIWYG DOCUMENT EDITOR
+   Powered by open-source Quill.js v2
+   Tailored for High-Stature Executive Briefs:
+   - Newsreader Serif & Plus Jakarta Sans typography
+   - Midnight Navy & Antique Brass accent styling
+   - 1-Click Executive Templates: Strategic Callout, Leadership Pillar Quote
+   - Two-way binding & debounced auto-save callbacks
    ========================================================================== */
 
 (function(window) {
   'use strict';
 
-  const ICON_COLLECTION = [
-    { name: 'school', category: 'Academic', icon: 'school' },
-    { name: 'groups', category: 'People', icon: 'groups' },
-    { name: 'military_tech', category: 'Leadership', icon: 'military_tech' },
-    { name: 'verified', category: 'Status', icon: 'verified' },
-    { name: 'insights', category: 'Analytics', icon: 'insights' },
-    { name: 'trending_up', category: 'Growth', icon: 'trending_up' },
-    { name: 'shield', category: 'Security', icon: 'shield' },
-    { name: 'target', category: 'Goal', icon: 'crisis_alert' },
-    { name: 'award', category: 'Achievement', icon: 'emoji_events' },
-    { name: 'heart', category: 'Wellbeing', icon: 'favorite' },
-    { name: 'fitness', category: 'Physical', icon: 'fitness_center' },
-    { name: 'tasks', category: 'Work', icon: 'task_alt' },
-    { name: 'calendar', category: 'Time', icon: 'calendar_month' },
-    { name: 'flag', category: 'Mission', icon: 'flag' },
-    { name: 'lightbulb', category: 'Idea', icon: 'lightbulb' },
-    { name: 'bolt', category: 'Velocity', icon: 'bolt' },
-    { name: 'document', category: 'Doc', icon: 'description' },
-    { name: 'folder', category: 'Storage', icon: 'folder' },
-    { name: 'public', category: 'Global', icon: 'public' },
-    { name: 'radar', category: 'Geospatial', icon: 'radar' },
-    { name: 'star', category: 'Rating', icon: 'star' },
-    { name: 'check_box', category: 'Check', icon: 'check_box' },
-    { name: 'warning', category: 'Alert', icon: 'warning' },
-    { name: 'info', category: 'Notice', icon: 'info' }
-  ];
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 
-  let currentTargetEditor = null;
-
-  class PbiDocEditor {
-    constructor(containerId, initialContent = '') {
-      this.container = document.getElementById(containerId);
+  class ExecutiveDocEditor {
+    constructor(containerOrId, initialContent = '', options = {}) {
+      this.container = typeof containerOrId === 'string'
+        ? document.getElementById(containerOrId)
+        : containerOrId;
       if (!this.container) return;
-      this.initialContent = initialContent;
+
+      this.initialContent = initialContent || '';
+      this.options = options;
+      this.onChange = options.onChange || null;
+      this.quill = null;
+      this.debounceTimer = null;
+
       this.render();
     }
 
     render() {
-      this.container.classList.add('doc-editor-container');
+      const uniqueId = 'ql-tb-' + Math.random().toString(36).substring(2, 9);
+      this.container.classList.add('executive-doc-editor-container');
       this.container.innerHTML = `
-        <div class="doc-ribbon" role="toolbar" aria-label="Formatting ribbon">
-          
-          <!-- Group 1: Styles / Headings -->
-          <div class="ribbon-group">
-            <select class="ribbon-select doc-style-select" title="Text Style">
-              <option value="p">Normal Text</option>
-              <option value="h1">Heading 1</option>
-              <option value="h2">Heading 2</option>
-              <option value="h3">Heading 3</option>
-              <option value="blockquote">Quote Callout</option>
-            </select>
+        <div class="executive-quill-wrapper">
+          <div class="executive-quill-toolbar" id="${uniqueId}">
+            <span class="ql-formats">
+              <button class="ql-header" value="2" title="Section Heading (H2)"></button>
+              <button class="ql-header" value="3" title="Subsection Heading (H3)"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-bold" title="Bold (Ctrl+B)"></button>
+              <button class="ql-italic" title="Italic (Ctrl+I)"></button>
+              <button class="ql-underline" title="Underline (Ctrl+U)"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-list" value="ordered" title="Numbered List"></button>
+              <button class="ql-list" value="bullet" title="Bulleted List"></button>
+              <button class="ql-list" value="check" title="Milestone Checklist"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-blockquote" title="Quote Callout"></button>
+              <button class="ql-clean" title="Clear Formatting"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-align" value="" title="Align Left"></button>
+              <button class="ql-align" value="center" title="Align Center"></button>
+              <button class="ql-align" value="right" title="Align Right"></button>
+              <button class="ql-align" value="justify" title="Justify"></button>
+            </span>
+            <span class="ql-formats executive-quick-templates">
+              <button type="button" class="btn-quill-template btn-insert-highlight" title="Insert Reusable Highlight / Anomaly Tag">
+                <span class="material-symbols-rounded">warning</span> Highlight Pill
+              </button>
+              <button type="button" class="btn-quill-template btn-insert-callout" title="Insert Executive Takeaway Box">
+                <span class="material-symbols-rounded">lightbulb</span> Callout
+              </button>
+              <button type="button" class="btn-quill-template btn-insert-pillar" title="Insert Strategic Pillar Quote">
+                <span class="material-symbols-rounded">format_quote</span> Pillar
+              </button>
+            </span>
           </div>
-
-          <!-- Group 2: Font Size -->
-          <div class="ribbon-group">
-            <select class="ribbon-select doc-size-select" title="Font Size">
-              <option value="12px">12px (Small)</option>
-              <option value="14px" selected>14px (Standard)</option>
-              <option value="16px">16px (Medium)</option>
-              <option value="18px">18px (Large)</option>
-              <option value="22px">22px (Display)</option>
-            </select>
-          </div>
-
-          <!-- Group 3: Inline Text Formatting -->
-          <div class="ribbon-group">
-            <button type="button" class="ribbon-btn btn-cmd-bold" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
-            <button type="button" class="ribbon-btn btn-cmd-italic" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
-            <button type="button" class="ribbon-btn btn-cmd-underline" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
-            <button type="button" class="ribbon-btn btn-cmd-strike" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
-          </div>
-
-          <!-- Group 4: Lists & Check Symbols (✓) -->
-          <div class="ribbon-group">
-            <button type="button" class="ribbon-btn btn-cmd-bullet" data-cmd="insertUnorderedList" title="Bulleted List (•)">
-              <span class="material-symbols-rounded" style="font-size:16px;">format_list_bulleted</span>
-            </button>
-            <button type="button" class="ribbon-btn btn-cmd-number" data-cmd="insertOrderedList" title="Numbered List (1.)">
-              <span class="material-symbols-rounded" style="font-size:16px;">format_list_numbered</span>
-            </button>
-            <button type="button" class="ribbon-btn ribbon-btn-pill btn-insert-checklist" title="Insert Check Symbol List (✓)">
-              <span style="color:#10b981; font-weight:900;">✓</span> Check List
-            </button>
-          </div>
-
-          <!-- Group 5: Insert Elements (Icons & Callouts) -->
-          <div class="ribbon-group">
-            <button type="button" class="ribbon-btn ribbon-btn-pill btn-open-icon-picker" title="Insert Material Icon">
-              <span class="material-symbols-rounded" style="font-size:16px; color:#1a73e8;">sentiment_satisfied</span> Icon
-            </button>
-            <button type="button" class="ribbon-btn ribbon-btn-pill btn-insert-callout" title="Insert Executive Highlight Callout">
-              <span class="material-symbols-rounded" style="font-size:16px; color:#fb8c00;">lightbulb</span> Callout
-            </button>
-          </div>
-
-          <!-- Group 6: History -->
-          <div class="ribbon-group">
-            <button type="button" class="ribbon-btn btn-cmd-undo" data-cmd="undo" title="Undo (Ctrl+Z)">
-              <span class="material-symbols-rounded" style="font-size:16px;">undo</span>
-            </button>
-            <button type="button" class="ribbon-btn btn-cmd-redo" data-cmd="redo" title="Redo (Ctrl+Y)">
-              <span class="material-symbols-rounded" style="font-size:16px;">redo</span>
-            </button>
-          </div>
-
-        </div>
-
-        <!-- Editable Document Canvas -->
-        <div class="doc-canvas" contenteditable="true" spellcheck="true">
-          ${this.initialContent || '<p>Click here to start editing with the Word-style ribbon...</p>'}
+          <div class="executive-quill-editor"></div>
         </div>
       `;
 
-      this.canvas = this.container.querySelector('.doc-canvas');
-      this.bindEvents();
+      const toolbarElem = this.container.querySelector('.executive-quill-toolbar');
+      const editorElem = this.container.querySelector('.executive-quill-editor');
+
+      if (window.Quill) {
+        this.quill = new window.Quill(editorElem, {
+          theme: 'snow',
+          modules: {
+            toolbar: toolbarElem
+          },
+          placeholder: 'Enter extended strategic analysis, governance context, or leadership takeaways...'
+        });
+
+        if (this.initialContent) {
+          this.setContent(this.initialContent);
+        }
+
+        this.quill.on('text-change', () => {
+          if (this.onChange) {
+            clearTimeout(this.debounceTimer);
+            this.debounceTimer = setTimeout(() => {
+              this.onChange(this.getContent());
+            }, 300);
+          }
+        });
+      } else {
+        // Fallback if Quill script is still loading or unavailable
+        editorElem.setAttribute('contenteditable', 'true');
+        editorElem.innerHTML = this.initialContent;
+        editorElem.addEventListener('input', () => {
+          if (this.onChange) {
+            clearTimeout(this.debounceTimer);
+            this.debounceTimer = setTimeout(() => {
+              this.onChange(editorElem.innerHTML);
+            }, 300);
+          }
+        });
+      }
+
+      // Bind custom template buttons
+      const btnHighlight = toolbarElem.querySelector('.btn-insert-highlight');
+      if (btnHighlight) {
+        btnHighlight.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.openPillDesigner();
+        });
+      }
+
+      const btnCallout = toolbarElem.querySelector('.btn-insert-callout');
+      if (btnCallout) {
+        btnCallout.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.insertCallout();
+        });
+      }
+
+      const btnPillar = toolbarElem.querySelector('.btn-insert-pillar');
+      if (btnPillar) {
+        btnPillar.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.insertPillar();
+        });
+      }
     }
 
-    bindEvents() {
-      const ribbon = this.container.querySelector('.doc-ribbon');
-      const canvas = this.canvas;
+    openPillDesigner() {
+      let popover = this.container.querySelector('.executive-pill-picker-popover');
+      if (!popover) {
+        popover = document.createElement('div');
+        popover.className = 'executive-pill-picker-popover';
+        popover.innerHTML = `
+          <div class="pill-picker-header">
+            <div class="pill-picker-title">
+              <span class="material-symbols-rounded" style="font-size: 15px; color: var(--c-brass-600);">palette</span>
+              <span>Highlight Pill Designer</span>
+            </div>
+            <button type="button" class="btn-picker-close" title="Close">&times;</button>
+          </div>
+          <div class="picker-field">
+            <label>Pill Text / Label</label>
+            <input type="text" class="ue-input picker-text-input" value="Strategic Highlight" placeholder="e.g. Workload Convergence">
+          </div>
+          <div class="picker-field">
+            <label>Accent Color</label>
+            <div class="picker-color-swatches">
+              <button type="button" class="color-swatch-btn active" data-color="amber" title="Amber Warning" style="background: #F59E0B;"></button>
+              <button type="button" class="color-swatch-btn" data-color="emerald" title="Emerald Success" style="background: #10B981;"></button>
+              <button type="button" class="color-swatch-btn" data-color="brass" title="Antique Brass" style="background: #9B7738;"></button>
+              <button type="button" class="color-swatch-btn" data-color="navy" title="Midnight Navy" style="background: #0F172A;"></button>
+              <button type="button" class="color-swatch-btn" data-color="crimson" title="Crimson Alert" style="background: #EF4444;"></button>
+              <button type="button" class="color-swatch-btn" data-color="violet" title="Violet Horizon" style="background: #8B5CF6;"></button>
+            </div>
+          </div>
+          <div class="picker-field">
+            <label>Icon Symbol</label>
+            <div class="picker-icon-grid">
+              <button type="button" class="icon-swatch-btn active" data-icon="warning"><span class="material-symbols-rounded">warning</span></button>
+              <button type="button" class="icon-swatch-btn" data-icon="verified"><span class="material-symbols-rounded">verified</span></button>
+              <button type="button" class="icon-swatch-btn" data-icon="star"><span class="material-symbols-rounded">star</span></button>
+              <button type="button" class="icon-swatch-btn" data-icon="bolt"><span class="material-symbols-rounded">bolt</span></button>
+              <button type="button" class="icon-swatch-btn" data-icon="flag"><span class="material-symbols-rounded">flag</span></button>
+              <button type="button" class="icon-swatch-btn" data-icon="lightbulb"><span class="material-symbols-rounded">lightbulb</span></button>
+              <button type="button" class="icon-swatch-btn" data-icon="trending_up"><span class="material-symbols-rounded">trending_up</span></button>
+              <button type="button" class="icon-swatch-btn" data-icon="shield"><span class="material-symbols-rounded">shield</span></button>
+              <button type="button" class="icon-swatch-btn" data-icon="crisis_alert"><span class="material-symbols-rounded">crisis_alert</span></button>
+              <button type="button" class="icon-swatch-btn" data-icon="school"><span class="material-symbols-rounded">school</span></button>
+            </div>
+          </div>
+          <div class="picker-preview-box">
+            <label>Live Design Preview</label>
+            <div class="picker-preview-stage">
+              <span class="anomaly-badge-pill pill-amber" id="pickerLivePreview">
+                <span class="material-symbols-rounded preview-icon" style="font-size:12px; line-height:1;">warning</span>
+                <span class="preview-text">Strategic Highlight</span>
+              </span>
+            </div>
+          </div>
+          <button type="button" class="btn-picker-insert">
+            <span class="material-symbols-rounded">add_circle</span> Insert into Briefing
+          </button>
+        `;
 
-      // Track active editor
-      canvas.addEventListener('focus', () => {
-        currentTargetEditor = this;
-      });
+        const wrapper = this.container.querySelector('.executive-quill-wrapper');
+        if (wrapper) wrapper.style.position = 'relative';
+        (wrapper || this.container).appendChild(popover);
 
-      // Command buttons
-      ribbon.querySelectorAll('button[data-cmd]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        let curColor = 'amber';
+        let curIcon = 'warning';
+
+        const updatePreview = () => {
+          const textVal = popover.querySelector('.picker-text-input').value.trim() || 'Highlight';
+          const prev = popover.querySelector('#pickerLivePreview');
+          if (prev) {
+            prev.className = `anomaly-badge-pill pill-${curColor}`;
+            prev.innerHTML = `<span class="material-symbols-rounded preview-icon" style="font-size:12px; line-height:1;">${escapeHtml(curIcon)}</span> <span class="preview-text">${escapeHtml(textVal)}</span>`;
+          }
+        };
+
+        popover.querySelector('.btn-picker-close').addEventListener('click', (e) => {
           e.preventDefault();
-          canvas.focus();
-          const cmd = btn.getAttribute('data-cmd');
-          document.execCommand(cmd, false, null);
+          popover.style.display = 'none';
         });
-      });
 
-      // Style select (Headings / Paragraph / Quote)
-      const styleSelect = ribbon.querySelector('.doc-style-select');
-      styleSelect.addEventListener('change', () => {
-        canvas.focus();
-        const tag = styleSelect.value;
-        if (tag === 'blockquote') {
-          document.execCommand('formatBlock', false, '<blockquote>');
-        } else {
-          document.execCommand('formatBlock', false, `<${tag}>`);
+        popover.querySelector('.picker-text-input').addEventListener('input', updatePreview);
+
+        popover.querySelectorAll('.color-swatch-btn').forEach(b => {
+          b.addEventListener('click', (e) => {
+            e.preventDefault();
+            popover.querySelectorAll('.color-swatch-btn').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active');
+            curColor = b.dataset.color;
+            updatePreview();
+          });
+        });
+
+        popover.querySelectorAll('.icon-swatch-btn').forEach(b => {
+          b.addEventListener('click', (e) => {
+            e.preventDefault();
+            popover.querySelectorAll('.icon-swatch-btn').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active');
+            curIcon = b.dataset.icon;
+            updatePreview();
+          });
+        });
+
+        popover.querySelector('.btn-picker-insert').addEventListener('click', (e) => {
+          e.preventDefault();
+          const textVal = popover.querySelector('.picker-text-input').value.trim() || 'Strategic Highlight';
+          const pillHtml = `<span class="anomaly-badge-pill pill-${curColor}" contenteditable="true" style="margin:4px 4px 4px 0;"><span class="material-symbols-rounded" style="font-size:13px; line-height:1;">${escapeHtml(curIcon)}</span><span>${escapeHtml(textVal)}</span></span>&nbsp;`;
+          this.insertHtmlAtCursor(pillHtml);
+          popover.style.display = 'none';
+        });
+      }
+
+      popover.style.display = (popover.style.display === 'none' || !popover.style.display) ? 'flex' : 'none';
+    }
+
+    insertHighlightPill() {
+      this.openPillDesigner();
+    }
+
+    insertCallout() {
+      const calloutHtml = `<blockquote class="doc-callout success"><strong>Strategic Key Takeaway:</strong> Enter executive takeaway or operational insight here...</blockquote><p><br></p>`;
+      this.insertHtmlAtCursor(calloutHtml);
+    }
+
+    insertPillar() {
+      const quoteHtml = `<blockquote class="doc-callout dark"><strong>Leadership Pillar:</strong> "I turn purpose into performance through data, discipline, and dedication."</blockquote><p><br></p>`;
+      this.insertHtmlAtCursor(quoteHtml);
+    }
+
+    insertHtmlAtCursor(html) {
+      if (this.quill) {
+        const range = this.quill.getSelection(true) || { index: this.quill.getLength() };
+        this.quill.clipboard.dangerouslyPasteHTML(range.index, html);
+        this.quill.setSelection(range.index + 1);
+        if (this.onChange) {
+          this.onChange(this.getContent());
         }
-      });
-
-      // Size select
-      const sizeSelect = ribbon.querySelector('.doc-size-select');
-      sizeSelect.addEventListener('change', () => {
-        canvas.focus();
-        const selection = window.getSelection();
-        if (!selection || selection.rangeCount === 0) return;
-        const range = selection.getRangeAt(0);
-        const span = document.createElement('span');
-        span.style.fontSize = sizeSelect.value;
-        span.appendChild(range.extractContents());
-        range.insertNode(span);
-      });
-
-      // Check symbol list insertion (✓)
-      const btnChecklist = ribbon.querySelector('.btn-insert-checklist');
-      btnChecklist.addEventListener('click', () => {
-        canvas.focus();
-        const checkItemHtml = `
-          <div class="doc-checklist-item" style="display:flex;align-items:center;gap:8px;margin:6px 0;">
-            <span class="doc-check-icon" style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:11px;font-weight:900;">✓</span>
-            <span>New verified target or objective...</span>
-          </div>
-        `;
-        document.execCommand('insertHTML', false, checkItemHtml);
-      });
-
-      // Callout insertion
-      const btnCallout = ribbon.querySelector('.btn-insert-callout');
-      btnCallout.addEventListener('click', () => {
-        canvas.focus();
-        const calloutHtml = `
-          <div class="doc-callout" style="padding:10px 14px;border-radius:8px;margin:10px 0;border-left:4px solid #1a73e8;background:#f0f7ff;color:#1e3a8a;">
-            <strong>Executive Key Takeaway:</strong> Enter strategic takeaway or observation here...
-          </div>
-        `;
-        document.execCommand('insertHTML', false, calloutHtml);
-      });
-
-      // Icon Picker Trigger
-      const btnIcon = ribbon.querySelector('.btn-open-icon-picker');
-      btnIcon.addEventListener('click', () => {
-        currentTargetEditor = this;
-        openIconPicker();
-      });
+      } else {
+        const editorElem = this.container.querySelector('.executive-quill-editor');
+        if (editorElem) {
+          editorElem.focus();
+          document.execCommand('insertHTML', false, html);
+          if (this.onChange) {
+            this.onChange(editorElem.innerHTML);
+          }
+        }
+      }
     }
 
     getContent() {
-      return this.canvas ? this.canvas.innerHTML : '';
+      if (this.quill) {
+        return this.quill.root.innerHTML;
+      }
+      const editorElem = this.container.querySelector('.executive-quill-editor');
+      return editorElem ? editorElem.innerHTML : '';
     }
 
     setContent(html) {
-      if (this.canvas) {
-        this.canvas.innerHTML = html;
+      if (this.quill) {
+        this.quill.clipboard.dangerouslyPasteHTML(html || '');
+      } else {
+        const editorElem = this.container.querySelector('.executive-quill-editor');
+        if (editorElem) {
+          editorElem.innerHTML = html || '';
+        }
       }
     }
-  }
 
-  // Global Icon Picker Modal
-  function openIconPicker() {
-    let pickerModal = document.getElementById('globalIconPickerModal');
-    if (!pickerModal) {
-      pickerModal = document.createElement('div');
-      pickerModal.id = 'globalIconPickerModal';
-      pickerModal.className = 'icon-picker-modal';
-      pickerModal.innerHTML = `
-        <div class="icon-picker-head">
-          <h4>Insert Material Symbol</h4>
-          <button type="button" class="btn-card-hide" id="btnCloseIconPicker">✕</button>
-        </div>
-        <input type="text" class="icon-picker-search" id="iconPickerSearch" placeholder="Filter icons (e.g. school, shield, target)...">
-        <div class="icon-picker-grid" id="iconPickerGrid"></div>
-      `;
-      document.body.appendChild(pickerModal);
-
-      document.getElementById('btnCloseIconPicker').addEventListener('click', () => {
-        pickerModal.style.display = 'none';
-      });
-
-      const searchInput = document.getElementById('iconPickerSearch');
-      searchInput.addEventListener('input', (e) => {
-        renderIconGrid(e.target.value.toLowerCase());
-      });
+    focus() {
+      if (this.quill) {
+        this.quill.focus();
+      } else {
+        const editorElem = this.container.querySelector('.executive-quill-editor');
+        if (editorElem) editorElem.focus();
+      }
     }
 
-    renderIconGrid('');
-    pickerModal.style.display = 'block';
+    destroy() {
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer);
+      }
+      if (this.container) {
+        this.container.innerHTML = '';
+      }
+      this.quill = null;
+    }
   }
 
-  function renderIconGrid(filterTerm = '') {
-    const grid = document.getElementById('iconPickerGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    const filtered = ICON_COLLECTION.filter(item => 
-      item.name.toLowerCase().includes(filterTerm) || 
-      item.category.toLowerCase().includes(filterTerm)
-    );
-
-    filtered.forEach(item => {
-      const el = document.createElement('div');
-      el.className = 'icon-picker-item';
-      el.dataset.icon = item.name;
-      el.title = `${item.name} (${item.category})`;
-      el.innerHTML = `<span class="material-symbols-rounded" style="font-size:22px;">${item.icon}</span>`;
-      el.addEventListener('click', () => {
-        if (currentTargetEditor && currentTargetEditor.canvas) {
-          currentTargetEditor.canvas.focus();
-          const iconHtml = `<span class="material-symbols-rounded" style="font-size:18px;vertical-align:middle;margin:0 3px;">${item.icon}</span>&nbsp;`;
-          document.execCommand('insertHTML', false, iconHtml);
-        }
-        document.getElementById('globalIconPickerModal').style.display = 'none';
-      });
-      grid.appendChild(el);
-    });
-  }
-
-  // Export to window
-  window.PbiDocEditor = PbiDocEditor;
-  window.openIconPicker = openIconPicker;
+  // Export to global scope with backward-compatible alias
+  window.ExecutiveDocEditor = ExecutiveDocEditor;
+  window.PbiDocEditor = ExecutiveDocEditor;
 
 })(window);
